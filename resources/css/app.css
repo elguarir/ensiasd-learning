@@ -211,3 +211,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+/*
+  remove autofill blueish background color
+  */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    transition:
+        background-color 600000s 0s,
+        color 600000s 0s;
+}
+
+input[data-autocompleted] {
+    background-color: transparent !important;
+}
+
+input:-webkit-autofill {
+    -webkit-animation-delay: 1s;
+    /* Safari support - any positive time runs instantly */
+    -webkit-animation-name: autofill;
+    -webkit-animation-fill-mode: both;
+}
