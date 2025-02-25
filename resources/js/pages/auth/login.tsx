@@ -22,7 +22,8 @@ interface LoginProps {
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
-  const { data, setData, post, processing, errors, reset } = useForm<LoginForm>(
+  // @ts-ignore
+    const { data, setData, post, processing, errors, reset } = useForm<LoginForm>(
     {
       email: "",
       password: "",
