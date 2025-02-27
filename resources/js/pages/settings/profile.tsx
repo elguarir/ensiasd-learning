@@ -6,9 +6,11 @@ import { FormEventHandler } from "react";
 import DeleteUser from "@/components/delete-user";
 import HeadingSmall from "@/components/heading-small";
 import InputError from "@/components/input-error";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useInitials } from "@/hooks/use-initials";
 import AppLayout from "@/layouts/app-layout";
 import SettingsLayout from "@/layouts/settings/layout";
 
@@ -27,19 +29,27 @@ export default function Profile({
   status?: string;
 }) {
   const { auth } = usePage<SharedData>().props;
-
-  const { data, setData, patch, errors, processing, recentlySuccessful } =
+  const getInitials = useInitials();
+  console.log(auth);
+  const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
+      _method: "patch",
       name: auth.user.name,
       email: auth.user.email,
+      avatar: null as File | null,
     });
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
 
-    patch(route("profile.update"), {
-      preserveScroll: true,
-    });
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    if (data.avatar) {
+      formData.append("avatar", data.avatar);
+    }
+
+    post(route("profile.update"), { method: "patch", preserveScroll: true });
   };
 
   return (
@@ -54,6 +64,51 @@ export default function Profile({
           />
 
           <form onSubmit={submit} className="space-y-6">
+            <div className="grid gap-2">
+              <Label htmlFor="avatar">Avatar</Label>
+
+              <div className="flex items-center gap-4">
+                <div className="flex-shrink-0">
+                  <Avatar className="size-20 border-2">
+                    <AvatarImage src={auth.user.avatar} />
+                    <AvatarFallback>
+                      {getInitials(auth.user.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+                <div className="flex-1">
+                  <Button type="button" variant={"outline"} asChild>
+                    <label htmlFor="avatar">
+                      <div>Change avatar</div>
+                    </label>
+                  </Button>
+                  {data.avatar && (
+                    <Button
+                      type="button"
+                      variant={"destructive"}
+                      asChild
+                      onClick={() => setData("avatar", null)}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
+              </div>
+              <Input
+                id="avatar"
+                name="avatar"
+                type="file"
+                className="hidden"
+                onChange={(e) => {
+                  const files = e.target.files;
+                  if (files && files.length > 0) {
+                    setData("avatar", files[0]);
+                  }
+                }}
+              />
+
+              <InputError className="mt-2" message={errors.avatar} />
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
 
