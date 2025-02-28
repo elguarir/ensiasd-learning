@@ -1,7 +1,7 @@
 import { type BreadcrumbItem, type SharedData } from "@/types";
 import { Transition } from "@headlessui/react";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
-import { FormEventHandler } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 
 import DeleteUser from "@/components/delete-user";
 import HeadingSmall from "@/components/heading-small";
@@ -30,27 +30,44 @@ export default function Profile({
 }) {
   const { auth } = usePage<SharedData>().props;
   const getInitials = useInitials();
-  console.log(auth);
-  const { data, setData, post, errors, processing, recentlySuccessful } =
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const { data, setData, post, errors, reset, processing, recentlySuccessful } =
     useForm({
       _method: "patch",
       name: auth.user.name,
+      username: auth.user.username,
       email: auth.user.email,
       avatar: null as File | null,
     });
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
+    post(route("profile.update"), {
+      method: "patch",
+      preserveScroll: true,
+      onSuccess: () => {
+        reset("avatar");
+      },
+    });
+  };
 
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("email", data.email);
-    if (data.avatar) {
-      formData.append("avatar", data.avatar);
+  useEffect(() => {
+    if (data.avatar !== null) {
+      const reader = new FileReader();
+      reader.onload = (e) =>
+        e.target && setAvatarPreview(e.target.result as string);
+      reader.readAsDataURL(data.avatar);
+    } else {
+      setAvatarPreview(null);
     }
 
-    post(route("profile.update"), { method: "patch", preserveScroll: true });
-  };
+    return () => {
+      setAvatarPreview(null);
+      if (avatarPreview) {
+        URL.revokeObjectURL(avatarPreview);
+      }
+    };
+  }, [data.avatar]);
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -70,7 +87,18 @@ export default function Profile({
               <div className="flex items-center gap-4">
                 <div className="flex-shrink-0">
                   <Avatar className="size-20 border-2">
-                    <AvatarImage src={auth.user.avatar} />
+                    {data.avatar !== null ? (
+                      <AvatarImage
+                        className="object-cover"
+                        src={avatarPreview ?? ""}
+                        alt={auth.user.name}
+                      />
+                    ) : (
+                      <AvatarImage
+                        className="object-cover"
+                        src={auth.user.avatar}
+                      />
+                    )}
                     <AvatarFallback>
                       {getInitials(auth.user.name)}
                     </AvatarFallback>
@@ -82,11 +110,10 @@ export default function Profile({
                       <div>Change avatar</div>
                     </label>
                   </Button>
-                  {data.avatar && (
+                  {data.avatar !== null && (
                     <Button
                       type="button"
                       variant={"destructive"}
-                      asChild
                       onClick={() => setData("avatar", null)}
                     >
                       Remove
@@ -109,20 +136,38 @@ export default function Profile({
 
               <InputError className="mt-2" message={errors.avatar} />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Name</Label>
 
-              <Input
-                id="name"
-                className="mt-1 block w-full"
-                value={data.name}
-                onChange={(e) => setData("name", e.target.value)}
-                required
-                autoComplete="name"
-                placeholder="Full name"
+                <Input
+                  id="name"
+                  className="mt-1 block w-full"
+                  value={data.name}
+                  onChange={(e) => setData("name", e.target.value)}
+                  required
+                  autoComplete="name"
+                  placeholder="Full name"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="username">Username</Label>
+
+                <Input
+                  id="username"
+                  className="mt-1 block w-full"
+                  value={data.username}
+                  onChange={(e) => setData("username", e.target.value)}
+                  required
+                  autoComplete="username"
+                  placeholder="Username"
+                />
+              </div>
+
+              <InputError
+                className="col-span-full mt-2"
+                message={errors.name || errors.username}
               />
-
-              <InputError className="mt-2" message={errors.name} />
             </div>
 
             <div className="grid gap-2">
@@ -174,7 +219,7 @@ export default function Profile({
                 leave="transition ease-in-out"
                 leaveTo="opacity-0"
               >
-                <p className="text-sm text-neutral-600">Saved</p>
+                <p className="text-sm text-emerald-600">Saved.</p>
               </Transition>
             </div>
           </form>
