@@ -31,7 +31,14 @@ class ProfileUpdateRequest extends FormRequest
                 'image',
                 'mimes:jpeg,png,jpg',
                 'max:2048', // 2MB max size
-            ]
+            ],
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                'lowercase:all',
+                Rule::unique(User::class)->ignore($this->user()->id),
+            ],
         ];
     }
 }

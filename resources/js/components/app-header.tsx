@@ -31,7 +31,7 @@ import { useInitials } from "@/hooks/use-initials";
 import { cn } from "@/lib/utils";
 import { type BreadcrumbItem, type NavItem, type SharedData } from "@/types";
 import { Link, usePage } from "@inertiajs/react";
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from "lucide-react";
+import { LayoutGrid, Menu, Search } from "lucide-react";
 import AppLogo from "./app-logo";
 import AppLogoIcon from "./app-logo-icon";
 
@@ -44,16 +44,16 @@ const mainNavItems: NavItem[] = [
 ];
 
 const rightNavItems: NavItem[] = [
-  {
-    title: "Repository",
-    url: "https://github.com/laravel/react-starter-kit",
-    icon: Folder,
-  },
-  {
-    title: "Documentation",
-    url: "https://laravel.com/docs/starter-kits",
-    icon: BookOpen,
-  },
+  // {
+  //   title: "Repository",
+  //   url: "https://github.com/laravel/react-starter-kit",
+  //   icon: Folder,
+  // },
+  // {
+  //   title: "Documentation",
+  //   url: "https://laravel.com/docs/starter-kits",
+  //   icon: BookOpen,
+  // },
 ];
 
 const activeItemStyles =
@@ -98,7 +98,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                         <Link
                           key={item.title}
                           href={item.url}
-                          className="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring transition-colors flex items-center space-x-2 px-3 py-2 rounded-md font-medium"
+                          className="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring flex items-center space-x-2 rounded-md px-3 py-2 font-medium transition-colors"
                         >
                           {item.icon && (
                             <Icon iconNode={item.icon} className="h-5 w-5" />
@@ -115,7 +115,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring transition-colors flex items-center space-x-2 px-3 py-2 rounded-md font-medium"
+                          className="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring flex items-center space-x-2 rounded-md px-3 py-2 font-medium transition-colors"
                         >
                           {item.icon && (
                             <Icon iconNode={item.icon} className="h-5 w-5" />
