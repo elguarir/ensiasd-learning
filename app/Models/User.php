@@ -47,4 +47,34 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function instructorProfile()
+    {
+        return $this->hasOne(InstructorProfile::class);
+    }
+
+    public function courseEnrollments()
+    {
+        return $this->hasMany(CourseEnrollment::class);
+    }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'course_enrollments');
+    }
+
+    public function createdCourses()
+    {
+        return $this->hasMany(Course::class, 'instructor_id');
+    }
+
+    public function courseThreads()
+    {
+        return $this->hasMany(CourseThread::class, 'author_id');
+    }
+
+    public function threadComments()
+    {
+        return $this->hasMany(ThreadComment::class, 'author_id');
+    }
 }
