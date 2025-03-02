@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -20,7 +19,9 @@ return new class extends Migration
             $table->bigInteger('size')->unsigned();
             $table->string('extension')->nullable();
             $table->morphs('attachable'); // This will create attachable_id and attachable_type columns
-            $table->string('collection')->default('uploads');
+            $table->string('collection')->default('uploads'); // This is to group attachments into different collections
+            $table->boolean('is_private')->default(true);
+            $table->json('metadata')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

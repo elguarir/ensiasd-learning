@@ -10,8 +10,13 @@ class Course extends Model
         'instructor_id',
         'title',
         'description',
+        'image',
         'category',
-        'published',
+        'published_at',
+    ];
+
+    protected $casts = [
+        'published_at' => 'datetime',
     ];
 
     public function instructor()

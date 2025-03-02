@@ -30,7 +30,7 @@ trait HasAttachments
      */
     public function attachFile(UploadedFile $file, array $options = [])
     {
-        $disk = $options['disk'] ?? config('filesystems.default');
+        $disk = config('filesystems.default');
         $collection = $options['collection'] ?? 'uploads';
         $directory = $options['directory'] ?? $this->getAttachmentDirectory();
         $originalFilename = $file->getClientOriginalName();

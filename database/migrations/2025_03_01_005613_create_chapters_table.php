@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->integer('position')->default(0);
-
             //$table->index('position');
             $table->timestamps();
         });

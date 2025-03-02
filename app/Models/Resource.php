@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use App\Traits\HasAttachments;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Resource extends Model
 {
-    use HasAttachments;
 
     protected $fillable = [
         'chapter_id',
         'title',
+        'description',
         'resource_type',
         'position',
         'metadata',
@@ -21,29 +22,23 @@ class Resource extends Model
         'metadata' => 'array',
     ];
 
-    public function chapter()
+    public function chapter(): BelongsTo
     {
         return $this->belongsTo(Chapter::class);
     }
 
-    public function fileResource()
+    public function attachments(): MorphMany
     {
-        return $this->hasOne(ResourceFile::class);
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 
-//    public function embedResource()
-//    {
-//        return $this->hasOne(EmbedResource::class);
-//    }
-//
-//    public function richTextResource()
-//    {
-//        return $this->hasOne(RichTextResource::class);
-//    }
-//
-//    public function externalResource()
-//    {
-//        return $this->hasOne(ExternalResource::class);
-//    }
-//
+    public function isResourceType($type)
+    {
+        return $this->resource_type === $type;
+    }
+
+    // You can add similar methods for other resource types
+    // public function embedResource() {...}
+    // public function richTextResource() {...}
+    // public function externalResource() {...}
 }

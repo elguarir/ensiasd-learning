@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Storage;
+use Illuminate\Support\Facades\Storage;
 
 class Attachment extends Model
 {
     use SoftDeletes;
+
+    // Default disk to use for file storage
+    protected $disk = config('filesystems.default');
 
     protected $fillable = [
         'original_filename',
@@ -17,13 +21,23 @@ class Attachment extends Model
         'mime_type',
         'size',
         'extension',
+        'attachable_id',
+        'attachable_type',
         'collection',
+        'is_private',
+        'metadata',
+    ];
+
+    protected $casts = [
+        'is_private' => 'boolean',
+        'metadata' => 'array',
+        'size' => 'integer',
     ];
 
     /**
      * Get the parent attachable model.
      */
-    public function attachable()
+    public function attachable(): MorphTo
     {
         return $this->morphTo();
     }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use Auth;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use function is_null;
 
 class EnsureProfileIsComplete
 {
@@ -17,8 +18,8 @@ class EnsureProfileIsComplete
 
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && is_null(Auth::user()->profile_completed_at)) {
-            return redirect()->route('profile.create');
+        if (Auth::check() && (is_null(Auth::user()->profile_completed_at) || is_null(Auth::user()->role))) {
+            return redirect()->route('profile.setup');
         }
         return $next($request);
     }

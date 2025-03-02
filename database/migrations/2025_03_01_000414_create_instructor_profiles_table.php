@@ -16,7 +16,6 @@ return new class extends Migration {
             $table->text('bio');
             $table->json('expertise_areas');
             $table->json('social_links');
-            $table->string('profile_picture')->nullable();
             $table->timestamps();
         });
     }
