@@ -451,12 +451,13 @@ export default function InstructorCourses() {
                       Filter and sort your courses
                     </SheetDescription>
                   </SheetHeader>
-                  <div className="grid gap-4 p-4">
+                  <div className="grid gap-6 p-4">
                     {/* Search input */}
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-y-2.5">
                       <Label htmlFor={`${id}-mobile-input`}>Search</Label>
                       <Input
                         id={`${id}-mobile-input`}
+                        autoFocus={false}
                         className={cn(
                           "w-full",
                           Boolean(table.getColumn("title")?.getFilterValue()) &&
@@ -475,7 +476,7 @@ export default function InstructorCourses() {
                       />
                     </div>
                     {/* Status filter */}
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-y-2.5">
                       <Label>Status</Label>
                       <div className="space-y-2">
                         {uniqueStatusValues.map((value, i) => (
@@ -489,7 +490,7 @@ export default function InstructorCourses() {
                             />
                             <Label
                               htmlFor={`${id}-mobile-${i}`}
-                              className="flex grow justify-between gap-2 font-normal"
+                              className="flex grow justify-between gap-2 font-normal capitalize"
                             >
                               {value}{" "}
                               <span className="text-muted-foreground ms-2 text-xs">
@@ -501,7 +502,7 @@ export default function InstructorCourses() {
                       </div>
                     </div>
                     {/* View mode */}
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-y-2.5">
                       <Label>View Mode</Label>
                       <div className="flex w-full items-center overflow-hidden rounded-md border">
                         <Button
