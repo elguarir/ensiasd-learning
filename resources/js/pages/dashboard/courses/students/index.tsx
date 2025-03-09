@@ -1,11 +1,9 @@
-import InstructorCourses from "@/components/comp-483";
-import Component from "@/components/comp-485";
 import Heading from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import AppLayout from "@/layouts/app-layout";
 import { type BreadcrumbItem } from "@/types";
 import { Head } from "@inertiajs/react";
-import { Book, BookOpenText, Pencil, StarsIcon, User } from "lucide-react";
+import { BookOpenText, Pencil, StarsIcon, User } from "lucide-react";
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -31,10 +29,7 @@ export default function Dashboard() {
 
           <Button>Create Course</Button>
         </div>
-        <div>
-          <Component />
-          {/* <StatsCards /> */}
-        </div>
+        <div className="flex flex-col gap-4 "></div>
       </div>
     </AppLayout>
   );
@@ -87,7 +82,7 @@ const StatsCards = () => (
           <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
         </svg>
         <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-emerald-600/50 bg-emerald-600/25 text-emerald-500 max-[480px]:hidden">
-         <Pencil className="size-5" />
+          <Pencil className="size-5" />
         </div>
         <div>
           <a
@@ -149,7 +144,7 @@ const StatsCards = () => (
           <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
         </svg>
         <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-emerald-600/50 bg-emerald-600/25 text-emerald-500 max-[480px]:hidden">
-         <StarsIcon className="size-5" />
+          <StarsIcon className="size-5" />
         </div>
         <div>
           <a
