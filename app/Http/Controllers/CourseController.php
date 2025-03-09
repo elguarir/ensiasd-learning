@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class CourseController extends Controller
@@ -11,6 +10,11 @@ class CourseController extends Controller
 
     public function view(Request $request)
     {
-        return Inertia::render('dashboard/courses/index');
+        $role = $request->user()->role;
+        if ($role == "instructor") {
+            return Inertia::render('dashboard/courses/instructors/index');
+        } else {
+            return Inertia::render('dashboard/courses/students/index');
+        }
     }
 }

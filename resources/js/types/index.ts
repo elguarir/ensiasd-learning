@@ -40,3 +40,21 @@ export interface User {
   updated_at: string;
   [key: string]: unknown;
 }
+
+export interface Course {
+  id: number;
+  instructor_id: number;
+  title: string;
+  slug: string;
+  description: string;
+  image: string;
+  category: string;
+  is_featured: boolean;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  status: 'draft' | 'published' | 'archived';
+  tags: string[];
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+  students_count: number;
+}

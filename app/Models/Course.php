@@ -17,6 +17,8 @@ class Course extends Model
 
     protected $casts = [
         'published_at' => 'datetime',
+        'tags' => 'array',
+        'is_featured' => 'boolean',
     ];
 
     public function instructor()

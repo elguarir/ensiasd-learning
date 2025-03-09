@@ -14,9 +14,13 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('instructor_id')->constrained("users")->onDelete('cascade');
             $table->string('title');
+            $table->string('slug')->unique();
             $table->text('description');
             $table->string('image');
             $table->string('category');
+            $table->boolean('is_featured')->default(false);
+            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
+            $table->json(('tags'))->nullable();
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });

@@ -43,7 +43,7 @@ export function SearchBar() {
 
       <div className="block lg:hidden">
         <Button variant="ghost" size={"icon"} onClick={() => setOpen(true)}>
-          <SearchIcon className="size-5" />
+          <SearchIcon className="size-4" />
         </Button>
       </div>
 

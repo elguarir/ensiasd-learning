@@ -11,7 +11,7 @@ function NotificationsPopup({}: Props) {
       <PopoverTrigger>
         <div className="relative">
           <Button variant="ghost" size="icon">
-            <Bell className="size-5" />
+            <Bell className="size-4" />
           </Button>
           <span className="absolute top-2 right-2 size-1 rounded-full bg-red-500" />
         </div>
