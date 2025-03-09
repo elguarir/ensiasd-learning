@@ -46,9 +46,12 @@ export default function SettingsLayout({
                 size="sm"
                 variant="ghost"
                 asChild
-                className={cn("w-full justify-start", {
-                  "bg-muted": currentPath === item.url,
-                })}
+                className={cn(
+                  "w-full justify-start border border-transparent",
+                  {
+                    "bg-muted border border-[--border]": currentPath === item.url,
+                  },
+                )}
               >
                 <Link href={item.url} prefetch>
                   {item.title}

@@ -10,33 +10,71 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useUser } from "@/hooks/use-user";
 import { type NavItem } from "@/types";
 import { Link } from "@inertiajs/react";
-import { BookOpen, Folder, LayoutGrid } from "lucide-react";
+import {
+  BookOpenText,
+  ClipboardList,
+  FileText,
+  LayoutGrid,
+  MessageSquareIcon,
+  User,
+} from "lucide-react";
 import AppLogo from "./app-logo";
 
-const mainNavItems: NavItem[] = [
+const studentMainNavItems: NavItem[] = [
   {
     title: "Dashboard",
     url: "/dashboard",
     icon: LayoutGrid,
   },
+  {
+    title: "Courses",
+    url: "/dashboard/courses",
+    icon: BookOpenText,
+  },
+];
+
+const instructorMainNavItems: NavItem[] = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: LayoutGrid,
+  },
+  {
+    title: "Courses",
+    url: "/dashboard/courses",
+    icon: BookOpenText,
+  },
+  {
+    title: "Assignements",
+    url: "/dashboard/assignments",
+    icon: ClipboardList,
+  },
+  {
+    title: "Publications",
+    url: "/dashboard/publications",
+    icon: FileText,
+  },
+  {
+    title: "Messages",
+    url: "/dashboard/messages",
+    icon: MessageSquareIcon,
+  },
 ];
 
 const footerNavItems: NavItem[] = [
-  // {
-  //   title: "Repository",
-  //   url: "https://github.com/laravel/react-starter-kit",
-  //   icon: Folder,
-  // },
-  // {
-  //   title: "Documentation",
-  //   url: "https://laravel.com/docs/starter-kits",
-  //   icon: BookOpen,
-  // },
+  {
+    title: "Profile",
+    url: "/settings/profile",
+    icon: User,
+  },
 ];
 
 export function AppSidebar() {
+  const user = useUser();
+  const isInstructor = user?.role === "instructor";
   return (
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader>
@@ -52,7 +90,9 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        <NavMain items={mainNavItems} />
+        <NavMain
+          items={isInstructor ? instructorMainNavItems : studentMainNavItems}
+        />
       </SidebarContent>
 
       <SidebarFooter>

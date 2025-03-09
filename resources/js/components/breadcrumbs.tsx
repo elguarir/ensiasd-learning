@@ -7,6 +7,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { type BreadcrumbItem as BreadcrumbItemType } from "@/types";
+import { Link } from "@inertiajs/react";
 import { Fragment } from "react";
 
 export function Breadcrumbs({
@@ -27,8 +28,8 @@ export function Breadcrumbs({
                     {isLast ? (
                       <BreadcrumbPage>{item.title}</BreadcrumbPage>
                     ) : (
-                      <BreadcrumbLink href={item.href}>
-                        {item.title}
+                      <BreadcrumbLink asChild>
+                        <Link href={item.href}>{item.title}</Link>
                       </BreadcrumbLink>
                     )}
                   </BreadcrumbItem>

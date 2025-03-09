@@ -17,5 +17,6 @@ createServer((page) =>
     },
     // prettier-ignore
     setup: ({ App, props }) => <App {...props} />,
+    progress: true,
   }),
 );

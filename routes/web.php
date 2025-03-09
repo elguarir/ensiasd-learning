@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileCompletionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -8,12 +9,14 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-// Routes requiring complete profile
 Route::middleware(['auth', 'profile.complete'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-    // Add other routes requiring completed profile here
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('/', function () {
+            return Inertia::render('dashboard');
+        })->name('index');
+
+        Route::get('courses', [CourseController::class, 'view'])->name('courses');
+    });
 });
 
 // Auth routes that don't require complete profile

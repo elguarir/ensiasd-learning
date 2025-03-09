@@ -11,8 +11,7 @@ class Attachment extends Model
 {
     use SoftDeletes;
 
-    // Default disk to use for file storage
-    protected $disk = config('filesystems.default');
+    protected $disk;
 
     protected $fillable = [
         'original_filename',
@@ -35,6 +34,15 @@ class Attachment extends Model
     ];
 
     /**
+     * Create a new model instance.
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->disk = config('filesystems.default');
+    }
+
+    /**
      * Get the parent attachable model.
      */
     public function attachable(): MorphTo
@@ -47,7 +55,7 @@ class Attachment extends Model
      */
     public function getUrlAttribute()
     {
-        return Storage::disk($this->disk)->url($this->path);
+        return Storage::disk($this->disk)->get($this->path);
     }
 
     /**

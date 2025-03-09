@@ -14,7 +14,7 @@ class ProfileCompletionController extends Controller
     public function create()
     {
         if(Auth::user()->profile_completed_at && Auth::user()->role) {
-            return redirect()->route('dashboard');
+            return redirect()->route('dashboard.index');
         }
         return Inertia::render('profile/profile-setup');
     }
@@ -68,7 +68,7 @@ class ProfileCompletionController extends Controller
 
             DB::commit();
 
-            return redirect()->route('dashboard')->with('success', 'Profile setup completed successfully!');
+            return redirect()->route('dashboard.index')->with('success', 'Profile setup completed successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors(['error' => 'Failed to complete profile setup. Please try again.']);
