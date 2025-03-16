@@ -330,7 +330,7 @@ export default function InstructorCourses() {
                     )}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto min-w-36 p-3" align="start">
+                <PopoverContent className="w-auto min-w-36 px-3 py-2" align="start">
                   <div className="space-y-3">
                     <div className="text-muted-foreground text-xs font-medium">
                       Filters
@@ -347,7 +347,7 @@ export default function InstructorCourses() {
                           />
                           <Label
                             htmlFor={`${id}-${i}`}
-                            className="flex grow justify-between gap-2 font-normal"
+                            className="flex grow justify-between gap-2 font-normal capitalize"
                           >
                             {value}{" "}
                             <span className="text-muted-foreground ms-2 text-xs">

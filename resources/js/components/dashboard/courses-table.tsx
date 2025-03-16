@@ -214,7 +214,7 @@ export default function CoursesTable({
                     <TableHead
                       key={header.id}
                       style={{ width: `${header.getSize()}px` }}
-                      className="h-11"
+                      className="h-11 focus-visible:outline-none"
                     >
                       {header.isPlaceholder ? null : header.column.getCanSort() ? (
                         <div

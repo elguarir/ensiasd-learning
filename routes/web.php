@@ -11,7 +11,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'profile.complete'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
-        
+
         Route::get('/', function () {
             return Inertia::render('dashboard');
         })->name('index');
