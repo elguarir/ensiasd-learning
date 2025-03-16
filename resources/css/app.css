@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 @import "tailwindcss";
 @plugin 'tailwindcss-animate';
 
@@ -10,6 +10,10 @@
   --font-sans:
     "Geist", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif:
+    "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono:
+    "Fira Code", ui-monospace, SFMono-Regular, SF Mono, Consolas, "Liberation Mono", Menlo, Courier, monospace, monospace;
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -68,6 +72,7 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -79,11 +84,11 @@
 
 :root {
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(220, 3%, 15%);
+  --foreground: hsl(220, 5%, 15%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(220, 3%, 15%);
+  --card-foreground: hsl(220, 5%, 15%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(220, 3%, 15%);
+  --popover-foreground: hsl(220, 5%, 15%);
   --primary: hsl(217, 89%, 50%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(213, 80%, 95%);
@@ -104,7 +109,7 @@
   --chart-5: hsl(195, 80%, 50%);
   --radius: 0.1rem;
   --sidebar-background: hsl(220, 14%, 96%);
-  --sidebar-foreground: hsl(220, 3%, 15%);
+  --sidebar-foreground: hsl(220, 5%, 15%);
   --sidebar-primary: hsl(217, 89%, 50%);
   --sidebar-primary-foreground: hsl(0, 0%, 100%);
   --sidebar-accent: hsl(213, 80%, 95%);
@@ -115,14 +120,14 @@
 }
 
 .dark {
-  --background: hsl(220, 3%, 15%);
+  --background: hsl(220, 5%, 15%);
   --foreground: hsl(0, 0%, 100%);
-  --card: hsl(220, 3%, 15%);
+  --card: hsl(220, 5%, 15%);
   --card-foreground: hsl(0, 0%, 100%);
-  --popover: hsl(220, 3%, 15%);
+  --popover: hsl(220, 5%, 15%);
   --popover-foreground: hsl(0, 0%, 100%);
   --primary: hsl(213, 94%, 68%);
-  --primary-foreground: hsl(220, 3%, 15%);
+  --primary-foreground: hsl(220, 5%, 15%);
   --secondary: hsl(220, 6%, 20%);
   --secondary-foreground: hsl(0, 0%, 100%);
   --muted: hsl(220, 6%, 20%);
@@ -175,6 +180,7 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+
   /*
   ---break---
 */
@@ -182,10 +188,12 @@
     from {
       height: 0;
     }
+
     to {
       height: var(--radix-accordion-content-height);
     }
   }
+
   /*
   ---break---
 */
@@ -193,6 +201,7 @@
     from {
       height: var(--radix-accordion-content-height);
     }
+
     to {
       height: 0;
     }
@@ -207,6 +216,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -218,18 +228,18 @@
   */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
-    transition:
-        background-color 600000s 0s,
-        color 600000s 0s;
+  transition:
+    background-color 600000s 0s,
+    color 600000s 0s;
 }
 
 input[data-autocompleted] {
-    background-color: transparent !important;
+  background-color: transparent !important;
 }
 
 input:-webkit-autofill {
-    -webkit-animation-delay: 1s;
-    /* Safari support - any positive time runs instantly */
-    -webkit-animation-name: autofill;
-    -webkit-animation-fill-mode: both;
+  -webkit-animation-delay: 1s;
+  /* Safari support - any positive time runs instantly */
+  -webkit-animation-name: autofill;
+  -webkit-animation-fill-mode: both;
 }

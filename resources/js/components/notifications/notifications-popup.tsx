@@ -8,7 +8,7 @@ type Props = {};
 function NotificationsPopup({}: Props) {
   return (
     <Popover>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <div className="relative">
           <Button variant="ghost" size="icon">
             <Bell className="size-4" />
