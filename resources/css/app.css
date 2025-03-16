@@ -71,24 +71,24 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
-@layer base {
+/* @layer base {
 
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--color-border, currentColor);
   }
-}
+} */
 
 :root {
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(220, 5%, 15%);
+  --foreground: hsl(220, 3%, 7%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(220, 5%, 15%);
+  --card-foreground: hsl(220, 3%, 7%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(220, 5%, 15%);
+  --popover-foreground: hsl(220, 3%, 7%);
   --primary: hsl(217, 89%, 50%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(213, 80%, 95%);
@@ -109,7 +109,7 @@
   --chart-5: hsl(195, 80%, 50%);
   --radius: 0.1rem;
   --sidebar-background: hsl(220, 14%, 96%);
-  --sidebar-foreground: hsl(220, 5%, 15%);
+  --sidebar-foreground: hsl(220, 3%, 7%);
   --sidebar-primary: hsl(217, 89%, 50%);
   --sidebar-primary-foreground: hsl(0, 0%, 100%);
   --sidebar-accent: hsl(213, 80%, 95%);
@@ -120,14 +120,14 @@
 }
 
 .dark {
-  --background: hsl(220, 5%, 15%);
+  --background: hsl(220, 3%, 7%);
   --foreground: hsl(0, 0%, 100%);
-  --card: hsl(220, 5%, 15%);
+  --card: hsl(220, 3%, 7%);
   --card-foreground: hsl(0, 0%, 100%);
-  --popover: hsl(220, 5%, 15%);
+  --popover: hsl(220, 3%, 7%);
   --popover-foreground: hsl(0, 0%, 100%);
   --primary: hsl(213, 94%, 68%);
-  --primary-foreground: hsl(220, 5%, 15%);
+  --primary-foreground: hsl(220, 3%, 7%);
   --secondary: hsl(220, 6%, 20%);
   --secondary-foreground: hsl(0, 0%, 100%);
   --muted: hsl(220, 6%, 20%);
@@ -136,7 +136,7 @@
   --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(4, 90%, 65%);
   --destructive-foreground: hsl(0, 0%, 100%);
-  --border: hsl(220, 6%, 25%);
+  --border: hsl(220, 6%, 20%);
   --input: hsl(220, 6%, 25%);
   --ring: hsl(0, 0%, 83.1%);
   --chart-1: hsl(220, 70%, 50%);
