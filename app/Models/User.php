@@ -79,4 +79,65 @@ class User extends Authenticatable
     {
         return $this->hasMany(ThreadComment::class, 'author_id');
     }
+
+    // Assignment relationships
+    public function createdAssignments()
+    {
+        return $this->hasManyThrough(
+            Assignment::class,
+            Course::class,
+            'instructor_id', // Foreign key on courses table
+            'course_id', // Foreign key on assignments table
+            'id', // Local key on users table
+            'id' // Local key on courses table
+        );
+    }
+
+    // Submission relationships
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
+
+    // Quiz answers
+    public function quizAnswers()
+    {
+        return $this->hasManyThrough(
+            QuizAnswer::class,
+            Submission::class,
+            'user_id', // Foreign key on submissions table
+            'submission_id', // Foreign key on quiz_answers table
+            'id', // Local key on users table
+            'id' // Local key on submissions table
+        );
+    }
+
+    // Submission attachments
+    public function submissionAttachments()
+    {
+        return $this->hasManyThrough(
+            Attachment::class,
+            Submission::class,
+            'user_id', // Foreign key on submissions table
+            'attachable_id', // Foreign key on attachments table
+            'id', // Local key on users table
+            'id' // Local key on submissions table
+        )->where('attachable_type', Submission::class);
+    }
+
+    // Helper methods for assignments
+    public function hasSubmittedAssignment($assignmentId)
+    {
+        return $this->submissions()
+            ->where('assignment_id', $assignmentId)
+            ->where('status', '!=', 'draft')
+            ->exists();
+    }
+
+    public function getAssignmentSubmission($assignmentId)
+    {
+        return $this->submissions()
+            ->where('assignment_id', $assignmentId)
+            ->first();
+    }
 }

@@ -8,17 +8,18 @@ class Course extends Model
 {
     protected $fillable = [
         'instructor_id',
+        'code',
         'title',
         'description',
         'image',
         'category',
+        'status', // draft, published, archived
         'published_at',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
-        'tags' => 'array',
-        'is_featured' => 'boolean',
+        'status' => 'string',
     ];
 
     public function instructor()
@@ -48,6 +49,6 @@ class Course extends Model
 
     public function isPublished()
     {
-        return $this->published !== null;
+        return $this->status === 'published';
     }
 }

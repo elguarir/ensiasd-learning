@@ -14,7 +14,10 @@ class CourseController extends Controller
         if ($role == "instructor") {
             return Inertia::render('dashboard/courses/instructors/index');
         } else {
-            return Inertia::render('dashboard/courses/students/index');
+            $courses = $request->user()->courses;
+            return Inertia::render('dashboard/courses/students/index', [
+                'courses' => $courses,
+            ]);
         }
     }
 }

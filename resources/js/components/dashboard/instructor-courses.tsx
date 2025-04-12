@@ -66,6 +66,7 @@ import { useId, useMemo, useRef, useState } from "react";
 import { Badge } from "../ui/badge";
 import CoursesGrid from "./courses-grid";
 import CoursesTable, { columns } from "./courses-table";
+import AddCourseDialog from "./add-course-dialog";
 
 // Mock data for demonstration
 const mockCourses: Course[] = [
@@ -537,9 +538,7 @@ export default function InstructorCourses() {
               </Sheet>
 
               {/* Add course button remains visible */}
-              <Button size="icon" className="shrink-0">
-                <PlusIcon className="size-4" aria-hidden="true" />
-              </Button>
+              <AddCourseDialog showText={false} />
             </div>
 
             {/* Desktop actions */}
@@ -593,14 +592,7 @@ export default function InstructorCourses() {
                 </AlertDialog>
               )}
               {/* Add course button */}
-              <Button className="ml-auto">
-                <PlusIcon
-                  className="-ms-1 opacity-60"
-                  size={16}
-                  aria-hidden="true"
-                />
-                Add course
-              </Button>
+                <AddCourseDialog showText />
             </div>
           </div>
 

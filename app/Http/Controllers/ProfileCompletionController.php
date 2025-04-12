@@ -13,7 +13,7 @@ class ProfileCompletionController extends Controller
 {
     public function create()
     {
-        if(Auth::user()->profile_completed_at && Auth::user()->role) {
+        if (Auth::user()->profile_completed_at && Auth::user()->role) {
             return redirect()->route('dashboard.index');
         }
         return Inertia::render('profile/profile-setup');
@@ -23,16 +23,15 @@ class ProfileCompletionController extends Controller
     {
         // Start a database transaction
         DB::beginTransaction();
-
+        
         try {
             $user = $request->user();
             $validated = $request->validated();
-
-            // Prepare user data
+            
             $userData = [
                 'name' => $validated['name'],
                 'username' => $validated['username'],
-                'role' => $validated['accountType'],
+                'role' => 'student',
                 'profile_completed_at' => now(),
             ];
 
@@ -54,22 +53,11 @@ class ProfileCompletionController extends Controller
 
             $user->update($userData);
 
-            if ($validated['accountType'] === 'instructor') {
-                InstructorProfile::updateOrCreate(
-                    ['user_id' => $user->id],
-                    [
-                        'bio' => $validated['bio'],
-                        'expertise_areas' => $validated['expertise_areas'],
-                        'social_links' => $validated['social_links'],
-                    ]
-                );
-            }
-
-
             DB::commit();
 
             return redirect()->route('dashboard.index')->with('success', 'Profile setup completed successfully!');
         } catch (\Exception $e) {
+            dd($e);
             DB::rollBack();
             return back()->withErrors(['error' => 'Failed to complete profile setup. Please try again.']);
         }

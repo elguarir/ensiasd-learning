@@ -1,9 +1,7 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { type BreadcrumbItem as BreadcrumbItemType } from "@/types";
-import { Search } from "lucide-react";
-import NotificationsPopup from "./notifications/notifications-popup";
-import { Button } from "./ui/button";
+import NotificationsPopup from "./dashboard/notifications/notifications-popup";
 import { SearchBar } from "./extras/search-bar";
 
 export function AppSidebarHeader({

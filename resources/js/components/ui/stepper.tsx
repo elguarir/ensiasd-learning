@@ -145,7 +145,7 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
   if (asChild) {
     const Comp = asChild ? Slot : "span";
     return (
-      <Comp data-slot="stepper-trigger" className={className}>
+      <Comp data-slot="stepper-trigger"  className={className}>
         {children}
       </Comp>
     );
@@ -161,6 +161,7 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
       onClick={() => setActiveStep(step)}
       disabled={isDisabled}
       {...props}
+      type="button"
     >
       {children}
     </button>

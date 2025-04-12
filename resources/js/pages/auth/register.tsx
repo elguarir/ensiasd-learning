@@ -54,7 +54,7 @@ export default function Register() {
                 value={data.name}
                 onChange={(e) => setData("name", e.target.value)}
                 disabled={processing}
-                placeholder="Full name"
+                placeholder="John Doe"
               />
             </div>
             <div className="grid gap-2">
@@ -68,7 +68,7 @@ export default function Register() {
                 value={data.username}
                 onChange={(e) => setData("username", e.target.value)}
                 disabled={processing}
-                placeholder="Username"
+                placeholder="johndoe"
               />
             </div>
             <InputError

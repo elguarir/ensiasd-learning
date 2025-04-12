@@ -28,44 +28,23 @@ class ProfileSetupRequest extends FormRequest
                 'nullable',
                 'image',
                 'mimes:jpeg,png,jpg',
-                'max:2048',
-            ],
-            'accountType' => [
-                'required',
-                Rule::in(['student', 'instructor'])
+                'max:10240',
             ],
         ];
-
-        // Add instructor-specific validation rules when account type is instructor
-        if ($this->input('accountType') === 'instructor') {
-            $rules['bio'] = ['required', 'string', 'min:100', 'max:1000'];
-            $rules['expertise_areas'] = [
-                'required',
-                'array',
-                'min:1',
-                'max:5'
-            ];
-            $rules['expertise_areas.*'] = ['required', 'string', 'max:50'];
-            $rules['social_links'] = ['required', 'array'];
-            $rules['social_links.linkedin'] = ['nullable', 'url'];
-            $rules['social_links.twitter'] = ['nullable', 'url'];
-            $rules['social_links.github'] = ['nullable', 'url'];
-            $rules['social_links.website'] = ['nullable', 'url'];
-        }
-
         return $rules;
     }
 
     public function messages(): array
     {
         return [
-            'accountType.in' => 'The account type must be either student or instructor.',
-            'avatar.max' => 'The profile picture must not be larger than 2MB.',
-            'bio.required' => 'A bio is required for instructor accounts.',
-            'bio.min' => 'Your bio should be at least 100 characters.',
-            'expertise_areas.required' => 'Please specify at least one area of expertise.',
-            'expertise_areas.max' => 'You can specify up to 5 areas of expertise.',
-            'social_links.*.url' => 'Please provide valid URLs for social links.',
+            'avatar.max' => 'The profile picture must not be larger than 10MB.',
+            'name.required' => 'Please enter your name.',
+            'name.max' => 'Your name cannot be longer than 255 characters.',
+            'username.required' => 'Please choose a username.',
+            'username.max' => 'Your username cannot be longer than 255 characters.',
+            'username.unique' => 'This username is already taken.',
+            'avatar.image' => 'The profile picture must be an image.',
+            'avatar.mimes' => 'The profile picture must be a JPEG, PNG or JPG file.'
         ];
     }
 }

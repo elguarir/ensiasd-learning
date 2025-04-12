@@ -1,7 +1,8 @@
+import { EmptyState } from "@/components/empty-state";
 import Heading from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import AppLayout from "@/layouts/app-layout";
-import { type BreadcrumbItem } from "@/types";
+import { type BreadcrumbItem, type Course } from "@/types";
 import { Head } from "@inertiajs/react";
 import { BookOpenText, Pencil, StarsIcon, User } from "lucide-react";
 
@@ -16,7 +17,8 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-export default function Dashboard() {
+export default function Dashboard(props: { courses: Course[] }) {
+  console.log(props);
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Courses" />
@@ -24,12 +26,19 @@ export default function Dashboard() {
         <div className="flex items-center justify-between gap-4">
           <Heading
             title="Courses"
-            description="View and manage all your courses. Create new courses or modify existing ones."
+            description="View your courses and enroll in new ones."
           />
 
-          <Button>Create Course</Button>
+          <Button>Join Course</Button>
         </div>
-        <div className="flex flex-col gap-4 "></div>
+        <div className="flex flex-col gap-4">
+          <EmptyState
+            title="You're not enrolled in any courses"
+            description="Enroll in a course to get started."
+            icons={[BookOpenText, Pencil, User]}
+            className="w-full"
+          />
+        </div>
       </div>
     </AppLayout>
   );
