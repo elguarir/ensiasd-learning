@@ -1,10 +1,14 @@
 import { useForm } from "@inertiajs/react";
-import { ImageIcon, PlusIcon, Trash2, X } from "lucide-react";
+import { ImageIcon, Info, PlusIcon, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { useImageUpload } from "../../hooks/use-image-upload";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Input } from "../ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import {
   Select,
   SelectContent,
@@ -13,6 +17,8 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { toast } from "sonner";
 
 interface Props {
   showText: boolean;
@@ -23,21 +29,18 @@ function AddCourseDialog(p: Props) {
   const { data, setData, post, processing, errors, reset } = useForm({
     title: "",
     description: "",
-    image: "",
+    image: null as File | null,
     color: "#4DAB9A",
     category: "",
   });
 
   const {
     previewUrl,
-    fileName,
     fileInputRef,
     handleThumbnailClick,
     handleFileChange,
     handleRemove,
-  } = useImageUpload({
-    onUpload: (url) => setData("image", url),
-  });
+  } = useImageUpload();
 
   const colors = [
     { name: "Gray", value: "#9B9A97" },
@@ -64,10 +67,14 @@ function AddCourseDialog(p: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     post(route("courses.store"), {
+      preserveScroll: true,
+      forceFormData: true,
       onSuccess: () => {
         reset();
         setOpen(false);
+        toast.success("Course created successfully!");
       },
     });
   };
@@ -101,17 +108,12 @@ function AddCourseDialog(p: Props) {
             className="relative flex h-[180px] w-full flex-col items-start justify-end rounded-t-lg p-4"
             style={{
               backgroundColor: data.color,
-              backgroundImage: previewUrl
-                ? `url(${previewUrl})`
-                : data.image
-                  ? `url(${data.image})`
-                  : "none",
+              backgroundImage: previewUrl ? `url(${previewUrl})` : "none",
               backgroundSize: "cover",
               backgroundPosition: "center",
-              boxShadow:
-                previewUrl || data.image
-                  ? "inset 0 0 0 2000px rgba(0, 0, 0, 0.4)"
-                  : "none",
+              boxShadow: previewUrl
+                ? "inset 0 0 0 2000px rgba(0, 0, 0, 0.4)"
+                : "none",
             }}
           >
             <div className="absolute top-2 right-2 flex gap-2">
@@ -129,7 +131,7 @@ function AddCourseDialog(p: Props) {
                   className="rounded-full bg-white/20 p-1 hover:bg-white/30"
                   onClick={() => {
                     handleRemove();
-                    setData("image", "");
+                    setData("image", null);
                   }}
                   title="Remove image"
                 >
@@ -145,12 +147,42 @@ function AddCourseDialog(p: Props) {
               </button>
             </div>
 
+            {errors.image && (
+              <div className="absolute top-2 left-2 flex items-center gap-2">
+                <div className="flex items-center gap-2">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className="bg-destructive/20 hover:bg-destructive/30 rounded-full p-1"
+                      >
+                        <Info className="text-destructive size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="bottom"
+                      className="bg-destructive text-destructive-foreground"
+                      closeClassName="bg-destructive fill-destructive"
+                    >
+                      {errors.image}
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </div>
+            )}
+
             <input
               ref={fileInputRef}
               type="file"
               className="hidden"
               accept="image/*"
-              onChange={handleFileChange}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  setData("image", file);
+                }
+                handleFileChange(e);
+              }}
             />
 
             <input
@@ -204,17 +236,6 @@ function AddCourseDialog(p: Props) {
               {errors.category && (
                 <p className="mt-1 text-sm text-red-500">{errors.category}</p>
               )}
-            </div>
-
-            <div className="hidden">
-              <div className="flex gap-2">
-                <Input
-                  type="hidden"
-                  value={data.image}
-                  onChange={(e) => setData("image", e.target.value)}
-                  disabled={!!previewUrl}
-                />
-              </div>
             </div>
 
             <div>

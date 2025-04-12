@@ -19,6 +19,7 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
     });
 
     Route::post('courses/join', [CourseController::class, 'join'])->name('courses.join');
+    Route::post('courses', [CourseController::class, 'store'])->name('courses.store');
 });
 
 // Auth routes that don't require complete profile

@@ -15,8 +15,9 @@ return new class extends Migration {
             $table->foreignId('instructor_id')->constrained("users")->onDelete('cascade');
             $table->string('code')->unique();
             $table->string('title');
-            $table->text('description');
-            $table->string('image');
+            $table->text('description')->nullable();
+            $table->string('color')->default('#0B6E99');
+            $table->string('image')->nullable();
             $table->string('category');
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->timestamp('published_at')->nullable();

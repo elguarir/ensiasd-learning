@@ -8,10 +8,11 @@ class Course extends Model
 {
     protected $fillable = [
         'instructor_id',
-        'code',
         'title',
         'description',
         'image',
+        'code',
+        'color',
         'category',
         'status', // draft, published, archived
         'published_at',

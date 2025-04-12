@@ -12,7 +12,7 @@ class AvatarService
      * @param string $name
      * @return string
      */
-    public function generateDefaultAvatar(string $name): string
+    public static function generateDefaultAvatar(string $name): string
     {
         return sprintf(
             'https://api.dicebear.com/9.x/initials/svg?seed=%s&backgroundColor=00acc1,5e35b1,d81b60&backgroundRotation=135,225&scale=70',
@@ -26,7 +26,7 @@ class AvatarService
      * @param string|null $avatar
      * @return string|null
      */
-    public function getAvatarUrl(?string $avatar): ?string
+    public static function getAvatarUrl(?string $avatar): ?string
     {
         if (!$avatar) {
             return null;
