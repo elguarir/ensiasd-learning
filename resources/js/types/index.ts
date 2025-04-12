@@ -48,7 +48,7 @@ export interface Course {
   description: string;
   image: string;
   category: string;
-  status: 'draft' | 'published' | 'archived';
+  status: "draft" | "published" | "archived";
   published_at: string | null;
   created_at: string;
   updated_at: string;
@@ -66,7 +66,7 @@ export interface Assignment {
   chapter_id?: number | null;
   title: string;
   description: string | null;
-  type: 'file' | 'quiz';
+  type: "file" | "quiz";
   due_date: string | null;
   points_possible: number;
   published: boolean;
@@ -85,7 +85,7 @@ export interface Submission {
   user_id: number;
   submitted_at: string | null;
   is_late: boolean;
-  status: 'draft' | 'submitted' | 'graded';
+  status: "draft" | "submitted" | "graded";
   grade: number | null;
   feedback: string | null;
   created_at: string;

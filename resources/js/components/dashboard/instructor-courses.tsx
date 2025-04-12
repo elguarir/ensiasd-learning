@@ -57,16 +57,15 @@ import {
   FilterIcon,
   LayoutGridIcon,
   ListFilterIcon,
-  PlusIcon,
   SlidersHorizontal,
   TableIcon,
   TrashIcon,
 } from "lucide-react";
 import { useId, useMemo, useRef, useState } from "react";
 import { Badge } from "../ui/badge";
+import AddCourseDialog from "./add-course-dialog";
 import CoursesGrid from "./courses-grid";
 import CoursesTable, { columns } from "./courses-table";
-import AddCourseDialog from "./add-course-dialog";
 
 // Mock data for demonstration
 const mockCourses: Course[] = [
@@ -331,7 +330,10 @@ export default function InstructorCourses() {
                     )}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto min-w-36 px-3 py-2" align="start">
+                <PopoverContent
+                  className="w-auto min-w-36 px-3 py-2"
+                  align="start"
+                >
                   <div className="space-y-3">
                     <div className="text-muted-foreground text-xs font-medium">
                       Filters
@@ -592,7 +594,7 @@ export default function InstructorCourses() {
                 </AlertDialog>
               )}
               {/* Add course button */}
-                <AddCourseDialog showText />
+              <AddCourseDialog showText />
             </div>
           </div>
 

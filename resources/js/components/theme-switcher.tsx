@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { useControllableState } from '@radix-ui/react-use-controllable-state';
-import { Monitor, Moon, Sun } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { cn } from "@/lib/utils";
+import { useControllableState } from "@radix-ui/react-use-controllable-state";
+import { motion } from "framer-motion";
+import { Monitor, Moon, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const themes = [
   {
-    key: 'system',
+    key: "system",
     icon: Monitor,
-    label: 'System theme',
+    label: "System theme",
   },
   {
-    key: 'light',
+    key: "light",
     icon: Sun,
-    label: 'Light theme',
+    label: "Light theme",
   },
   {
-    key: 'dark',
+    key: "dark",
     icon: Moon,
-    label: 'Dark theme',
+    label: "Dark theme",
   },
 ];
 
 export type ThemeSwitcherProps = {
-  value?: 'light' | 'dark' | 'system';
-  onChange?: (theme: 'light' | 'dark' | 'system') => void;
-  defaultValue?: 'light' | 'dark' | 'system';
+  value?: "light" | "dark" | "system";
+  onChange?: (theme: "light" | "dark" | "system") => void;
+  defaultValue?: "light" | "dark" | "system";
   className?: string;
 };
 
@@ -56,8 +56,8 @@ export const ThemeSwitcher = ({
   return (
     <div
       className={cn(
-        'relative flex h-8 rounded-full bg-background p-1 ring-1 ring-border',
-        className
+        "bg-background ring-border relative flex h-8 rounded-full p-1 ring-1",
+        className,
       )}
     >
       {themes.map(({ key, icon: Icon, label }) => {
@@ -68,20 +68,20 @@ export const ThemeSwitcher = ({
             type="button"
             key={key}
             className="relative h-6 w-6 rounded-full"
-            onClick={() => setTheme(key as 'light' | 'dark' | 'system')}
+            onClick={() => setTheme(key as "light" | "dark" | "system")}
             aria-label={label}
           >
             {isActive && (
               <motion.div
                 layoutId="activeTheme"
-                className="absolute inset-0 rounded-full bg-secondary"
-                transition={{ type: 'spring', duration: 0.5 }}
+                className="bg-secondary absolute inset-0 rounded-full"
+                transition={{ type: "spring", duration: 0.5 }}
               />
             )}
             <Icon
               className={cn(
-                'relative m-auto h-4 w-4',
-                isActive ? 'text-foreground' : 'text-muted-foreground'
+                "relative m-auto h-4 w-4",
+                isActive ? "text-foreground" : "text-muted-foreground",
               )}
             />
           </button>

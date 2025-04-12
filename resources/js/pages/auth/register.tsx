@@ -73,7 +73,7 @@ export default function Register() {
             </div>
             <InputError
               message={errors.username || errors.name}
-              className="mt-2 col-span-full"
+              className="col-span-full mt-2"
             />
           </div>
 

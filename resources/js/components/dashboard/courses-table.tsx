@@ -204,7 +204,7 @@ export default function CoursesTable({
   return (
     <>
       {/* Table */}
-      <div className="bg-background overflow-hidden max-w-[calc(100dvw-40px)] md:max-w-[calc(100dvw-var(--sidebar-width)*1.15)] w-full rounded-md border">
+      <div className="bg-background w-full max-w-[calc(100dvw-40px)] overflow-hidden rounded-md border md:max-w-[calc(100dvw-var(--sidebar-width)*1.15)]">
         <Table className="table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup: any) => (

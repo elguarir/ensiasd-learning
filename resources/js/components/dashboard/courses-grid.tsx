@@ -26,6 +26,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Course } from "@/types";
 import {
   BookOpenIcon,
@@ -38,7 +43,6 @@ import {
   PenIcon,
 } from "lucide-react";
 import { useId } from "react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface CoursesGridProps {
   data: Course[];
@@ -64,34 +68,34 @@ export default function CoursesGrid({
           rows.map((row: any) => {
             const course = row.original;
             return (
-              <div 
-                key={course.id} 
-                className="group flex flex-col overflow-hidden rounded-lg border-[1.5px] duration-300 bg-card shadow-sm transition-all hover:shadow-md"
+              <div
+                key={course.id}
+                className="group bg-card flex flex-col overflow-hidden rounded-lg border-[1.5px] shadow-sm transition-all duration-300 hover:shadow-md"
               >
                 {/* Course Image with Overlay */}
                 <div className="relative">
                   {/* Remove status badge from here */}
-                  
+
                   {/* Quick Actions (only visible on hover) */}
-                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                    <Button 
-                      size="sm" 
-                      variant="secondary" 
+                  <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+                    <Button
+                      size="sm"
+                      variant="secondary"
                       className="h-9 w-9 rounded-full p-0"
                       aria-label="Edit course"
                     >
                       <PenIcon className="h-4 w-4" />
                     </Button>
-                    <Button 
-                      size="sm" 
-                      variant="secondary" 
+                    <Button
+                      size="sm"
+                      variant="secondary"
                       className="h-9 w-9 rounded-full p-0"
                       aria-label="View course"
                     >
                       <EyeIcon className="h-4 w-4" />
                     </Button>
                   </div>
-                  
+
                   {/* Course Image */}
                   <div className="aspect-video w-full overflow-hidden">
                     <img
@@ -105,19 +109,21 @@ export default function CoursesGrid({
                     />
                   </div>
                 </div>
-                
+
                 {/* Course Content */}
                 <div className="flex flex-1 flex-col p-4">
                   <div className="mb-2 flex items-start justify-between">
-                    <h3 className="font-semibold line-clamp-1">{course.title}</h3>
+                    <h3 className="line-clamp-1 font-semibold">
+                      {course.title}
+                    </h3>
                     <CourseActions course={course} />
                   </div>
-                  
-                  <p className="text-muted-foreground mb-4 line-clamp-2 text-sm flex-grow">
+
+                  <p className="text-muted-foreground mb-4 line-clamp-2 flex-grow text-sm">
                     {course.description}
                   </p>
-                  
-                  <div className="mt-auto flex items-center justify-between pt-2 border-t text-muted-foreground text-sm">
+
+                  <div className="text-muted-foreground mt-auto flex items-center justify-between border-t pt-2 text-sm">
                     <div className="flex items-center gap-1">
                       <BookOpenIcon className="h-4 w-4" />
                       <span>8 lessons</span> {/* This could be dynamic data */}
@@ -128,7 +134,8 @@ export default function CoursesGrid({
                           <div>{renderStatusBadge(course.status)}</div>
                         </TooltipTrigger>
                         <TooltipContent>
-                          Published on {new Date(course.published_at!).toLocaleDateString()}
+                          Published on{" "}
+                          {new Date(course.published_at!).toLocaleDateString()}
                         </TooltipContent>
                       </Tooltip>
                     ) : (

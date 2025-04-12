@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
 @import "./tw-animate.css";
 @import "tailwindcss";
 @plugin 'tailwindcss-animate';
@@ -6,15 +6,15 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @custom-variant dark (&:is(.dark *));
 
-
 @theme {
   --font-sans:
-    "Geist", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif:
     "Lora", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono:
-    "Fira Code", ui-monospace, SFMono-Regular, SF Mono, Consolas, "Liberation Mono", Menlo, Courier, monospace, monospace;
+    "Fira Code", ui-monospace, SFMono-Regular, SF Mono, Consolas,
+    "Liberation Mono", Menlo, Courier, monospace, monospace;
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -209,6 +209,19 @@
   }
 }
 
+@keyframes caret-blink {
+  0%, 70%, 100% {
+    opacity: 1;
+  }
+  20%, 50% {
+    opacity: 0;
+  }
+}
+
+.animate-caret-blink {
+  animation: caret-blink 1.25s ease-out infinite;
+}
+
 /*
   ---break---
 */
@@ -222,7 +235,6 @@
     @apply bg-background text-foreground;
   }
 }
-
 
 /*
   remove autofill blueish background color
@@ -245,7 +257,6 @@ input:-webkit-autofill {
   -webkit-animation-fill-mode: both;
 }
 
-
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
   width: 8px;
@@ -257,7 +268,7 @@ input:-webkit-autofill {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-border rounded-full hover:bg-muted-foreground/50 transition-colors;
+  @apply bg-border hover:bg-muted-foreground/50 rounded-full transition-colors;
 }
 
 /* Firefox scrollbar styles */

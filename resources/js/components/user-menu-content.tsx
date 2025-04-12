@@ -5,12 +5,12 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { UserInfo } from "@/components/user-info";
+import { useAppearance } from "@/hooks/use-appearance";
 import { useMobileNavigation } from "@/hooks/use-mobile-navigation";
 import { type User } from "@/types";
 import { Link } from "@inertiajs/react";
 import { LogOut, Settings } from "lucide-react";
 import { ThemeSwitcher } from "./theme-switcher";
-import { useAppearance } from "@/hooks/use-appearance";
 
 interface UserMenuContentProps {
   user: User;
@@ -41,14 +41,9 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
             Settings
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className="flex items-center justify-between"
-        >
+        <DropdownMenuItem className="flex items-center justify-between">
           <span className="text-sm">Theme</span>
-          <ThemeSwitcher 
-            value={appearance} 
-            onChange={updateAppearance} 
-          />
+          <ThemeSwitcher value={appearance} onChange={updateAppearance} />
         </DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />

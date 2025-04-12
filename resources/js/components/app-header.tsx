@@ -1,5 +1,5 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { Icon } from "@/components/icon";
+import { Icon } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,9 +43,7 @@ const mainNavItems: NavItem[] = [
   },
 ];
 
-const rightNavItems: NavItem[] = [
-
-];
+const rightNavItems: NavItem[] = [];
 
 const activeItemStyles =
   "text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100";

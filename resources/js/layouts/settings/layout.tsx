@@ -49,7 +49,8 @@ export default function SettingsLayout({
                 className={cn(
                   "w-full justify-start border border-transparent",
                   {
-                    "bg-muted border border-[--border]": currentPath === item.url,
+                    "bg-muted border border-[--border]":
+                      currentPath === item.url,
                   },
                 )}
               >

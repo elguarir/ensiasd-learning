@@ -1,6 +1,6 @@
+import { JoinCourseDialog } from "@/components/dashboard/join-course-dialog";
 import { EmptyState } from "@/components/empty-state";
 import Heading from "@/components/heading";
-import { Button } from "@/components/ui/button";
 import AppLayout from "@/layouts/app-layout";
 import { type BreadcrumbItem, type Course } from "@/types";
 import { Head } from "@inertiajs/react";
@@ -18,7 +18,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Dashboard(props: { courses: Course[] }) {
-  console.log(props);
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Courses" />
@@ -29,7 +28,7 @@ export default function Dashboard(props: { courses: Course[] }) {
             description="View your courses and enroll in new ones."
           />
 
-          <Button>Join Course</Button>
+          <JoinCourseDialog />
         </div>
         <div className="flex flex-col gap-4">
           <EmptyState
