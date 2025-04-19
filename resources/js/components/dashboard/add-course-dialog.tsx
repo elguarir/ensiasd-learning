@@ -1,6 +1,7 @@
 import { useForm } from "@inertiajs/react";
 import { ImageIcon, Info, PlusIcon, Trash2, X } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useImageUpload } from "../../hooks/use-image-upload";
 import { Button } from "../ui/button";
 import {
@@ -18,7 +19,6 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { toast } from "sonner";
 
 interface Props {
   showText: boolean;
@@ -71,8 +71,12 @@ function AddCourseDialog(p: Props) {
     post(route("courses.store"), {
       preserveScroll: true,
       forceFormData: true,
+      onError: () => {
+        toast.error("Failed to create course!");
+      },
       onSuccess: () => {
         reset();
+        setData("image", null);
         setOpen(false);
         toast.success("Course created successfully!");
       },
@@ -199,10 +203,14 @@ function AddCourseDialog(p: Props) {
 
           <div className="space-y-4 p-4">
             <div>
-              <label className="mb-1 block text-sm font-medium">
+              <label
+                htmlFor="description"
+                className="mb-1 block text-sm font-medium"
+              >
                 Description
               </label>
               <Textarea
+                id="description"
                 placeholder="Course description"
                 className="w-full resize-none"
                 rows={3}
@@ -217,12 +225,17 @@ function AddCourseDialog(p: Props) {
             </div>
 
             <div>
-              <label className="mb-1 block text-sm font-medium">Category</label>
+              <label
+                htmlFor="category"
+                className="mb-1 block text-sm font-medium"
+              >
+                Category
+              </label>
               <Select
                 value={data.category}
                 onValueChange={(value) => setData("category", value)}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger id="category" className="w-full">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -240,16 +253,24 @@ function AddCourseDialog(p: Props) {
 
             <div>
               <label className="mb-2 block text-sm font-medium">Color</label>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2" role="radiogroup">
                 {colors.map((color) => (
-                  <button
+                  <label
                     key={color.value}
-                    type="button"
-                    className={`h-8 w-8 rounded-full ${data.color === color.value ? "ring-primary ring-2 ring-offset-2" : ""}`}
+                    className={`has-checked:ring-primary relative h-8 w-8 cursor-pointer rounded-full has-checked:ring-2 has-checked:ring-offset-2`}
                     style={{ backgroundColor: color.value }}
-                    onClick={() => setData("color", color.value)}
                     title={color.name}
-                  />
+                  >
+                    <input
+                      type="radio"
+                      name="color"
+                      value={color.value}
+                      checked={data.color === color.value}
+                      onChange={(e) => setData("color", e.target.value)}
+                      className="sr-only"
+                    />
+                    <span className="sr-only">{color.name}</span>
+                  </label>
                 ))}
               </div>
             </div>

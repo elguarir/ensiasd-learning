@@ -1,0 +1,257 @@
+# nixpacks.toml
+
+# Define Nix packages needed for the environment
+[phases.setup]
+nixPkgs = ["...", "php83", "nginx", "python311Packages.supervisor"] # Ensure correct PHP version and add supervisor
+
+# Define build commands
+[phases.build]
+cmds = [
+    "php artisan optimize:clear", # Clear Laravel caches before build
+    "composer install --no-dev --no-interaction --optimize-autoloader", # Install composer dependencies
+    "php artisan event:cache", # Cache events
+    "php artisan view:cache", # Cache views
+    "php artisan config:cache", # Cache config
+    "npm install", # Install npm dependencies
+    "npm run build", # Build frontend assets (adjust if your build command is different)
+    "mkdir -p /etc/supervisor/conf.d/", # Create supervisor config directory
+    "cp /assets/worker-*.conf /etc/supervisor/conf.d/", # Copy all worker configs
+    "cp /assets/supervisord.conf /etc/supervisord.conf", # Copy main supervisor config
+    "chmod +x /assets/start.sh", # Make start script executable
+    "..." # Add any other necessary build commands
+]
+
+# Define the start command for the container
+[start]
+cmd = "/assets/start.sh"
+
+# Define static assets (configuration files, scripts) to be included
+[staticAssets]
+# Start script to initialize Nginx and Supervisor
+"start.sh" = '''#!/bin/bash
+# Transform the nginx configuration using environment variables
+# Note: Ensure prestart.mjs script exists and handles template variables correctly
+# node /assets/scripts/prestart.mjs /assets/nginx.template.conf /etc/nginx.conf
+
+# If prestart.mjs is not used, directly copy or link the config
+cp /assets/nginx.template.conf /etc/nginx.conf
+
+# Start supervisord to manage all processes
+supervisord -c /etc/supervisord.conf -n
+'''
+
+# Main Supervisor configuration
+"supervisord.conf" = '''
+[unix_http_server]
+file=/assets/supervisor.sock ; path to your socket file
+
+[supervisord]
+logfile=/var/log/supervisord.log ; main log file; default $CWD/supervisord.log
+logfile_maxbytes=50MB        ; max main logfile bytes b4 rotation; default 50MB
+logfile_backups=10           ; # of main logfile backups; 0 means none, default 10
+loglevel=info                ; log level; default info; others: debug,warn,trace
+pidfile=/assets/supervisord.pid ; supervisord pidfile; default supervisord.pid
+nodaemon=false               ; start in foreground if true; default false
+silent=false                 ; no logs to stdout if true; default false
+minfds=1024                  ; min. avail startup file descriptors; default 1024
+minprocs=200                 ; min. avail process descriptors;default 200
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix:///assets/supervisor.sock ; use a unix:// URL  for a unix socket
+
+[include]
+files = /etc/supervisor/conf.d/*.conf ; include all files in config directory
+'''
+
+# Supervisor configuration for Nginx
+"worker-nginx.conf" = '''
+[program:nginx]
+process_name=%(program_name)s_%(process_num)02d
+command=nginx -g "daemon off;" ; Run Nginx in the foreground
+autostart=true
+autorestart=true
+priority=10
+stdout_logfile=/var/log/nginx-stdout.log
+stderr_logfile=/var/log/nginx-stderr.log
+'''
+
+# Supervisor configuration for PHP-FPM
+"worker-phpfpm.conf" = '''
+[program:php-fpm]
+process_name=%(program_name)s_%(process_num)02d
+command=php-fpm -y /assets/php-fpm.conf -F ; Run php-fpm in foreground
+autostart=true
+autorestart=true
+priority=20
+stdout_logfile=/var/log/phpfpm-stdout.log
+stderr_logfile=/var/log/phpfpm-stderr.log
+'''
+
+# Supervisor configuration for Laravel Queue Worker
+"worker-laravel-queue.conf" = '''
+[program:laravel-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /app/artisan queue:work --sleep=3 --tries=3 --max-time=3600 ; Adjust command as needed
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data ; Run as appropriate user
+numprocs=1 ; Start one worker process (adjust as needed)
+redirect_stderr=true
+stdout_logfile=/var/log/laravel-worker.log
+stopwaitsecs=3600
+'''
+
+# Supervisor configuration for Laravel Scheduler (if needed)
+# "worker-laravel-scheduler.conf" = '''
+# [program:laravel-scheduler]
+# process_name=%(program_name)s_%(process_num)02d
+# command=bash -c 'while [ true ]; do (php /app/artisan schedule:run --verbose --no-interaction &); sleep 60; done'
+# autostart=true
+# autorestart=true
+# user=www-data
+# numprocs=1
+# redirect_stderr=true
+# stdout_logfile=/var/log/laravel-scheduler.log
+# '''
+
+# Supervisor configuration for Inertia SSR Worker
+"worker-inertia-ssr.conf" = '''
+[program:inertia-ssr]
+process_name=%(program_name)s_%(process_num)02d
+command=php /app/artisan inertia:start-ssr ; Command to start SSR
+autostart=true
+autorestart=true
+user=www-data ; Run as appropriate user
+redirect_stderr=true
+stdout_logfile=/var/log/inertia-ssr.log
+stderr_logfile=/var/log/inertia-ssr-error.log
+'''
+
+# PHP-FPM configuration file
+"php-fpm.conf" = '''
+[www]
+listen = 127.0.0.1:9000
+user = www-data
+group = www-data
+listen.owner = www-data
+listen.group = www-data
+
+pm = dynamic
+pm.max_children = 50 ; Adjust based on server resources
+pm.start_servers = 18  ; Adjust based on server resources
+pm.min_spare_servers = 4 ; Adjust based on server resources
+pm.max_spare_servers = 32 ; Adjust based on server resources
+pm.max_requests = 500 ; Restart workers after this many requests
+
+; Prevent environment variables from FPM overriding .env
+clear_env = no
+
+; Keep environment variables set in the parent process
+catch_workers_output = yes
+
+; PHP INI settings can be added here
+php_admin_value[memory_limit] = 256M ; Example: Set memory limit
+php_admin_value[post_max_size] = 35M
+php_admin_value[upload_max_filesize] = 30M
+; Add other php.ini customizations here if needed
+; php_admin_value[max_execution_time] = 60
+'''
+
+# Nginx configuration template
+"nginx.template.conf" = '''
+user www-data www-data;
+worker_processes auto; # Auto-detect number of cores
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+    worker_connections 1024; # Default is usually fine
+}
+
+http {
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    server_tokens off; # Hide Nginx version
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    ssl_protocols TLSv1.2 TLSv1.3; # Modern SSL protocols
+    ssl_prefer_server_ciphers on;
+
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    gzip on; # Enable gzip compression
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript image/svg+xml;
+
+    server {
+        listen ${PORT:-80}; # Use PORT env var, default to 80
+        listen [::]:${PORT:-80};
+
+        server_name _; # Listen for any hostname
+
+        # Adjust root based on your public directory structure if needed
+        root /app/public;
+        index index.php index.html index.htm;
+
+        charset utf-8;
+
+        # Security Headers
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        # add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self';" always; # Adjust CSP as needed
+
+        client_max_body_size 35M; # Match php-fpm setting
+
+        location / {
+            try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location = /favicon.ico { access_log off; log_not_found off; }
+        location = /robots.txt  { access_log off; log_not_found off; }
+
+        # Handle PHP files
+        location ~ \.php$ {
+            try_files $uri =404;
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            fastcgi_pass 127.0.0.1:9000; # Pass to PHP-FPM
+            fastcgi_index index.php;
+            include fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_param PATH_INFO $fastcgi_path_info;
+            fastcgi_param SERVER_PORT $server_port; # Pass server port
+            fastcgi_read_timeout 300; # Increase timeout if needed
+
+            # Increase buffer size for Inertia.js requests
+            fastcgi_buffer_size 16k; # Increased from default 4k/8k
+            fastcgi_buffers 4 16k;   # Increased buffers
+        }
+
+        # Deny access to dot files (.htaccess, .git, etc.)
+        location ~ /\. {
+            deny all;
+        }
+
+        # Deny access to specific file types if needed
+        # location ~* \.(?:log|sql|fla|psd|ini|bak|conf|dist|orig|save)$ {
+        #     deny all;
+        # }
+    }
+}
+'''

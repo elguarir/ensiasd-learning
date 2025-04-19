@@ -1,11 +1,12 @@
 import { JoinCourseDialog } from "@/components/dashboard/join-course-dialog";
 import { EmptyState } from "@/components/empty-state";
 import Heading from "@/components/heading";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import AppLayout from "@/layouts/app-layout";
 import { type BreadcrumbItem, type Course } from "@/types";
-import { Head } from "@inertiajs/react";
-import { BookOpenText, Pencil, StarsIcon, User } from "lucide-react";
-
+import { Head, Link } from "@inertiajs/react";
+import { BookOpenText, ExternalLink, Pencil, User } from "lucide-react";
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: "Dashboard",
@@ -18,6 +19,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Dashboard(props: { courses: Course[] }) {
+  const { courses } = props;
+  console.log(courses);
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Courses" />
@@ -30,144 +33,123 @@ export default function Dashboard(props: { courses: Course[] }) {
 
           <JoinCourseDialog />
         </div>
-        <div className="flex flex-col gap-4">
-          <EmptyState
-            title="You're not enrolled in any courses"
-            description="Enroll in a course to get started."
-            icons={[BookOpenText, Pencil, User]}
-            className="w-full"
-          />
+        <div>
+          {courses.length === 0 ? (
+            <EmptyState
+              title="You're not enrolled in any courses"
+              description="Enroll in a course to get started."
+              icons={[BookOpenText, Pencil, User]}
+              className="w-full"
+            />
+          ) : (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {courses.map((course) => (
+                <CourseItem key={course.id} course={course} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </AppLayout>
   );
 }
 
-const StatsCards = () => (
-  <div className="border-border from-sidebar/60 to-sidebar grid grid-cols-2 rounded-xl border bg-gradient-to-br min-[1200px]:grid-cols-4">
-    <div className="group before:from-input/30 before:via-input before:to-input/30 relative p-4 before:absolute before:inset-y-8 before:right-0 before:w-px before:bg-gradient-to-b last:before:hidden lg:p-5">
-      <div className="relative flex items-center gap-4">
-        <svg
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-          width={20}
-          height={20}
-          fill="currentColor"
-          aria-hidden="true"
-          className="remixicon absolute top-0 right-0 text-emerald-500 opacity-0 transition-opacity group-has-[a:hover]:opacity-100"
-        >
-          <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
-        </svg>
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-emerald-600/50 bg-emerald-600/25 text-emerald-500 max-[480px]:hidden">
-          <BookOpenText className="size-5" />
+function CourseItem({ course }: { course: Course }) {
+  return (
+    <div
+      // href={`/dashboard/courses/${course.id}`}
+      className="group border-border bg-card relative isolate flex flex-col overflow-hidden rounded-lg border transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg"
+    >
+      {/* Banner with color accent and title */}
+      <div className="relative h-56 w-full overflow-hidden">
+        {course.image ? (
+          <>
+            <img
+              src={
+                "https://s3.tebi.io/ensiasd-learning/courses/jm0hGprjjFbyjSQgxIt9F8yUBRDWWEwbTScSN32o.png"
+              }
+              alt={course.title}
+              className="h-full w-full object-cover brightness-[0.85] transition-all group-hover:scale-105 group-hover:brightness-100"
+            />
+            {/* Gradient overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+          </>
+        ) : (
+          <div
+            className="h-full w-full"
+            style={{
+              backgroundColor: course.color || "#3b82f6",
+              backgroundImage: `linear-gradient(135deg, 
+                ${course.color || "#3b82f6"}99, 
+                ${course.color || "#3b82f6"}EE
+              )`,
+            }}
+          ></div>
+        )}
+
+        {/* Dark overlay for better text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+
+        {/* Title on image */}
+        <div className="absolute right-0 bottom-0 left-0 p-4">
+          <h3 className="text-xl font-bold text-white drop-shadow-md">
+            {course.title}
+          </h3>
+          {course.category && (
+            <Badge
+              variant="outline"
+              className="mt-2 border-white/20 bg-black/30 text-white"
+            >
+              {course.category}
+            </Badge>
+          )}
         </div>
-        <div>
-          <a
-            href="#"
-            className="text-muted-foreground/60 text-xs font-medium tracking-widest uppercase before:absolute before:inset-0"
-          >
-            Total Courses
-          </a>
-          <div className="mb-2 text-2xl font-semibold">24</div>
-          <div className="text-muted-foreground/60 text-xs">
-            <span className="font-medium text-emerald-500">↗ +3</span> vs last
-            semester
-          </div>
+
+        <div
+          className="absolute inset-x-0 top-0 h-1.5"
+          style={{ backgroundColor: course.color || "#3b82f6" }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-1 flex-col p-4">
+        <p className="text-muted-foreground mb-4 line-clamp-2 text-sm">
+          {course.description || "No description"}
+        </p>
+
+        {/* Course details */}
+        <div className="text-muted-foreground mb-4 space-y-2 text-sm">
+          {course.instructor && (
+            <div className="flex items-center gap-2">
+              <span className="font-medium">Instructor:</span>
+              <div className="flex items-center gap-1.5">
+                {course.instructor.avatar ? (
+                  <img
+                    src={course.instructor.avatar}
+                    alt={course.instructor.name}
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="bg-primary text-primary-foreground flex h-5 w-5 items-center justify-center rounded-full text-[10px]">
+                    {course.instructor.name.charAt(0)}
+                  </div>
+                )}
+                <span>{course.instructor.name}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    </div>
-    <div className="group before:from-input/30 before:via-input before:to-input/30 relative p-4 before:absolute before:inset-y-8 before:right-0 before:w-px before:bg-gradient-to-b last:before:hidden lg:p-5">
-      <div className="relative flex items-center gap-4">
-        <svg
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-          width={20}
-          height={20}
-          fill="currentColor"
-          aria-hidden="true"
-          className="remixicon absolute top-0 right-0 text-emerald-500 opacity-0 transition-opacity group-has-[a:hover]:opacity-100"
-        >
-          <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
-        </svg>
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-emerald-600/50 bg-emerald-600/25 text-emerald-500 max-[480px]:hidden">
-          <Pencil className="size-5" />
-        </div>
-        <div>
-          <a
-            href="#"
-            className="text-muted-foreground/60 text-xs font-medium tracking-widest uppercase before:absolute before:inset-0"
-          >
-            Assignments
-          </a>
-          <div className="mb-2 text-2xl font-semibold">47</div>
-          <div className="text-muted-foreground/60 text-xs">
-            <span className="font-medium text-emerald-500">↗ +12</span> vs last
-            month
-          </div>
-        </div>
+
+      {/* Footer */}
+      <div className="bg-muted/20 border-t p-4">
+        <Button variant="outline" size="sm" className="w-full" asChild>
+          <Link href={`/dashboard/courses/${course.id}`}>
+            <span className="absolute inset-0 z-10" />
+            View Course <ExternalLink className="ml-1 h-4 w-4" />
+          </Link>
+        </Button>
       </div>
     </div>
-    <div className="group before:from-input/30 before:via-input before:to-input/30 relative p-4 before:absolute before:inset-y-8 before:right-0 before:w-px before:bg-gradient-to-b last:before:hidden lg:p-5">
-      <div className="relative flex items-center gap-4">
-        <svg
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-          width={20}
-          height={20}
-          fill="currentColor"
-          aria-hidden="true"
-          className="remixicon absolute top-0 right-0 text-emerald-500 opacity-0 transition-opacity group-has-[a:hover]:opacity-100"
-        >
-          <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
-        </svg>
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-emerald-600/50 bg-emerald-600/25 text-emerald-500 max-[480px]:hidden">
-          <User className="size-5" />
-        </div>
-        <div>
-          <a
-            href="#"
-            className="text-muted-foreground/60 text-xs font-medium tracking-widest uppercase before:absolute before:inset-0"
-          >
-            Students
-          </a>
-          <div className="mb-2 text-2xl font-semibold">183</div>
-          <div className="text-muted-foreground/60 text-xs">
-            <span className="font-medium text-emerald-500">↗ +8%</span> vs last
-            semester
-          </div>
-        </div>
-      </div>
-    </div>
-    <div className="group before:from-input/30 before:via-input before:to-input/30 relative p-4 before:absolute before:inset-y-8 before:right-0 before:w-px before:bg-gradient-to-b last:before:hidden lg:p-5">
-      <div className="relative flex items-center gap-4">
-        <svg
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-          width={20}
-          height={20}
-          fill="currentColor"
-          aria-hidden="true"
-          className="remixicon absolute top-0 right-0 text-emerald-500 opacity-0 transition-opacity group-has-[a:hover]:opacity-100"
-        >
-          <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
-        </svg>
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-emerald-600/50 bg-emerald-600/25 text-emerald-500 max-[480px]:hidden">
-          <StarsIcon className="size-5" />
-        </div>
-        <div>
-          <a
-            href="#"
-            className="text-muted-foreground/60 text-xs font-medium tracking-widest uppercase before:absolute before:inset-0"
-          >
-            Avg. Rating
-          </a>
-          <div className="mb-2 text-2xl font-semibold">4.7</div>
-          <div className="text-muted-foreground/60 text-xs">
-            <span className="font-medium text-emerald-500">↗ +0.3</span> vs
-            last semester
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
+  );
+}

@@ -17,10 +17,22 @@ class UserSeeder extends Seeder
             'email' => 'moha@elguarir.com',
             'username' => 'elguarir',
             'password' => Hash::make('moha@elguarir.com'),
-            'role' => 'instructor',
+            'role' => 'student',
             'avatar' => AvatarService::generateDefaultAvatar('Mohamed EL GUARIR'),
             'profile_completed_at' => now(),
         ]);
+
+        User::create([
+            'name' => 'John Doe',
+            'email' => 'moha@elguarir.dev',
+            'username' => 'mohaa',
+            'password' => Hash::make('moha@elguarir.dev'),
+            'role' => 'instructor',
+            'avatar' => AvatarService::generateDefaultAvatar('John Doe'),
+            'profile_completed_at' => now(),
+        ]);
+
+
 
     }
 } 

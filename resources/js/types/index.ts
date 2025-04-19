@@ -47,6 +47,7 @@ export interface Course {
   title: string;
   description: string;
   image: string;
+  color: string;
   category: string;
   status: "draft" | "published" | "archived";
   published_at: string | null;

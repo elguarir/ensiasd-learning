@@ -15,10 +15,21 @@ class CourseController extends Controller
     public function view(Request $request)
     {
         $role = $request->user()->role;
+
         if ($role == "instructor") {
             return Inertia::render('dashboard/courses/instructors/index');
         } else {
-            $courses = $request->user()->courses;
+            $courses = $request->user()->courses()->with(['instructor' => function ($query) {
+                $query->select('id', 'name', 'avatar', 'username');
+            }])
+                ->withPivot('enrolled_at')
+                ->get()
+                ->map(function ($course) {
+                    $course->enrollment = $course->pivot;
+                    unset($course->pivot);
+                    return $course;
+                });
+
             return Inertia::render('dashboard/courses/students/index', [
                 'courses' => $courses,
             ]);
@@ -40,6 +51,11 @@ class CourseController extends Controller
             return redirect()->back()->withErrors('Invalid course code');
         }
 
+        // Check if user is already enrolled in the course
+        if ($request->user()->courses()->where('course_id', $course->id)->exists()) {
+            return redirect()->back()->withErrors('You are already enrolled in this course');
+        }
+
         $request->user()->courses()->attach($course->id);
         return redirect()->back()->with('success', 'Course joined successfully');
     }
@@ -51,14 +67,14 @@ class CourseController extends Controller
     {
         // Get validated data
         $validated = $request->validated();
-        
-        $code = strtoupper(Str::random(8));
-        
+
+        $code = strtoupper(Str::random(6));
+
         // Ensure code uniqueness
         while (Course::where('code', $code)->exists()) {
-            $code = strtoupper(Str::random(8));
+            $code = strtoupper(Str::random(6));
         }
-        
+
         // Handle image upload to S3
         $imageUrl = null;
         if ($request->hasFile('image')) {
@@ -66,8 +82,7 @@ class CourseController extends Controller
                 'disk' => 's3',
                 'visibility' => 'public',
             ]);
-            dd($imagePath);
-            
+
             // Generate the S3 URL for the uploaded image
             $imageUrl = Storage::disk('s3')->url($imagePath);
         }
@@ -78,11 +93,12 @@ class CourseController extends Controller
             'title' => $validated['title'],
             'description' => $validated['description'],
             'code' => $code,
+            'color' => $validated['color'],
             'image' => $imageUrl,
             'category' => $validated['category'],
             'status' => 'draft',
         ]);
 
-        return redirect()->route('dashboard.courses')->with('success', 'Course created successfully');
+        return redirect()->route('dashboard.courses')->with('success', 'Course created successfully!');
     }
 }

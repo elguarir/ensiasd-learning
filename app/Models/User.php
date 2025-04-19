@@ -55,7 +55,7 @@ class User extends Authenticatable
         return $this->hasOne(InstructorProfile::class);
     }
 
-    public function courseEnrollments()
+    public function enrollments()
     {
         return $this->hasMany(CourseEnrollment::class);
     }
@@ -139,5 +139,10 @@ class User extends Authenticatable
         return $this->submissions()
             ->where('assignment_id', $assignmentId)
             ->first();
+    }
+
+    public function getEnrollment($courseId)
+    {
+        return $this->enrollments()->where('course_id', $courseId)->first();
     }
 }
