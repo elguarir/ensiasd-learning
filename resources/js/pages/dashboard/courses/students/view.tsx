@@ -16,8 +16,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AppLayout from "@/layouts/app-layout";
 import { Assignment, BreadcrumbItem, Chapter, Course, Resource } from "@/types";
@@ -30,7 +28,6 @@ import {
 } from "@/utils/course-utils";
 import { Head } from "@inertiajs/react";
 import {
-  AlertCircle,
   BookOpen,
   Calendar,
   CalendarClock,
@@ -246,11 +243,11 @@ export default function CourseView({
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={`${course.title} | Course View`} />
-      <div className="flex h-full flex-1 flex-col gap-6 p-6">
+      <div className="flex h-full flex-1 flex-col gap-4 p-4">
         <div className="container mx-auto">
           {/* Course Header */}
           <div
-            className="relative mb-8 overflow-hidden rounded-xl bg-cover bg-center p-8 text-white"  
+            className="relative mb-8 overflow-hidden rounded-xl bg-cover bg-center p-8 text-white"
             style={{
               backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), url(${course.image})`,
               minHeight: "220px",
@@ -315,35 +312,35 @@ export default function CourseView({
 
           {/* Responsive Info Cards (Chapters, Assignments, Students) */}
           <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="flex flex-row items-center gap-3 p-4 rounded-lg border-[1.5px] border-blue-600/20 bg-blue-50 dark:bg-blue-950/30">
+            <div className="flex flex-row items-center gap-3 rounded-lg border-[1.5px] border-blue-600/20 bg-blue-50 p-4 dark:bg-blue-950/30">
               <BookOpen className="h-8 w-8 text-blue-500" />
               <div>
                 <p className="text-muted-foreground text-sm">Chapters</p>
-                <p className="font-medium text-lg">{chapters.length}</p>
+                <p className="text-lg font-medium">{chapters.length}</p>
               </div>
             </div>
-            <div className="flex flex-row items-center gap-3 p-4 rounded-lg border-[1.5px] border-green-600/20 bg-green-50 dark:bg-green-950/30">
+            <div className="flex flex-row items-center gap-3 rounded-lg border-[1.5px] border-green-600/20 bg-green-50 p-4 dark:bg-green-950/30">
               <FileText className="h-8 w-8 text-green-500" />
               <div>
                 <p className="text-muted-foreground text-sm">Assignments</p>
-                <p className="font-medium text-lg">{assignments.length}</p>
+                <p className="text-lg font-medium">{assignments.length}</p>
               </div>
             </div>
-            <div className="flex flex-row items-center gap-3 p-4 rounded-lg border-[1.5px] border-purple-600/20 bg-purple-50 dark:bg-purple-950/30">
+            <div className="flex flex-row items-center gap-3 rounded-lg border-[1.5px] border-purple-600/20 bg-purple-50 p-4 dark:bg-purple-950/30">
               <Users className="h-8 w-8 text-purple-500" />
               <div>
                 <p className="text-muted-foreground text-sm">Students</p>
-                <p className="font-medium text-lg">32</p> {/* Mock data */}
+                <p className="text-lg font-medium">32</p> {/* Mock data */}
               </div>
             </div>
           </div>
 
           {/* Main Content */}
           <Tabs defaultValue="content" className="w-full">
-            <TabsList className="bg-background mb-3 h-auto -space-x-px p-0 shadow-xs rtl:space-x-reverse">
+            <TabsList className="bg-background mb-3 h-auto p-0 shadow-xs flex flex-col w-full sm:flex-row sm:-space-x-px">
               <TabsTrigger
                 value="content"
-                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e w-full sm:w-auto"
               >
                 <BookOpen
                   className="-ms-0.5 me-1.5 opacity-60"
@@ -354,7 +351,7 @@ export default function CourseView({
               </TabsTrigger>
               <TabsTrigger
                 value="assignments"
-                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e w-full sm:w-auto"
               >
                 <FileText
                   className="-ms-0.5 me-1.5 opacity-60"
@@ -365,7 +362,7 @@ export default function CourseView({
               </TabsTrigger>
               <TabsTrigger
                 value="announcements"
-                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e w-full sm:w-auto"
               >
                 <Info
                   className="-ms-0.5 me-1.5 opacity-60"
@@ -449,7 +446,7 @@ function ChapterItem({ chapter }: { chapter: Chapter }) {
       value={`chapter-${chapter.id}`}
       className="rounded-lg"
     >
-      <AccordionTrigger className="rounded-t-lg px-6 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 hover:no-underline">
+      <AccordionTrigger className="rounded-t-lg px-6 py-3 hover:bg-neutral-50 hover:no-underline dark:hover:bg-neutral-900/50">
         <div className="flex flex-col items-start text-left">
           <span className="text-lg font-medium">{chapter.title}</span>
           <span className="text-muted-foreground text-sm">
@@ -594,7 +591,7 @@ function AssignmentCard({ assignment }: { assignment: Assignment }) {
   return (
     <div
       key={assignment.id}
-      className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-card shadow-sm p-0 flex flex-col overflow-hidden transition hover:shadow-md"
+      className="bg-card flex flex-col overflow-hidden rounded-2xl border border-neutral-200 p-0 shadow-sm transition hover:shadow-md dark:border-neutral-800"
     >
       {/* Header Row */}
       <div className="flex items-center gap-4 px-6 pt-6 pb-2">
@@ -607,29 +604,33 @@ function AssignmentCard({ assignment }: { assignment: Assignment }) {
             <FileText className="h-6 w-6 text-green-500 dark:text-green-300" />
           )}
         </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold truncate">{assignment.title}</h3>
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-lg font-semibold">{assignment.title}</h3>
         </div>
         <Badge className={color}>{status}</Badge>
       </div>
 
       {/* Meta Row */}
-      <div className="flex flex-wrap items-center gap-4 px-6 pt-2 pb-1 text-sm text-muted-foreground">
+      <div className="text-muted-foreground flex flex-wrap items-center gap-4 px-6 pt-2 pb-1 text-sm">
         <div className="flex items-center gap-1.5">
           <CalendarClock className="h-4 w-4" />
           <span>
-            {assignment.due_date ? `Due ${formatDate(assignment.due_date)}` : "No deadline"}
+            {assignment.due_date
+              ? `Due ${formatDate(assignment.due_date)}`
+              : "No deadline"}
           </span>
         </div>
         <span className="hidden sm:inline">•</span>
         <div className="flex items-center gap-1.5">
           <span>Points:</span>
-          <span className="font-medium text-foreground">{assignment.points_possible}</span>
+          <span className="text-foreground font-medium">
+            {assignment.points_possible}
+          </span>
         </div>
         <span className="hidden sm:inline">•</span>
         <div className="flex items-center gap-1.5">
           <span>Type:</span>
-          <span className="capitalize font-medium text-foreground">
+          <span className="text-foreground font-medium capitalize">
             {assignment.type === "quiz" ? "Quiz" : "File Submission"}
           </span>
         </div>
@@ -645,8 +646,10 @@ function AssignmentCard({ assignment }: { assignment: Assignment }) {
       )}
 
       {/* Action Button */}
-      <div className="px-6 pt-2 pb-6 mt-auto flex">
-        <Button className="w-full sm:w-auto sm:ml-auto">Start Assignment</Button>
+      <div className="mt-auto flex px-6 pt-2 pb-6">
+        <Button className="w-full sm:ml-auto sm:w-auto">
+          Start Assignment
+        </Button>
       </div>
     </div>
   );
