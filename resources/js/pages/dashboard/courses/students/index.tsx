@@ -55,19 +55,17 @@ export default function Dashboard(props: { courses: Course[] }) {
 }
 
 function CourseItem({ course }: { course: Course }) {
+  console.log(course);
   return (
-    <div
-      // href={`/dashboard/courses/${course.id}`}
-      className="group border-border bg-card relative isolate flex flex-col overflow-hidden rounded-lg border transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg"
-    >
-      {/* Banner with color accent and title */}
-      <div className="relative h-56 w-full overflow-hidden">
+    <div className="group border-border bg-card relative isolate flex flex-col overflow-hidden rounded-lg border transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg">
+      <Link
+        href={`/dashboard/courses/${course.id}`}
+        className="relative h-56 w-full overflow-hidden"
+      >
         {course.image ? (
           <>
             <img
-              src={
-                "https://s3.tebi.io/ensiasd-learning/courses/jm0hGprjjFbyjSQgxIt9F8yUBRDWWEwbTScSN32o.png"
-              }
+              src={course.image}
               alt={course.title}
               className="h-full w-full object-cover brightness-[0.85] transition-all group-hover:scale-105 group-hover:brightness-100"
             />
@@ -109,7 +107,7 @@ function CourseItem({ course }: { course: Course }) {
           className="absolute inset-x-0 top-0 h-1.5"
           style={{ backgroundColor: course.color || "#3b82f6" }}
         />
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="flex flex-1 flex-col p-4">
@@ -145,7 +143,6 @@ function CourseItem({ course }: { course: Course }) {
       <div className="bg-muted/20 border-t p-4">
         <Button variant="outline" size="sm" className="w-full" asChild>
           <Link href={`/dashboard/courses/${course.id}`}>
-            <span className="absolute inset-0 z-10" />
             View Course <ExternalLink className="ml-1 h-4 w-4" />
           </Link>
         </Button>

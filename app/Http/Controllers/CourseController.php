@@ -36,6 +36,10 @@ class CourseController extends Controller
         }
     }
 
+    public function show(Course $course)
+    {
+        return Inertia::render('dashboard/courses/students/view');
+    }
     public function join(Request $request)
     {
         $request->validate([

@@ -16,6 +16,7 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
         })->name('index');
 
         Route::get('courses', [CourseController::class, 'view'])->name('courses');
+        Route::get('courses/{course}', [CourseController::class, 'show'])->name('courses.show');
     });
 
     Route::post('courses/join', [CourseController::class, 'join'])->name('courses.join');

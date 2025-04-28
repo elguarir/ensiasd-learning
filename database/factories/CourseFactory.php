@@ -34,7 +34,7 @@ class CourseFactory extends Factory
             'instructor_id' => User::where('role', 'instructor')->inRandomOrder()->first()?->id ?? User::factory()->create(['role' => 'instructor'])->id,
             'title' => fake()->sentence(rand(3, 8)),
             'description' => fake()->paragraphs(rand(1, 3), true),
-            'image' => fake()->imageUrl(640, 480, 'education'),
+            'image' => 'https://picsum.photos/seed/' . Str::random(10) . '/800/800',
             'code' => strtoupper(Str::random(6)),
             'color' => fake()->hexColor(),
             'category' => fake()->randomElement($categories),
