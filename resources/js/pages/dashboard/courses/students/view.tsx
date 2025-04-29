@@ -224,7 +224,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     href: "/dashboard/courses",
   },
   {
-    title: "Course View",
+    title: "Course Details",
     href: "#",
   },
 ];
@@ -312,21 +312,21 @@ export default function CourseView({
 
           {/* Responsive Info Cards (Chapters, Assignments, Students) */}
           <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="flex flex-row items-center gap-3 rounded-lg border-[1.5px] border-blue-600/20 bg-blue-50 p-4 dark:bg-blue-950/30">
+            <div className="flex flex-row items-center gap-3 border border-blue-600/20 bg-blue-50 p-4 dark:bg-blue-950/30">
               <BookOpen className="h-8 w-8 text-blue-500" />
               <div>
                 <p className="text-muted-foreground text-sm">Chapters</p>
                 <p className="text-lg font-medium">{chapters.length}</p>
               </div>
             </div>
-            <div className="flex flex-row items-center gap-3 rounded-lg border-[1.5px] border-green-600/20 bg-green-50 p-4 dark:bg-green-950/30">
+            <div className="flex flex-row items-center gap-3 border border-green-600/20 bg-green-50 p-4 dark:bg-green-950/30">
               <FileText className="h-8 w-8 text-green-500" />
               <div>
                 <p className="text-muted-foreground text-sm">Assignments</p>
                 <p className="text-lg font-medium">{assignments.length}</p>
               </div>
             </div>
-            <div className="flex flex-row items-center gap-3 rounded-lg border-[1.5px] border-purple-600/20 bg-purple-50 p-4 dark:bg-purple-950/30">
+            <div className="flex flex-row items-center gap-3 border border-purple-600/20 bg-purple-50 p-4 dark:bg-purple-950/30">
               <Users className="h-8 w-8 text-purple-500" />
               <div>
                 <p className="text-muted-foreground text-sm">Students</p>
@@ -337,10 +337,10 @@ export default function CourseView({
 
           {/* Main Content */}
           <Tabs defaultValue="content" className="w-full">
-            <TabsList className="bg-background mb-3 h-auto p-0 shadow-xs flex flex-col w-full sm:flex-row sm:-space-x-px">
+            <TabsList className="bg-background mb-3 h-auto p-0 shadow-xs flex flex-col w-full sm:justify-start sm:flex-row sm:-space-x-px">
               <TabsTrigger
                 value="content"
-                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e w-full sm:w-auto"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary max-sm:justify-start relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e w-full sm:w-auto"
               >
                 <BookOpen
                   className="-ms-0.5 me-1.5 opacity-60"
@@ -351,7 +351,7 @@ export default function CourseView({
               </TabsTrigger>
               <TabsTrigger
                 value="assignments"
-                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e w-full sm:w-auto"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary max-sm:justify-start relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e w-full sm:w-auto"
               >
                 <FileText
                   className="-ms-0.5 me-1.5 opacity-60"
@@ -362,7 +362,7 @@ export default function CourseView({
               </TabsTrigger>
               <TabsTrigger
                 value="announcements"
-                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e w-full sm:w-auto"
+                className="data-[state=active]:bg-muted data-[state=active]:after:bg-primary max-sm:justify-start relative overflow-hidden rounded-none border px-4 py-2 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 first:rounded-s last:rounded-e w-full sm:w-auto"
               >
                 <Info
                   className="-ms-0.5 me-1.5 opacity-60"
@@ -379,8 +379,8 @@ export default function CourseView({
               className="focus-visible:ring-0 focus-visible:outline-none"
             >
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                <div className="lg:col-span-2">
-                  <h2 className="mb-6 text-xl font-bold">Course Content</h2>
+                <div className="flex flex-col lg:col-span-2 gap-6">
+                  <h2 className="text-xl font-bold">Course Content</h2>
                   <Accordion type="multiple" className="w-full border">
                     {chapters.map((chapter) => (
                       <ChapterItem key={chapter.id} chapter={chapter} />
@@ -401,7 +401,7 @@ export default function CourseView({
               className="focus-visible:ring-0 focus-visible:outline-none"
             >
               <div className="grid grid-cols-1 gap-6">
-                <h2 className="mb-6 text-xl font-bold">Assignments</h2>
+                <h2 className="text-xl font-bold">Assignments</h2>
 
                 <div className="space-y-6">
                   {assignments.map((assignment) => (
@@ -420,7 +420,7 @@ export default function CourseView({
               className="focus-visible:ring-0 focus-visible:outline-none"
             >
               <div className="grid grid-cols-1 gap-8">
-                <h2 className="mb-6 text-xl font-bold">Announcements</h2>
+                <h2 className="text-xl font-bold">Announcements</h2>
                 <div className="space-y-8">
                   {announcements.map((announcement) => (
                     <AnnouncementCard
