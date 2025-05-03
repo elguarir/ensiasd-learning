@@ -103,27 +103,25 @@ export const columns: ColumnDef<Item>[] = [
     accessorKey: "title",
     cell: ({ row }) => (
       <div className="flex items-center gap-3">
-        <div className="h-10 overflow-hidden rounded-sm">
+        <div className="bg-muted flex h-10 min-w-18 items-center justify-center overflow-hidden rounded-sm border">
           {row.original.image ? (
             <img
               src={row.original.image}
               alt={`${row.getValue("title")} thumbnail`}
-              className="aspect-video h-full w-full object-cover"
+              className="h-full w-full object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).src =
                   "https://via.placeholder.com/40?text=Course";
               }}
             />
           ) : (
-            <div className="aspect-video border h-full w-full flex items-center justify-center bg-muted">
-              <span className="text-muted-foreground text-sm">?</span>
-            </div>
+            <span className="text-muted-foreground text-sm">?</span>
           )}
         </div>
-        <div className="font-medium">{row.getValue("title")}</div>
+        <div className="truncate font-medium">{row.getValue("title")}</div>
       </div>
     ),
-    size: 250,
+    size: 350,
     filterFn: multiColumnFilterFn,
     enableHiding: false,
   },
