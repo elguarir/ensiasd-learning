@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
+    DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -12,6 +12,7 @@ import { Course } from "@/types";
 import { Link, router } from "@inertiajs/react";
 import {
   ArchiveIcon,
+  CodeIcon,
   EditIcon,
   EllipsisIcon,
   EyeIcon,
@@ -21,6 +22,7 @@ import {
 } from "lucide-react";
 import { ReactNode } from "react";
 import { toast } from "sonner";
+import CourseCodeDialog from "./course-code-dialog";
 
 // Action handler functions
 
@@ -218,6 +220,13 @@ export default function CourseActions({
               <span>Manage students</span>
             </Link>
           </DropdownMenuItem>
+          <CourseCodeDialog course={course}>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <CodeIcon className="mr-2 h-4 w-4" />
+              <span>Show course code</span>
+              <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </CourseCodeDialog>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 

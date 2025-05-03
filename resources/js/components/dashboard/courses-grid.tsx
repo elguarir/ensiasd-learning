@@ -39,10 +39,11 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   EllipsisIcon,
+  CodeIcon,
 } from "lucide-react";
 import { useId } from "react";
-import { toast } from "sonner";
 import CourseActions from "./course-actions";
+import CourseCodeDialog from "./course-code-dialog";
 
 interface CoursesGridProps {
   data: Course[];
@@ -91,6 +92,16 @@ export default function CoursesGrid({
                         No image set
                       </div>
                     )}
+                  </div>
+                  
+                  {/* Course Code Badge */}
+                  <div className="absolute top-2 right-2">
+                    <CourseCodeDialog course={course}>
+                      <Button size="sm" variant="secondary" className="gap-1.5 text-xs font-medium">
+                        <CodeIcon className="h-3 w-3" />
+                        {course.code}
+                      </Button>
+                    </CourseCodeDialog>
                   </div>
                 </div>
 
