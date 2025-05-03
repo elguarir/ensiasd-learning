@@ -13,7 +13,7 @@ export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => {
   return (
     <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
       {children}
-      <Toaster theme={appearance} richColors duration={9000000} />
+      <Toaster theme={appearance} richColors duration={2300} />
     </AppLayoutTemplate>
   );
 };
