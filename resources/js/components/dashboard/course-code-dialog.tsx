@@ -56,7 +56,7 @@ export default function CourseCodeDialog({ course, children }: CourseCodeDialogP
           <div className="text-center">
             <div className={(cn(
                 "text-6xl font-mono font-bold tracking-widest mb-2",
-                isFullscreen && "text-8xl"
+                isFullscreen && "lg:text-8xl"
             ))}>
               {course.code}
             </div>
@@ -69,6 +69,7 @@ export default function CourseCodeDialog({ course, children }: CourseCodeDialogP
             size="icon" 
             onClick={toggleFullscreen}
             title={isFullscreen ? "Exit fullscreen" : "View fullscreen"}
+            className="hidden lg:block"
           >
             {isFullscreen ? (
               <MinimizeIcon className="h-4 w-4" />
