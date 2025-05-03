@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-    DropdownMenuSeparator,
+  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -23,13 +23,14 @@ import {
 import { ReactNode } from "react";
 import { toast } from "sonner";
 import CourseCodeDialog from "./course-code-dialog";
+import { confirm } from "@/utils/confirm";
 
 // Action handler functions
 
 export function handlePublishCourse(courseId: number | string) {
   const promise = new Promise<void>((resolve, reject) => {
     router.put(
-      `/dashboard/courses/${courseId}/status`,
+      route("dashboard.courses.status", { course: courseId }),
       {
         status: "published",
       },
@@ -48,30 +49,45 @@ export function handlePublishCourse(courseId: number | string) {
 }
 
 export function handleUnpublishCourse(courseId: number | string) {
-  const promise = new Promise<void>((resolve, reject) => {
-    router.put(
-      `/dashboard/courses/${courseId}/status`,
-      {
-        status: "draft",
-      },
-      {
-        onSuccess: () => resolve(),
-        onError: () => reject(new Error("Failed to unpublish course")),
-      },
-    );
-  });
+  return async () => {
+    try {
+      // Confirm before unpublishing
+      await confirm({
+        title: "Unpublish course",
+        message: "Are you sure you want to unpublish this course? Students won't be able to access it until it's published again.",
+        confirmText: "Unpublish",
+        cancelText: "Cancel",
+      });
+      
+      // User confirmed
+      const promise = new Promise<void>((resolve, reject) => {
+        router.put(
+          route("dashboard.courses.status", { course: courseId }),
+          {
+            status: "draft",
+          },
+          {
+            onSuccess: () => resolve(),
+            onError: () => reject(new Error("Failed to unpublish course")),
+          },
+        );
+      });
 
-  toast.promise(promise, {
-    loading: "Unpublishing course...",
-    success: "Course unpublished successfully",
-    error: "Failed to unpublish course",
-  });
+      toast.promise(promise, {
+        loading: "Unpublishing course...",
+        success: "Course unpublished successfully",
+        error: "Failed to unpublish course",
+      });
+    } catch {
+      // User cancelled, do nothing
+    }
+  };
 }
 
 export function handleArchiveCourse(courseId: number | string) {
   const promise = new Promise<void>((resolve, reject) => {
     router.put(
-      `/dashboard/courses/${courseId}/status`,
+      route("dashboard.courses.status", { course: courseId }),
       {
         status: "archived",
       },
@@ -92,7 +108,7 @@ export function handleArchiveCourse(courseId: number | string) {
 export function handleRestoreCourse(courseId: number | string) {
   const promise = new Promise<void>((resolve, reject) => {
     router.put(
-      `/dashboard/courses/${courseId}/status`,
+      route("dashboard.courses.status", { course: courseId }),
       {
         status: "draft",
       },
@@ -111,24 +127,34 @@ export function handleRestoreCourse(courseId: number | string) {
 }
 
 export function handleDeleteCourse(courseId: number | string) {
-  if (
-    confirm(
-      "Are you sure you want to delete this course? This action cannot be undone.",
-    )
-  ) {
-    const promise = new Promise<void>((resolve, reject) => {
-      router.delete(`/dashboard/courses/${courseId}`, {
-        onSuccess: () => resolve(),
-        onError: () => reject(new Error("Failed to delete course")),
+  return async () => {
+    try {
+      // Show the confirmation dialog and wait for user response
+      await confirm({
+        title: "Delete course",
+        message: "Are you sure you want to delete this course? This action cannot be undone.",
+        confirmText: "Delete",
+        cancelText: "Cancel",
+        variant: "destructive",
       });
-    });
+      
+      // If we get here, user confirmed the action
+      const promise = new Promise<void>((resolve, reject) => {
+        router.delete(route("dashboard.courses.destroy", { course: courseId }), {
+          onSuccess: () => resolve(),
+          onError: () => reject(new Error("Failed to delete course")),
+        });
+      });
 
-    toast.promise(promise, {
-      loading: "Deleting course...",
-      success: "Course deleted successfully",
-      error: "Failed to delete course",
-    });
-  }
+      toast.promise(promise, {
+        loading: "Deleting course...",
+        success: "Course deleted successfully",
+        error: "Failed to delete course",
+      });
+    } catch {
+      // User cancelled, do nothing
+    }
+  };
 }
 
 interface CourseActionsProps {
@@ -144,6 +170,8 @@ export default function CourseActions({
   const isPublished = course.status === "published";
   const isArchived = course.status === "archived";
   const isDraft = course.status === "draft";
+
+  const deleteCourseHandler = handleDeleteCourse(course.id);
 
   return (
     <DropdownMenu>
@@ -163,14 +191,14 @@ export default function CourseActions({
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href={`/dashboard/courses/${course.id}/edit`}>
+            <Link href={route("dashboard.courses.show", { course: course.id })}>
               <EditIcon className="mr-2 h-4 w-4" />
               <span>Edit course</span>
               <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={`/dashboard/courses/${course.id}`}>
+            <Link href={route("dashboard.courses.show", { course: course.id })}>
               <EyeIcon className="mr-2 h-4 w-4" />
               <span>View course</span>
               <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
@@ -215,7 +243,9 @@ export default function CourseActions({
 
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href={`/dashboard/courses/${course.id}/students`}>
+            <Link
+              href={route("dashboard.courses.students", { course: course.id })}
+            >
               <UserIcon className="mr-2 h-4 w-4" />
               <span>Manage students</span>
             </Link>
@@ -231,7 +261,7 @@ export default function CourseActions({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
-          onClick={() => handleDeleteCourse(course.id)}
+          onClick={deleteCourseHandler}
           className="text-destructive focus:text-destructive"
         >
           <TrashIcon className="mr-2 h-4 w-4" />

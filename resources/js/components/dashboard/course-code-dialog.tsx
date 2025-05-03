@@ -55,7 +55,7 @@ export default function CourseCodeDialog({ course, children }: CourseCodeDialogP
         <div className="bg-muted/60 border flex-1 h-full flex items-center justify-center p-12 rounded-md">
           <div className="text-center">
             <div className={(cn(
-                "text-4xl font-mono font-bold tracking-widest mb-2",
+                "text-6xl font-mono font-bold tracking-widest mb-2",
                 isFullscreen && "text-8xl"
             ))}>
               {course.code}
