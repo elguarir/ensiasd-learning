@@ -52,7 +52,7 @@ export default function CourseCodeDialog({ course, children }: CourseCodeDialogP
             Share this code with your students to allow them to join your course.
           </DialogDescription>
         </DialogHeader>
-        <div className="bg-muted flex-1 h-full flex items-center justify-center p-12 rounded-md">
+        <div className="bg-muted/60 border flex-1 h-full flex items-center justify-center p-12 rounded-md">
           <div className="text-center">
             <div className={(cn(
                 "text-4xl font-mono font-bold tracking-widest mb-2",
