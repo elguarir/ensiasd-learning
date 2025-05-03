@@ -6,16 +6,25 @@ use App\Models\User;
 use App\Services\AvatarService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
         User::create([
+            'name' => 'Hassan EL GUARIR',
+            'email' => 'hassan@elguarir.com',
+            'username' => 'hassan',
+            'password' => Hash::make('hassan@elguarir.com'),
+            'role' => 'student',
+            'avatar' => AvatarService::generateDefaultAvatar('Hassan EL GUARIR'),
+            'profile_completed_at' => now(),
+        ]);
+
+        User::create([
             'name' => 'Mohamed EL GUARIR',
             'email' => 'moha@elguarir.com',
-            'username' => 'elguarir',
+            'username' => 'moha',
             'password' => Hash::make('moha@elguarir.com'),
             'role' => 'student',
             'avatar' => AvatarService::generateDefaultAvatar('Mohamed EL GUARIR'),

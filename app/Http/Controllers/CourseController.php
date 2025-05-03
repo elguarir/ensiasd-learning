@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use App\Models\Assignment;
+use App\Models\Announcement;
 
 class CourseController extends Controller
 {
@@ -38,7 +40,83 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        return Inertia::render('dashboard/courses/students/view');
+        // Check if the user is enrolled in the course or is the instructor
+        $user = request()->user();
+        $isInstructor = $user->id === $course->instructor_id;
+        $isEnrolled = $user->courses()->where('course_id', $course->id)->exists();
+
+        if (!$isInstructor && !$isEnrolled) {
+            return redirect()->route('dashboard.courses')->with('error', 'You are not enrolled in this course');
+        }
+
+        // Load the course with its instructor
+        $course->load(['instructor' => function ($query) {
+            $query->select('id', 'name', 'username', 'email', 'avatar');
+        }]);
+
+        // Load chapters with their resources
+        $chapters = $course->chapters()
+            ->with(['resources' => function ($query) {
+                $query->orderBy('position');
+            }])
+            ->orderBy('position')
+            ->get();
+
+        // Load published assignments
+        $assignments = $course->hasMany(Assignment::class)
+            ->where('published', true)
+            ->orderBy('due_date')
+            ->get();
+
+        // Load student's submissions for each assignment if they're a student
+        if (!$isInstructor) {
+            $submissions = $user->submissions()
+                ->whereIn('assignment_id', $assignments->pluck('id'))
+                ->get()
+                ->keyBy('assignment_id');
+
+            // Add submission data to each assignment
+            $assignments->map(function ($assignment) use ($submissions) {
+                $assignment->user_submission = $submissions->get($assignment->id);
+                return $assignment;
+            });
+        }
+
+        // Load announcements with comments and their authors
+        $announcements = $course->hasMany(Announcement::class)
+            ->with(['user' => function ($query) {
+                $query->select('id', 'name', 'username', 'avatar');
+            }, 'comments' => function ($query) {
+                $query->orderBy('created_at');
+            }, 'comments.user' => function ($query) {
+                $query->select('id', 'name', 'username', 'avatar');
+            }])
+            ->latest()
+            ->get();
+
+        // Load course threads with their authors and comments
+        $threads = $course->threads()
+            ->with(['author' => function ($query) {
+                $query->select('id', 'name', 'username', 'avatar');
+            }, 'comments' => function ($query) {
+                $query->orderBy('created_at');
+            }, 'comments.author' => function ($query) {
+                $query->select('id', 'name', 'username', 'avatar');
+            }])
+            ->latest()
+            ->get();
+
+        // Get enrollment data
+        $enrollmentCount = $course->enrollments()->count();
+
+        return Inertia::render('dashboard/courses/students/view', [
+            'course' => $course,
+            'chapters' => $chapters,
+            'assignments' => $assignments,
+            'announcements' => $announcements,
+            'threads' => $threads,
+            'enrollmentCount' => $enrollmentCount,
+        ]);
     }
     public function join(Request $request)
     {
@@ -87,7 +165,6 @@ class CourseController extends Controller
                 'visibility' => 'public',
             ]);
 
-            // Generate the S3 URL for the uploaded image
             $imageUrl = Storage::disk('s3')->url($imagePath);
         }
 

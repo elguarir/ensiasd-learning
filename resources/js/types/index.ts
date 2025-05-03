@@ -213,3 +213,26 @@ export interface Resource {
   chapter?: Chapter;
   attachments?: Attachment[];
 }
+
+export interface Announcement {
+  id: number;
+  course_id: number;
+  user_id: number;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  user: User;
+  comments: AnnouncementComment[];
+  course?: Course;
+}
+
+export interface AnnouncementComment {
+  id: number;
+  announcement_id: number;
+  user_id: number;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  user: User;
+  announcement?: Announcement;
+}

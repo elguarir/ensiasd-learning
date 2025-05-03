@@ -42,7 +42,7 @@ export default function Dashboard(props: { courses: Course[] }) {
               className="w-full"
             />
           ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {courses.map((course) => (
                 <CourseItem key={course.id} course={course} />
               ))}
@@ -55,7 +55,6 @@ export default function Dashboard(props: { courses: Course[] }) {
 }
 
 function CourseItem({ course }: { course: Course }) {
-  console.log(course);
   return (
     <div className="group border-border bg-card relative isolate flex flex-col overflow-hidden rounded-lg border transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg">
       <Link
