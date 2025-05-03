@@ -1,15 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import {
   Pagination,
@@ -33,27 +24,19 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Course } from "@/types";
-import { Link, router } from "@inertiajs/react";
 import { ColumnDef, FilterFn, Row, flexRender } from "@tanstack/react-table";
 import {
-  ArchiveIcon,
   ChevronDownIcon,
   ChevronFirstIcon,
   ChevronLastIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
-  EditIcon,
-  EllipsisIcon,
-  EyeIcon,
-  TrashIcon,
-  UploadIcon,
   UserIcon,
 } from "lucide-react";
 import { useId } from "react";
-import { toast } from "sonner";
 import CourseActions from "./course-actions";
-
+import { Link } from "@inertiajs/react";
 type Item = Course;
 
 // Custom filter function for multi-column searching
@@ -106,7 +89,10 @@ export const columns: ColumnDef<Item>[] = [
     header: "Title",
     accessorKey: "title",
     cell: ({ row }) => (
-      <div className="flex items-center gap-3">
+      <Link
+        href={route("dashboard.courses.show", row.original.id)}
+        className="flex items-center gap-3"
+      >
         <div className="bg-muted flex h-10 min-w-18 items-center justify-center overflow-hidden rounded-sm border">
           {row.original.image ? (
             <img
@@ -123,7 +109,7 @@ export const columns: ColumnDef<Item>[] = [
           )}
         </div>
         <div className="truncate font-medium">{row.getValue("title")}</div>
-      </div>
+      </Link>
     ),
     size: 350,
     filterFn: multiColumnFilterFn,
@@ -197,16 +183,10 @@ export const columns: ColumnDef<Item>[] = [
 ];
 
 interface CoursesTableProps {
-  data: Item[];
   table: any;
-  handleDeleteRows: () => void;
 }
 
-export default function CoursesTable({
-  data,
-  table,
-  handleDeleteRows,
-}: CoursesTableProps) {
+export default function CoursesTable({ table }: CoursesTableProps) {
   const id = useId();
 
   return (

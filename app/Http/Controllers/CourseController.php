@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Models\Assignment;
 use App\Models\Announcement;
+use App\Models\CourseEnrollment;
 
 class CourseController extends Controller
 {
@@ -161,7 +162,15 @@ class CourseController extends Controller
             'status' => 'required|string|in:draft,published,archived',
         ]);
 
-        $course->status = $request->status;
+        $oldStatus = $course->status;
+        $newStatus = $request->status;
+        
+        // Update published_at timestamp if publishing for the first time
+        if ($newStatus === 'published' && $oldStatus !== 'published') {
+            $course->published_at = now();
+        }
+        
+        $course->status = $newStatus;
         $course->save();
 
         $statusMap = [
@@ -170,7 +179,7 @@ class CourseController extends Controller
             'archived' => 'archived'
         ];
 
-        $message = "Course has been " . $statusMap[$request->status];
+        $message = "Course has been " . $statusMap[$newStatus];
         return redirect()->back()->with('success', $message);
     }
 
@@ -179,29 +188,34 @@ class CourseController extends Controller
      */
     public function students(Course $course)
     {
-        // // Check if user is the course instructor
-        // $user = request()->user();
-        // if ($user->id !== $course->instructor_id) {
-        //     return redirect()->route('dashboard.courses')->with('error', 'You are not authorized to manage this course');
-        // }
+        // Check if user is the course instructor
+        $user = request()->user();
+        if ($user->id !== $course->instructor_id) {
+            return redirect()->route('dashboard.courses')->with('error', 'You are not authorized to manage this course');
+        }
 
-        // // Get all enrolled students with their enrollment date
-        // $students = $course->students()
-        //     ->with('enrollments')
-        //     ->orderBy('name')
-        //     ->get()
-        //     ->map(function ($student) use ($course) {
-        //         $enrollment = $student->enrollments->where('course_id', $course->id)->first();
-        //         return [
-        //             'id' => $student->id,
-        //             'name' => $student->name,
-        //             'email' => $student->email,
-        //             'avatar' => $student->avatar,
-        //             'username' => $student->username,
-        //             'enrolled_at' => $enrollment->pivot->enrolled_at,
-        //         ];
-        //     });
+        // Get all enrolled students with their enrollment date
+        $students = $course->enrollments()
+            ->with('user')
+            ->orderBy('enrolled_at', 'desc')
+            ->get()
+            ->map(function ($enrollment) {
+                $student = $enrollment->user;
+                return [
+                    'id' => $student->id,
+                    'name' => $student->name,
+                    'email' => $student->email,
+                    'avatar' => $student->avatar,
+                    'username' => $student->username,
+                    'enrolled_at' => $enrollment->enrolled_at,
+                    'enrollment_id' => $enrollment->id,
+                ];
+            });
 
+        return Inertia::render('dashboard/courses/instructors/students', [
+            'course' => $course,
+            'students' => $students,
+        ]);
     }
 
     /**
@@ -228,11 +242,11 @@ class CourseController extends Controller
     public function join(Request $request)
     {
         $request->validate([
-            'code' => 'required|string|max:255',
+            'code' => 'required|string|max:6',
         ], [
             'code.required' => 'Course code is required',
             'code.string' => 'Course code must be a string',
-            'code.max' => 'Course code must be less than 255 characters',
+            'code.max' => 'Course code must be less than 6 characters',
         ]);
 
         $course = Course::where('code', $request->code)->first();
@@ -289,5 +303,54 @@ class CourseController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Course created successfully!');
+    }
+
+    /**
+     * Remove a student from the course.
+     */
+    public function removeStudent(Course $course, CourseEnrollment $enrollment)
+    {
+        // Check if user is the course instructor
+        $user = request()->user();
+        if ($user->id !== $course->instructor_id) {
+            return redirect()->back()->with('error', 'You are not authorized to manage this course');
+        }
+
+        // Make sure the enrollment belongs to this course
+        if ($enrollment->course_id !== $course->id) {
+            return redirect()->back()->with('error', 'The enrollment does not belong to this course');
+        }
+
+        $enrollment->delete();
+
+        return redirect()->back()->with('success', 'Student removed successfully');
+    }
+
+    /**
+     * Update a student's enrollment status in the course.
+     */
+    public function updateStudentStatus(Request $request, Course $course, CourseEnrollment $enrollment)
+    {
+        // Check if user is the course instructor
+        $user = request()->user();
+        if ($user->id !== $course->instructor_id) {
+            return redirect()->back()->with('error', 'You are not authorized to manage this course');
+        }
+
+        // Make sure the enrollment belongs to this course
+        if ($enrollment->course_id !== $course->id) {
+            return redirect()->back()->with('error', 'The enrollment does not belong to this course');
+        }
+
+        $request->validate([
+            'completed' => 'boolean',
+        ]);
+
+        if ($request->has('completed')) {
+            $enrollment->completed_at = $request->completed ? now() : null;
+            $enrollment->save();
+        }
+
+        return redirect()->back()->with('success', 'Student status updated successfully');
     }
 }

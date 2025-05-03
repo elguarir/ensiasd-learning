@@ -69,7 +69,7 @@ export default function CourseCodeDialog({ course, children }: CourseCodeDialogP
             size="icon" 
             onClick={toggleFullscreen}
             title={isFullscreen ? "Exit fullscreen" : "View fullscreen"}
-            className="hidden lg:block"
+            className="hidden lg:flex"
           >
             {isFullscreen ? (
               <MinimizeIcon className="h-4 w-4" />
