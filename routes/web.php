@@ -17,6 +17,11 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
 
         Route::get('courses', [CourseController::class, 'view'])->name('courses');
         Route::get('courses/{course}', [CourseController::class, 'show'])->name('courses.show');
+        
+        // Add new course management routes
+        Route::get('courses/{course}/students', [CourseController::class, 'students'])->name('courses.students');
+        Route::put('courses/{course}/status', [CourseController::class, 'updateStatus'])->name('courses.status');
+        Route::delete('courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
     });
 
     Route::post('courses/join', [CourseController::class, 'join'])->name('courses.join');

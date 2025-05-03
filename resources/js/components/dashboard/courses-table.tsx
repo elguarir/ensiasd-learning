@@ -6,12 +6,8 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
@@ -37,18 +33,26 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Course } from "@/types";
+import { Link, router } from "@inertiajs/react";
 import { ColumnDef, FilterFn, Row, flexRender } from "@tanstack/react-table";
 import {
+  ArchiveIcon,
   ChevronDownIcon,
   ChevronFirstIcon,
   ChevronLastIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
+  EditIcon,
   EllipsisIcon,
+  EyeIcon,
+  TrashIcon,
+  UploadIcon,
   UserIcon,
 } from "lucide-react";
 import { useId } from "react";
+import { toast } from "sonner";
+import CourseActions from "./course-actions";
 
 type Item = Course;
 
@@ -421,95 +425,10 @@ export default function CoursesTable({
 
 function RowActions({ row }: { row: Row<Item> }) {
   const course = row.original;
-  const isPublished = course.status === "published";
-  const isArchived = course.status === "archived";
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div className="flex justify-end">
-          <Button
-            size="icon"
-            variant="ghost"
-            className="shadow-none"
-            aria-label="Course actions"
-          >
-            <EllipsisIcon size={16} aria-hidden="true" />
-          </Button>
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <span>Edit course</span>
-            <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <span>View course</span>
-            <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          {!isPublished && !isArchived && (
-            <DropdownMenuItem>
-              <span>Publish</span>
-              <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          )}
-          {isPublished && (
-            <DropdownMenuItem>
-              <span>Unpublish</span>
-              <DropdownMenuShortcut>⌘U</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          )}
-          {!isArchived && (
-            <DropdownMenuItem>
-              <span>Archive</span>
-              <DropdownMenuShortcut>⌘A</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          )}
-          {isArchived && (
-            <DropdownMenuItem>
-              <span>Restore</span>
-              <DropdownMenuShortcut>⌘R</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <span>Manage content</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <span>Manage students</span>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Analytics</DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Student Progress</DropdownMenuItem>
-                <DropdownMenuItem>Engagement Metrics</DropdownMenuItem>
-                <DropdownMenuItem>Revenue Reports</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <span>Clone course</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <span>Export data</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-destructive focus:text-destructive">
-          <span>Delete course</span>
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex justify-end">
+      <CourseActions course={course} />
+    </div>
   );
 }

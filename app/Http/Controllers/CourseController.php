@@ -146,6 +146,85 @@ class CourseController extends Controller
             'enrollmentCount' => $enrollmentCount,
         ]);
     }
+
+    /**
+     * Update the course status (publish/unpublish/archive/restore).
+     */
+    public function updateStatus(Request $request, Course $course)
+    {
+        // Check if user is the course instructor
+        if ($request->user()->id !== $course->instructor_id) {
+            return redirect()->route('dashboard.courses')->with('error', 'You are not authorized to update this course');
+        }
+
+        $request->validate([
+            'status' => 'required|string|in:draft,published,archived',
+        ]);
+
+        $course->status = $request->status;
+        $course->save();
+
+        $statusMap = [
+            'draft' => 'unpublished',
+            'published' => 'published',
+            'archived' => 'archived'
+        ];
+
+        $message = "Course has been " . $statusMap[$request->status];
+        return redirect()->back()->with('success', $message);
+    }
+
+    /**
+     * Show the course students management page.
+     */
+    public function students(Course $course)
+    {
+        // // Check if user is the course instructor
+        // $user = request()->user();
+        // if ($user->id !== $course->instructor_id) {
+        //     return redirect()->route('dashboard.courses')->with('error', 'You are not authorized to manage this course');
+        // }
+
+        // // Get all enrolled students with their enrollment date
+        // $students = $course->students()
+        //     ->with('enrollments')
+        //     ->orderBy('name')
+        //     ->get()
+        //     ->map(function ($student) use ($course) {
+        //         $enrollment = $student->enrollments->where('course_id', $course->id)->first();
+        //         return [
+        //             'id' => $student->id,
+        //             'name' => $student->name,
+        //             'email' => $student->email,
+        //             'avatar' => $student->avatar,
+        //             'username' => $student->username,
+        //             'enrolled_at' => $enrollment->pivot->enrolled_at,
+        //         ];
+        //     });
+
+    }
+
+    /**
+     * Remove the specified course from storage.
+     */
+    public function destroy(Course $course)
+    {
+        // Check if user is the course instructor
+        $user = request()->user();
+        if ($user->id !== $course->instructor_id) {
+            return redirect()->route('dashboard.courses')->with('error', 'You are not authorized to delete this course');
+        }
+
+        // Delete course image from S3 if it exists
+        if ($course->image) {
+            Storage::disk('s3')->delete($course->image);
+        }
+
+        $course->delete();
+
+        return redirect()->route('dashboard.courses')->with('success', 'Course deleted successfully');
+    }
+
     public function join(Request $request)
     {
         $request->validate([

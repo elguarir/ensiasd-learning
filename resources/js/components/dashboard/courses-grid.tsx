@@ -41,6 +41,8 @@ import {
   EllipsisIcon,
 } from "lucide-react";
 import { useId } from "react";
+import { toast } from "sonner";
+import CourseActions from "./course-actions";
 
 interface CoursesGridProps {
   data: Course[];
@@ -98,7 +100,7 @@ export default function CoursesGrid({
                     <h3 className="line-clamp-1 font-semibold">
                       {course.title}
                     </h3>
-                    <CourseActions course={course} />
+                    <CourseCardActions course={course} />
                   </div>
 
                   <p className="text-muted-foreground mb-4 line-clamp-2 flex-grow text-sm">
@@ -255,7 +257,6 @@ export default function CoursesGrid({
   );
 }
 
-// Remove renderLevelBadge function
 function renderStatusBadge(status: string) {
   let variant: "default" | "success" | "warning" | "danger" = "default";
 
@@ -278,94 +279,17 @@ function renderStatusBadge(status: string) {
   );
 }
 
-function CourseActions({ course }: { course: Course }) {
-  const isPublished = course.status === "published";
-  const isArchived = course.status === "archived";
-
+function CourseCardActions({ course }: { course: Course }) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="h-8 w-8 shadow-none"
-          aria-label="Course actions"
-        >
-          <EllipsisIcon size={16} aria-hidden="true" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <span>Edit course</span>
-            <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <span>View course</span>
-            <DropdownMenuShortcut>⌘V</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          {!isPublished && !isArchived && (
-            <DropdownMenuItem>
-              <span>Publish</span>
-              <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          )}
-          {isPublished && (
-            <DropdownMenuItem>
-              <span>Unpublish</span>
-              <DropdownMenuShortcut>⌘U</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          )}
-          {!isArchived && (
-            <DropdownMenuItem>
-              <span>Archive</span>
-              <DropdownMenuShortcut>⌘A</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          )}
-          {isArchived && (
-            <DropdownMenuItem>
-              <span>Restore</span>
-              <DropdownMenuShortcut>⌘R</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <span>Manage content</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <span>Manage students</span>
-          </DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Analytics</DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Student Progress</DropdownMenuItem>
-                <DropdownMenuItem>Engagement Metrics</DropdownMenuItem>
-                <DropdownMenuItem>Revenue Reports</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <span>Clone course</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <span>Export data</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-destructive focus:text-destructive">
-          <span>Delete course</span>
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <CourseActions course={course}>
+      <Button
+        size="icon"
+        variant="ghost"
+        className="h-8 w-8 shadow-none"
+        aria-label="Course actions"
+      >
+        <EllipsisIcon size={16} aria-hidden="true" />
+      </Button>
+    </CourseActions>
   );
 }

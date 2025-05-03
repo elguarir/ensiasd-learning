@@ -57,7 +57,7 @@ export default function CourseView(p: CourseViewProps) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={`${course.title} | Course View`} />
-      <div className="flex h-full flex-1 flex-col gap-4 p-4">
+      <div className="flex h-full flex-1 flex-col gap-4">
         <div className="container mx-auto">
           {/* Course Header */}
           <div

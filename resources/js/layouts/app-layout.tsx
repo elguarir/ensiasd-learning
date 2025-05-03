@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
+import { useAppearance } from "@/hooks/use-appearance";
 import AppLayoutTemplate from "@/layouts/app/app-header-layout";
 import { type BreadcrumbItem } from "@/types";
 
@@ -7,9 +8,12 @@ interface AppLayoutProps {
   breadcrumbs?: BreadcrumbItem[];
 }
 
-export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => (
-  <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
-    <Toaster richColors duration={2000} />
-    {children}
-  </AppLayoutTemplate>
-);
+export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => {
+  const { appearance, updateAppearance } = useAppearance();
+  return (
+    <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
+      {children}
+      <Toaster theme={appearance} richColors duration={9000000} />
+    </AppLayoutTemplate>
+  );
+};
