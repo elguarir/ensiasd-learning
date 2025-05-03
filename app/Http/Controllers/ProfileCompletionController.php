@@ -41,11 +41,11 @@ class ProfileCompletionController extends Controller
                     'visibility' => 'public',
                 ]);
 
-                $avatarUrl = Storage::disk('s3')->url($avatarPath);
+                $avatarUrl = Storage::url($avatarPath);
 
                 if ($user->avatar) {
                     $oldAvatarPath = parse_url($user->avatar, PHP_URL_PATH);
-                    Storage::disk('s3')->delete(ltrim($oldAvatarPath, '/'));
+                    Storage::delete(ltrim($oldAvatarPath, '/'));
                 }
 
                 $userData['avatar'] = $avatarUrl;

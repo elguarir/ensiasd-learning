@@ -39,8 +39,6 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   EllipsisIcon,
-  EyeIcon,
-  PenIcon,
 } from "lucide-react";
 import { useId } from "react";
 
@@ -74,39 +72,23 @@ export default function CoursesGrid({
               >
                 {/* Course Image with Overlay */}
                 <div className="relative">
-                  {/* Remove status badge from here */}
-
-                  {/* Quick Actions (only visible on hover) */}
-                  <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="h-9 w-9 rounded-full p-0"
-                      aria-label="Edit course"
-                    >
-                      <PenIcon className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="h-9 w-9 rounded-full p-0"
-                      aria-label="View course"
-                    >
-                      <EyeIcon className="h-4 w-4" />
-                    </Button>
-                  </div>
-
                   {/* Course Image */}
                   <div className="aspect-video w-full overflow-hidden">
-                    <img
-                      src={course.image}
-                      alt={`${course.title} thumbnail`}
-                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                          "https://via.placeholder.com/400x225?text=Course";
-                      }}
-                    />
+                    {course.image ? (
+                      <img
+                        src={course.image}
+                        alt={`${course.title} thumbnail`}
+                        className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            "https://via.placeholder.com/400x225?text=Course";
+                        }}
+                      />
+                    ) : (
+                      <div className="bg-muted text-muted-foreground flex h-full w-full items-center justify-center">
+                        No image set
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -120,13 +102,15 @@ export default function CoursesGrid({
                   </div>
 
                   <p className="text-muted-foreground mb-4 line-clamp-2 flex-grow text-sm">
-                    {course.description}
+                    {course.description
+                      ? course.description
+                      : "No description set."}
                   </p>
 
                   <div className="text-muted-foreground mt-auto flex items-center justify-between border-t pt-2 text-sm">
                     <div className="flex items-center gap-1">
                       <BookOpenIcon className="h-4 w-4" />
-                      <span>8 lessons</span> {/* This could be dynamic data */}
+                      <span>{course.chapters_count || 0} chapters</span>
                     </div>
                     {course.status === "published" ? (
                       <Tooltip delayDuration={300}>

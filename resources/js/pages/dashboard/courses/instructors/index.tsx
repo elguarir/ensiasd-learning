@@ -1,6 +1,6 @@
 import InstructorCourses from "@/components/dashboard/instructor-courses";
 import AppLayout from "@/layouts/app-layout";
-import { type BreadcrumbItem } from "@/types";
+import { type BreadcrumbItem, Course } from "@/types";
 import { Head } from "@inertiajs/react";
 import { BookOpenText, Pencil, StarsIcon, User } from "lucide-react";
 
@@ -10,18 +10,20 @@ const breadcrumbs: BreadcrumbItem[] = [
     href: "/dashboard",
   },
   {
-    title: "Courses",
+    title: "My Courses",
     href: "/dashboard/courses",
   },
 ];
 
-export default function CoursesPage() {
+interface Props {
+  courses: Course[];
+}
+
+export default function InstructorCoursesPage({ courses }: Props) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Courses" />
-      <div className="flex h-full flex-1 flex-col gap-4 p-4">
-        <InstructorCourses />
-      </div>
+      <Head title="My Courses" />
+      <InstructorCourses courses={courses} />
     </AppLayout>
   );
 }

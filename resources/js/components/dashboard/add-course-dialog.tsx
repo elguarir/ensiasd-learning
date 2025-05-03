@@ -1,4 +1,4 @@
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import { ImageIcon, Info, PlusIcon, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,12 +19,14 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-
+import { router } from "@inertiajs/react";
 interface Props {
   showText: boolean;
 }
 
 function AddCourseDialog(p: Props) {
+  const { courses } = usePage().props;
+  console.log(courses);
   const [open, setOpen] = useState(false);
   const { data, setData, post, processing, errors, reset } = useForm({
     title: "",
@@ -194,6 +196,7 @@ function AddCourseDialog(p: Props) {
               className="w-full bg-transparent text-3xl font-bold text-white placeholder-white/70 focus:outline-none"
               placeholder="Course title"
               value={data.title}
+              autoFocus
               onChange={(e) => setData("title", e.target.value)}
             />
             {errors.title && (

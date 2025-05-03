@@ -59,6 +59,8 @@ export interface Course {
   students?: User[];
   threads?: CourseThread[];
   assignments?: Assignment[];
+  students_count?: number;
+  chapters_count?: number;
 }
 
 export interface Assignment {

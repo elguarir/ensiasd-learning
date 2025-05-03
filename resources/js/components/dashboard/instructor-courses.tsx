@@ -61,109 +61,20 @@ import {
   TableIcon,
   TrashIcon,
 } from "lucide-react";
-import { useId, useMemo, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState, useEffect } from "react";
 import { Badge } from "../ui/badge";
 import AddCourseDialog from "./add-course-dialog";
 import CoursesGrid from "./courses-grid";
 import CoursesTable, { columns } from "./courses-table";
 
-// Mock data for demonstration
-const mockCourses: Course[] = [
-  {
-    id: 1,
-    instructor_id: 1,
-    title: "Introduction to React",
-    slug: "intro-to-react",
-    description: "Learn the basics of React",
-    image:
-      "https://buildui.com/_next/image?url=https%3A%2F%2Fmedia.graphassets.com%2F7Q52yiQvSuiZfXl7vXqM&w=828&q=75",
-    category: "Web Development",
-    is_featured: true,
-    level: "beginner",
-    status: "published",
-    tags: ["react", "javascript", "web"],
-    published_at: "2024-03-01T00:00:00.000Z",
-    created_at: "2024-02-28T00:00:00.000Z",
-    updated_at: "2024-02-28T00:00:00.000Z",
-    students_count: 156,
-  },
-  {
-    id: 2,
-    instructor_id: 1,
-    title: "Advanced TypeScript",
-    slug: "advanced-typescript",
-    description: "Master TypeScript development",
-    image:
-      "https://buildui.com/_next/image?url=https%3A%2F%2Fmedia.graphassets.com%2FpG6MERWDRkK9IT5rRlBB&w=640&q=100",
-    category: "Programming",
-    is_featured: false,
-    level: "advanced",
-    status: "draft",
-    tags: ["typescript", "javascript"],
-    published_at: null,
-    created_at: "2024-02-27T00:00:00.000Z",
-    updated_at: "2024-02-27T00:00:00.000Z",
-    students_count: 42,
-  },
-  {
-    id: 3,
-    instructor_id: 1,
-    title: "Full Stack Web Development",
-    slug: "full-stack-web-dev",
-    description: "Learn both frontend and backend development",
-    image:
-      "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&h=200",
-    category: "Web Development",
-    is_featured: true,
-    level: "intermediate",
-    status: "published",
-    tags: ["node", "react", "javascript", "fullstack"],
-    published_at: "2024-02-15T00:00:00.000Z",
-    created_at: "2024-02-10T00:00:00.000Z",
-    updated_at: "2024-02-15T00:00:00.000Z",
-    students_count: 89,
-  },
-  {
-    id: 4,
-    instructor_id: 1,
-    title: "Database Design Fundamentals",
-    slug: "database-design",
-    description: "Learn how to design efficient database schemas",
-    image:
-      "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&h=200",
-    category: "Database",
-    is_featured: false,
-    level: "beginner",
-    status: "archived",
-    tags: ["sql", "database", "design"],
-    published_at: "2023-10-05T00:00:00.000Z",
-    created_at: "2023-10-01T00:00:00.000Z",
-    updated_at: "2024-01-15T00:00:00.000Z",
-    students_count: 23,
-  },
-  {
-    id: 5,
-    instructor_id: 1,
-    title: "Cloud Computing with AWS",
-    slug: "cloud-computing-aws",
-    description: "Master Amazon Web Services",
-    image:
-      "https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&h=200",
-    category: "Cloud Computing",
-    is_featured: true,
-    level: "advanced",
-    status: "published",
-    tags: ["aws", "cloud", "devops"],
-    published_at: "2024-01-20T00:00:00.000Z",
-    created_at: "2024-01-10T00:00:00.000Z",
-    updated_at: "2024-01-20T00:00:00.000Z",
-    students_count: 67,
-  },
-];
-
 type ViewMode = "table" | "grid";
 
-export default function InstructorCourses() {
+// Update the component to accept props
+type Props = {
+  courses: Course[];
+};
+
+export default function InstructorCourses({ courses: initialCourses }: Props) {
   const id = useId();
   const [viewMode, setViewMode] = useState<ViewMode>("table");
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -181,7 +92,12 @@ export default function InstructorCourses() {
     },
   ]);
 
-  const [data, setData] = useState<Course[]>(mockCourses);
+  const [data, setData] = useState<Course[]>(initialCourses);
+
+  // Update data when initialCourses changes
+  useEffect(() => {
+    setData(initialCourses);
+  }, [initialCourses]);
 
   const handleDeleteRows = () => {
     const selectedRows = table.getSelectedRowModel().rows;

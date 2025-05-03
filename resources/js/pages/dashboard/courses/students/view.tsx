@@ -1,13 +1,20 @@
+import AnnouncementsTab from "@/components/dashboard/course/announcements-tab";
+import AssignmentsTab from "@/components/dashboard/course/assignments-tab";
+import ContentTab from "@/components/dashboard/course/content-tab";
+import DiscussionTab from "@/components/dashboard/course/discussion-tab";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ContentTab from "@/components/dashboard/course/content-tab";
-import AssignmentsTab from "@/components/dashboard/course/assignments-tab";
-import AnnouncementsTab from "@/components/dashboard/course/announcements-tab";
-import DiscussionTab from "@/components/dashboard/course/discussion-tab";
 import AppLayout from "@/layouts/app-layout";
-import { Assignment, BreadcrumbItem, Chapter, Course, CourseThread } from "@/types";
+import {
+  Announcement,
+  Assignment,
+  BreadcrumbItem,
+  Chapter,
+  Course,
+  CourseThread,
+} from "@/types";
 import { getInitials } from "@/utils/course-utils";
 import { Head } from "@inertiajs/react";
 import { BookOpen, FileText, Info, MessageSquare, Users } from "lucide-react";
@@ -32,14 +39,21 @@ interface CourseViewProps {
   course: Course;
   chapters: Chapter[];
   assignments: Assignment[];
-  announcements: any[]; // Using any to avoid type conflicts for now
+  announcements: Announcement[];
   enrollmentCount: number;
   threads?: CourseThread[];
 }
 
 export default function CourseView(p: CourseViewProps) {
-  const { course, chapters, assignments, announcements, enrollmentCount, threads } = p;
-  
+  const {
+    course,
+    chapters,
+    assignments,
+    announcements,
+    enrollmentCount,
+    threads,
+  } = p;
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={`${course.title} | Course View`} />
@@ -72,7 +86,7 @@ export default function CourseView(p: CourseViewProps) {
                 <h2 className="mb-4 text-2xl font-bold md:text-3xl">
                   {course.title}
                 </h2>
-                <p className="mb-6 max-w-3xl line-clamp-3 text-white/80">
+                <p className="mb-6 line-clamp-3 max-w-3xl text-white/80">
                   {course.description}
                 </p>
               </div>
@@ -189,10 +203,10 @@ export default function CourseView(p: CourseViewProps) {
               value="content"
               className="focus-visible:ring-0 focus-visible:outline-none"
             >
-              <ContentTab 
-                course={course} 
-                chapters={chapters} 
-                assignments={assignments} 
+              <ContentTab
+                course={course}
+                chapters={chapters}
+                assignments={assignments}
               />
             </TabsContent>
 
@@ -209,11 +223,9 @@ export default function CourseView(p: CourseViewProps) {
               value="announcements"
               className="focus-visible:ring-0 focus-visible:outline-none"
             >
-              <AnnouncementsTab 
-                announcements={announcements}
-              />
+              <AnnouncementsTab announcements={announcements} />
             </TabsContent>
-            
+
             {/* Discussion Tab */}
             <TabsContent
               value="discussion"

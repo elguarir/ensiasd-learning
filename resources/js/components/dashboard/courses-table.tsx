@@ -104,15 +104,21 @@ export const columns: ColumnDef<Item>[] = [
     cell: ({ row }) => (
       <div className="flex items-center gap-3">
         <div className="h-10 overflow-hidden rounded-sm">
-          <img
-            src={row.original.image}
-            alt={`${row.getValue("title")} thumbnail`}
-            className="aspect-video h-full w-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src =
-                "https://via.placeholder.com/40?text=Course";
-            }}
-          />
+          {row.original.image ? (
+            <img
+              src={row.original.image}
+              alt={`${row.getValue("title")} thumbnail`}
+              className="aspect-video h-full w-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src =
+                  "https://via.placeholder.com/40?text=Course";
+              }}
+            />
+          ) : (
+            <div className="aspect-video border h-full w-full flex items-center justify-center bg-muted">
+              <span className="text-muted-foreground text-sm">?</span>
+            </div>
+          )}
         </div>
         <div className="font-medium">{row.getValue("title")}</div>
       </div>
@@ -204,7 +210,7 @@ export default function CoursesTable({
   return (
     <>
       {/* Table */}
-      <div className="bg-background w-full max-w-[calc(100dvw-40px)] overflow-hidden rounded-md border md:max-w-[calc(100dvw-var(--sidebar-width)*1.15)]">
+      <div className="bg-background w-full overflow-hidden rounded-md border">
         <Table className="table-fixed">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup: any) => (

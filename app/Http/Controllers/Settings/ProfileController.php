@@ -48,10 +48,10 @@ class ProfileController extends Controller
                 'visibility' => 'public',
             ]);
 
-            $avatarUrl = Storage::disk('s3')->url($avatarPath);
+            $avatarUrl = Storage::url($avatarPath);
             if ($request->user()->avatar) {
                 $oldAvatarPath = parse_url($request->user()->avatar, PHP_URL_PATH);
-                Storage::disk('s3')->delete(ltrim($oldAvatarPath, '/'));
+                Storage::delete(ltrim($oldAvatarPath, '/'));
             }
             $request->user()->avatar = $avatarUrl;
         }

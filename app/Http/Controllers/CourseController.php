@@ -19,7 +19,35 @@ class CourseController extends Controller
         $role = $request->user()->role;
 
         if ($role == "instructor") {
-            return Inertia::render('dashboard/courses/instructors/index');
+            // Get courses created by this instructor with counts
+            $courses = $request->user()->createdCourses()
+                ->withCount('students')
+                ->withCount('chapters')
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->map(function ($course) {
+                    // Format the course for frontend display
+                    return [
+                        'id' => $course->id,
+                        'instructor_id' => $course->instructor_id,
+                        'title' => $course->title,
+                        'description' => $course->description,
+                        'image' => $course->image,
+                        'code' => $course->code,
+                        'color' => $course->color,
+                        'category' => $course->category,
+                        'status' => $course->status,
+                        'published_at' => $course->published_at,
+                        'created_at' => $course->created_at,
+                        'updated_at' => $course->updated_at,
+                        'students_count' => $course->students_count,
+                        'chapters_count' => $course->chapters_count,
+                    ];
+                });
+
+            return Inertia::render('dashboard/courses/instructors/index', [
+                'courses' => $courses,
+            ]);
         } else {
             $courses = $request->user()->courses()->with(['instructor' => function ($query) {
                 $query->select('id', 'name', 'avatar', 'username');
@@ -165,7 +193,8 @@ class CourseController extends Controller
                 'visibility' => 'public',
             ]);
 
-            $imageUrl = Storage::disk('s3')->url($imagePath);
+            // Generate the S3 URL for the uploaded image
+            $imageUrl = Storage::url($imagePath);
         }
 
         // Create the course
@@ -180,6 +209,6 @@ class CourseController extends Controller
             'status' => 'draft',
         ]);
 
-        return redirect()->route('dashboard.courses')->with('success', 'Course created successfully!');
+        return redirect()->back()->with('success', 'Course created successfully!');
     }
 }
