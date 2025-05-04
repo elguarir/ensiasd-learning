@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileCompletionController;
 use Illuminate\Support\Facades\Route;
@@ -17,17 +18,19 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
 
         Route::get('courses', [CourseController::class, 'view'])->name('courses');
         Route::get('courses/{course}', [CourseController::class, 'show'])->name('courses.show');
-        
-        // Add new course management routes
+
         Route::get('courses/{course}/students', [CourseController::class, 'students'])->name('courses.students');
         Route::delete('courses/{course}/students/{enrollment}', [CourseController::class, 'removeStudent'])->name('courses.students.remove');
         Route::put('courses/{course}/students/{enrollment}', [CourseController::class, 'updateStudentStatus'])->name('courses.students.update');
         Route::put('courses/{course}/status', [CourseController::class, 'updateStatus'])->name('courses.status');
         Route::delete('courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
     });
-
     Route::post('courses/join', [CourseController::class, 'join'])->name('courses.join');
     Route::post('courses', [CourseController::class, 'store'])->name('courses.store');
+    Route::post('courses/{course}/chapters', [ChapterController::class, 'store'])->name('courses.chapters.store');
+    Route::post('courses/{course}/chapters/reorder', [ChapterController::class, 'reorder'])->name('courses.chapters.reorder');
+    Route::put('chapters/{chapter}', [ChapterController::class, 'update'])->name('chapters.update');
+    Route::delete('chapters/{chapter}', [ChapterController::class, 'destroy'])->name('chapters.destroy');
 });
 
 // Auth routes that don't require complete profile

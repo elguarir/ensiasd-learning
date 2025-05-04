@@ -1,4 +1,4 @@
-import { SharedData } from "@/types";
+import { Course, SharedData } from "@/types";
 import { usePage } from "@inertiajs/react";
 
 export const useUser = () => {
@@ -9,4 +9,9 @@ export const useUser = () => {
   }
 
   return null;
+};
+
+export const useIsInstructor = (course: Course): boolean => {
+  const user = useUser();
+  return user?.id === course.instructor_id;
 };

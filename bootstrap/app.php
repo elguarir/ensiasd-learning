@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Middleware\EnsureInstructorOwnership;
 use App\Http\Middleware\EnsureProfileIsComplete;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Providers\AuthServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,9 +21,14 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
         $middleware->alias([
-            'profile.complete' => EnsureProfileIsComplete::class
+            'profile.complete' => EnsureProfileIsComplete::class,
+            'instructor.ownership' => EnsureInstructorOwnership::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->withProviders([
+        AuthServiceProvider::class,
+    ])
+    ->create();
