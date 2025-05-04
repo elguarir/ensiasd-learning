@@ -1,5 +1,5 @@
 import { useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -10,70 +10,74 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { PlusCircle } from "lucide-react";
+import { Chapter } from "@/types";
 
-interface AddChapterModalProps {
-  courseId: number;
-  onChapterAdded?: () => void;
+interface EditChapterModalProps {
+  chapter: Chapter;
+  isOpen: boolean;
+  onClose: () => void;
+  onChapterUpdated?: () => void;
 }
 
-export function AddChapterModal({
-  courseId,
-  onChapterAdded,
-}: AddChapterModalProps) {
-  const [open, setOpen] = useState(false);
-
-  const { data, setData, post, processing, errors, reset } = useForm({
-    title: "",
-    description: "",
+export function EditChapterModal({
+  chapter,
+  isOpen,
+  onClose,
+  onChapterUpdated,
+}: EditChapterModalProps) {
+  const { data, setData, put, processing, errors, reset } = useForm({
+    title: chapter.title || "",
+    description: chapter.description || "",
   });
+
+  // Reset form data when chapter changes
+  useEffect(() => {
+    if (isOpen) {
+      setData({
+        title: chapter.title || "",
+        description: chapter.description || "",
+      });
+    }
+  }, [chapter, isOpen, setData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    post(route("courses.chapters.store", courseId), {
+    put(route("chapters.update", chapter.id), {
       preserveScroll: true,
       onError: () => {
-        toast.error("Failed to add chapter");
+        toast.error("Failed to update chapter");
       },
       onSuccess: () => {
-        reset();
-        setOpen(false);
-        toast.success("Chapter added successfully");
-        if (onChapterAdded) {
-          onChapterAdded();
+        onClose();
+        toast.success("Chapter updated successfully");
+        if (onChapterUpdated) {
+          onChapterUpdated();
         }
       },
     });
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Add Chapter
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Chapter</DialogTitle>
+          <DialogTitle>Edit Chapter</DialogTitle>
           <DialogDescription>
-            Create a new chapter for your course content
+            Update the details of this chapter
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="title" className="mb-1 block text-sm font-medium">
+            <label htmlFor="edit-title" className="mb-1 block text-sm font-medium">
               Chapter Title
             </label>
             <Input
-              id="title"
+              id="edit-title"
               placeholder="Enter chapter title"
               value={data.title}
               onChange={(e) => setData("title", e.target.value)}
@@ -86,13 +90,13 @@ export function AddChapterModal({
 
           <div>
             <label
-              htmlFor="description"
+              htmlFor="edit-description"
               className="mb-1 block text-sm font-medium"
             >
               Description (Optional)
             </label>
             <Textarea
-              id="description"
+              id="edit-description"
               placeholder="Enter chapter description"
               value={data.description}
               onChange={(e) => setData("description", e.target.value)}
@@ -106,12 +110,12 @@ export function AddChapterModal({
             <Button
               type="button"
               variant="outline"
-              onClick={() => setOpen(false)}
+              onClick={onClose}
             >
               Cancel
             </Button>
             <Button type="submit" disabled={processing}>
-              {processing ? "Adding..." : "Add Chapter"}
+              {processing ? "Updating..." : "Update Chapter"}
             </Button>
           </DialogFooter>
         </form>
@@ -119,3 +123,5 @@ export function AddChapterModal({
     </Dialog>
   );
 }
+
+export default EditChapterModal;
