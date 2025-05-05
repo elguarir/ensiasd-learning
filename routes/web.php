@@ -7,8 +7,25 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    return view('home');
 })->name('home');
+
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/publications', function () {
+    return view('publications');
+})->name('publications');
+
+Route::get('/courses', function () {
+    return view('courses');
+})->name('courses');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
 
 Route::middleware(['auth', 'profile.complete'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
