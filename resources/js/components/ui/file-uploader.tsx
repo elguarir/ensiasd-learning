@@ -75,16 +75,16 @@ export const FileUploader = ({
         className={`border-2 border-dashed rounded-lg p-8 text-center ${
           isDragActive 
             ? "border-primary bg-primary/5" 
-            : "border-gray-300 dark:border-gray-700"
+            : "border-neutral-300 dark:border-neutral-700"
         }`}
       >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center justify-center gap-1">
-          <UploadCloud className="h-10 w-10 text-gray-500 dark:text-gray-400 mb-2" />
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <UploadCloud className="h-10 w-10 text-neutral-500 dark:text-neutral-400 mb-2" />
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
             {uploadText}
           </p>
-          <small className="text-xs text-gray-500 dark:text-gray-500">
+          <small className="text-xs text-neutral-500 dark:text-neutral-500">
             {files.length}/{maxFiles} files • Max {(maxSize / 1024 / 1024).toFixed(0)}MB per file
           </small>
           
@@ -106,13 +106,13 @@ export const FileUploader = ({
             {files.map((file, index) => (
               <li
                 key={`${file.name}-${index}`}
-                className="flex items-center justify-between rounded-md border border-gray-200 dark:border-gray-800 p-3"
+                className="flex items-center justify-between rounded-md border border-neutral-200 dark:border-neutral-800 p-3"
               >
                 <div className="flex items-center gap-2">
                   {getFileIcon(file)}
                   <div className="overflow-hidden">
                     <p className="text-sm font-medium truncate">{file.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
                       {(file.size / 1024).toFixed(0)} KB
                     </p>
                   </div>

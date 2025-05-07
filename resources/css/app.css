@@ -120,6 +120,8 @@
   --sidebar-border: hsl(220, 14%, 90%);
   --sidebar-ring: hsl(217, 89%, 50%);
   --sidebar: hsl(220, 14%, 96%);
+  --selection-background: hsl(217, 89%, 85%);
+  --selection-foreground: hsl(220, 3%, 7%);
 }
 
 .dark {
@@ -156,6 +158,8 @@
   --sidebar-border: hsl(0, 0%, 15.9%);
   --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
   --sidebar: hsl(240 5.9% 10%);
+  --selection-background: hsl(217, 47%, 51%);
+  --selection-foreground: hsl(0, 0%, 100%);
 }
 
 @layer base {
@@ -165,6 +169,11 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+  
+  ::selection {
+    background-color: var(--selection-background);
+    color: var(--selection-foreground);
   }
 }
 
