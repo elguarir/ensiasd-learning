@@ -16,10 +16,15 @@ import {
   CourseThread,
 } from "@/types";
 import { getInitials } from "@/utils/course-utils";
-import { Head } from "@inertiajs/react";
-import { BookOpen, FileText, Info, MessageSquare, Users } from "lucide-react";
-import { Link } from "@inertiajs/react";
-import { ExternalLink } from "lucide-react";
+import { Head, Link } from "@inertiajs/react";
+import {
+  BookOpen,
+  ExternalLink,
+  FileText,
+  Info,
+  MessageSquare,
+  Users,
+} from "lucide-react";
 // Define breadcrumbs for the page
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -142,16 +147,15 @@ export default function CourseView(p: CourseViewProps) {
               </div>
             </div>
             <Link
-
               href={route("dashboard.courses.students", course.id)}
-              className="flex flex-row items-center gap-3 border border-purple-600/20 bg-purple-50 p-4 dark:bg-purple-950/30 hover:bg-purple-100 dark:hover:bg-purple-950/40 transition-colors group"
+              className="group flex flex-row items-center gap-3 border border-purple-600/20 bg-purple-50 p-4 transition-colors hover:bg-purple-100 dark:bg-purple-950/30 dark:hover:bg-purple-950/40"
             >
               <Users className="h-8 w-8 text-purple-500" />
               <div className="flex-grow">
                 <p className="text-muted-foreground text-sm">Students</p>
                 <p className="text-lg font-medium">{enrollmentCount}</p>
               </div>
-              <ExternalLink className="h-4 w-4 text-purple-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <ExternalLink className="h-4 w-4 text-purple-500 opacity-0 transition-opacity group-hover:opacity-100" />
             </Link>
           </div>
 

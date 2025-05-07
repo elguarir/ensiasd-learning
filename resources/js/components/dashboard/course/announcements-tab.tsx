@@ -1,7 +1,7 @@
+import { EmptyState } from "@/components/empty-state";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { EmptyState } from "@/components/empty-state";
 import { Input } from "@/components/ui/input";
 import { Announcement, Course } from "@/types";
 import { formatRelativeTime, getInitials } from "@/utils/course-utils";
@@ -13,15 +13,20 @@ interface AnnouncementsTabProps {
   instructor?: Course["instructor"];
 }
 
-export default function AnnouncementsTab({ announcements }: AnnouncementsTabProps) {
+export default function AnnouncementsTab({
+  announcements,
+}: AnnouncementsTabProps) {
   return (
     <div className="grid grid-cols-1 gap-6">
       <h2 className="text-xl font-bold">Announcements</h2>
-      
+
       {announcements.length > 0 ? (
         <div className="space-y-8">
           {announcements.map((announcement) => (
-            <AnnouncementCard key={announcement.id} announcement={announcement} />
+            <AnnouncementCard
+              key={announcement.id}
+              announcement={announcement}
+            />
           ))}
         </div>
       ) : (
@@ -35,11 +40,7 @@ export default function AnnouncementsTab({ announcements }: AnnouncementsTabProp
   );
 }
 
-function AnnouncementCard({
-  announcement,
-}: {
-  announcement: Announcement;
-}) {
+function AnnouncementCard({ announcement }: { announcement: Announcement }) {
   const [comment, setComment] = useState("");
   const announcer = announcement.user;
 
@@ -55,7 +56,10 @@ function AnnouncementCard({
         <CardHeader>
           <div className="flex items-center gap-4">
             <Avatar className="h-12 w-12">
-              <AvatarImage src={announcer?.avatar || undefined} alt={announcer?.name} />
+              <AvatarImage
+                src={announcer?.avatar || undefined}
+                alt={announcer?.name}
+              />
               <AvatarFallback>
                 {getInitials(announcer?.name || "")}
               </AvatarFallback>
@@ -145,4 +149,4 @@ function AnnouncementCard({
       </div>
     </Card>
   );
-} 
+}

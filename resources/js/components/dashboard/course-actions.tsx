@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Course } from "@/types";
+import { confirm } from "@/utils/confirm";
 import { Link, router } from "@inertiajs/react";
 import {
   ArchiveIcon,
@@ -23,7 +24,6 @@ import {
 import { ReactNode } from "react";
 import { toast } from "sonner";
 import CourseCodeDialog from "./course-code-dialog";
-import { confirm } from "@/utils/confirm";
 
 // Action handler functions
 
@@ -54,11 +54,12 @@ export function handleUnpublishCourse(courseId: number | string) {
       // Confirm before unpublishing
       await confirm({
         title: "Unpublish course",
-        message: "Are you sure you want to unpublish this course? Students won't be able to access it until it's published again.",
+        message:
+          "Are you sure you want to unpublish this course? Students won't be able to access it until it's published again.",
         confirmText: "Unpublish",
         cancelText: "Cancel",
       });
-      
+
       // User confirmed
       const promise = new Promise<void>((resolve, reject) => {
         router.put(
@@ -132,18 +133,22 @@ export function handleDeleteCourse(courseId: number | string) {
       // Show the confirmation dialog and wait for user response
       await confirm({
         title: "Delete course",
-        message: "Are you sure you want to delete this course? This action cannot be undone.",
+        message:
+          "Are you sure you want to delete this course? This action cannot be undone.",
         confirmText: "Delete",
         cancelText: "Cancel",
         variant: "destructive",
       });
-      
+
       // If we get here, user confirmed the action
       const promise = new Promise<void>((resolve, reject) => {
-        router.delete(route("dashboard.courses.destroy", { course: courseId }), {
-          onSuccess: () => resolve(),
-          onError: () => reject(new Error("Failed to delete course")),
-        });
+        router.delete(
+          route("dashboard.courses.destroy", { course: courseId }),
+          {
+            onSuccess: () => resolve(),
+            onError: () => reject(new Error("Failed to delete course")),
+          },
+        );
       });
 
       toast.promise(promise, {

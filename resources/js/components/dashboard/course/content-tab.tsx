@@ -1,4 +1,5 @@
 import { EmptyState } from "@/components/empty-state";
+import { Accordion } from "@/components/ui/accordion";
 import { useIsInstructor } from "@/hooks/use-user";
 import { Assignment, Chapter, Course } from "@/types";
 import {
@@ -24,7 +25,6 @@ import { AddChapterModal } from "./add-chapter-modal";
 import { CourseInfoCard } from "./course-info-card";
 import { SortableChapterItem } from "./sortable-chapter-item";
 import { UpcomingDeadlinesCard } from "./upcoming-deadlines-card";
-import { Accordion } from "@/components/ui/accordion";
 
 interface ContentTabProps {
   course: Course;
@@ -160,7 +160,7 @@ export default function ContentTab({
             Drag to reorder chapters
           </div>
         )}
-        
+
         {items.length > 0 ? (
           <div className="space-y-6">
             <DndContext
@@ -177,7 +177,7 @@ export default function ContentTab({
                   type="multiple"
                   value={expandedChapters}
                   onValueChange={setExpandedChapters}
-                  className="w-full border divide-y"
+                  className="w-full divide-y border"
                 >
                   {items.map((chapter) => (
                     <SortableChapterItem

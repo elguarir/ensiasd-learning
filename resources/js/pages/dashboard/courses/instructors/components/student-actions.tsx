@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -6,10 +5,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, UserMinus, CheckCircle } from "lucide-react";
 import { confirm } from "@/utils/confirm";
-import { toast } from "sonner";
 import { router } from "@inertiajs/react";
+import { CheckCircle, MoreHorizontal, UserMinus } from "lucide-react";
+import { toast } from "sonner";
 
 interface StudentActionsProps {
   courseId: number;
@@ -36,14 +35,14 @@ export default function StudentActions({
       // Call the API to remove the student using Inertia
       const promise = new Promise<void>((resolve, reject) => {
         router.delete(
-          route("dashboard.courses.students.remove", { 
-            course: courseId, 
-            enrollment: enrollmentId 
-          }), 
+          route("dashboard.courses.students.remove", {
+            course: courseId,
+            enrollment: enrollmentId,
+          }),
           {
             onSuccess: () => resolve(),
             onError: () => reject(new Error("Failed to remove student")),
-          }
+          },
         );
       });
 
@@ -60,15 +59,15 @@ export default function StudentActions({
   const handleUpdateStatus = (completed: boolean) => {
     const promise = new Promise<void>((resolve, reject) => {
       router.put(
-        route("dashboard.courses.students.update", { 
-          course: courseId, 
-          enrollment: enrollmentId 
-        }), 
+        route("dashboard.courses.students.update", {
+          course: courseId,
+          enrollment: enrollmentId,
+        }),
         { completed },
         {
           onSuccess: () => resolve(),
           onError: () => reject(new Error("Failed to update student status")),
-        }
+        },
       );
     });
 
@@ -104,7 +103,7 @@ export default function StudentActions({
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={handleRemoveStudent}
-          className="cursor-pointer text-destructive"
+          className="text-destructive cursor-pointer"
         >
           <UserMinus className="mr-2 h-4 w-4" />
           Remove from course
@@ -112,4 +111,4 @@ export default function StudentActions({
       </DropdownMenuContent>
     </DropdownMenu>
   );
-} 
+}

@@ -28,15 +28,22 @@ import {
 } from "@/components/ui/tooltip";
 import { UserMenuContent } from "@/components/user-menu-content";
 import { useInitials } from "@/hooks/use-initials";
+import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils";
 import { type BreadcrumbItem, type NavItem, type SharedData } from "@/types";
 import { Link, usePage } from "@inertiajs/react";
-import { LayoutGrid, Menu, Search, BookOpenText, ClipboardList, FileText, MessageSquareIcon } from "lucide-react";
-import AppLogo from "./app-logo"
+import {
+  BookOpenText,
+  ClipboardList,
+  FileText,
+  LayoutGrid,
+  Menu,
+  MessageSquareIcon,
+} from "lucide-react";
+import AppLogo from "./app-logo";
 import AppLogoIcon from "./app-logo-icon";
-import { SearchBar } from "./extras/search-bar";
 import NotificationsPopup from "./dashboard/notifications/notifications-popup";
-import { useUser } from "@/hooks/use-user";
+import { SearchBar } from "./extras/search-bar";
 
 const studentMainNavItems: NavItem[] = [
   {
@@ -92,7 +99,9 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
   const page = usePage<SharedData>();
   const getInitials = useInitials();
   const isInstructor = user?.role === "instructor";
-  const mainNavItems = isInstructor ? instructorMainNavItems : studentMainNavItems;
+  const mainNavItems = isInstructor
+    ? instructorMainNavItems
+    : studentMainNavItems;
   return (
     <>
       <div className="border-sidebar-border/80 border-b">
@@ -124,7 +133,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                         <Link
                           key={item.title}
                           href={item.url}
-                          className="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring flex items-center space-x-2 rounded-md px-3 py-2 font-medium transition-colors border border-border/20"
+                          className="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring border-border/20 flex items-center space-x-2 rounded-md border px-3 py-2 font-medium transition-colors"
                         >
                           {item.icon && (
                             <Icon iconNode={item.icon} className="h-5 w-5" />
@@ -141,7 +150,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring flex items-center space-x-2 rounded-md px-3 py-2 font-medium transition-colors border border-border/20"
+                          className="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring border-border/20 flex items-center space-x-2 rounded-md border px-3 py-2 font-medium transition-colors"
                         >
                           {item.icon && (
                             <Icon iconNode={item.icon} className="h-5 w-5" />
@@ -197,10 +206,10 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
 
           <div className="ml-auto flex items-center space-x-2">
             <div className="relative flex items-center space-x-1">
-            <div className="flex items-center gap-2">
-          <SearchBar />
-          <NotificationsPopup />
-        </div>
+              <div className="flex items-center gap-2">
+                <SearchBar />
+                <NotificationsPopup />
+              </div>
               <div className="hidden lg:flex">
                 {rightNavItems.map((item) => (
                   <TooltipProvider key={item.title} delayDuration={0}>
@@ -233,7 +242,10 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="size-10 rounded-full p-1">
                   <Avatar className="size-8 overflow-hidden rounded-full">
-                    <AvatarImage src={user?.avatar || ""} alt={user?.name || ""} />
+                    <AvatarImage
+                      src={user?.avatar || ""}
+                      alt={user?.name || ""}
+                    />
                     <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                       {getInitials(user?.name || "")}
                     </AvatarFallback>

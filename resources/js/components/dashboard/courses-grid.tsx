@@ -1,18 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import {
   Pagination,
@@ -38,8 +25,8 @@ import {
   ChevronLastIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  EllipsisIcon,
   CodeIcon,
+  EllipsisIcon,
 } from "lucide-react";
 import { useId } from "react";
 import CourseActions from "./course-actions";
@@ -93,11 +80,15 @@ export default function CoursesGrid({
                       </div>
                     )}
                   </div>
-                  
+
                   {/* Course Code Badge */}
                   <div className="absolute top-2 right-2">
                     <CourseCodeDialog course={course}>
-                      <Button size="sm" variant="secondary" className="gap-1.5 text-xs font-medium">
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        className="gap-1.5 text-xs font-medium"
+                      >
                         <CodeIcon className="h-3 w-3" />
                         {course.code}
                       </Button>

@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/empty-state";
+import { Button } from "@/components/ui/button";
 import { CourseThread } from "@/types";
 import { MessageSquare, Users } from "lucide-react";
 
@@ -37,4 +37,4 @@ export default function DiscussionTab({ threads = [] }: DiscussionTabProps) {
       )}
     </div>
   );
-} 
+}

@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { Course } from "@/types";
+import { Link } from "@inertiajs/react";
 import { ColumnDef, FilterFn, Row, flexRender } from "@tanstack/react-table";
 import {
   ChevronDownIcon,
@@ -36,7 +37,6 @@ import {
 } from "lucide-react";
 import { useId } from "react";
 import CourseActions from "./course-actions";
-import { Link } from "@inertiajs/react";
 type Item = Course;
 
 // Custom filter function for multi-column searching

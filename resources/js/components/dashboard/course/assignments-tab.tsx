@@ -1,6 +1,6 @@
+import { EmptyState } from "@/components/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { EmptyState } from "@/components/empty-state";
 import { Assignment } from "@/types";
 import { formatDate, getAssignmentStatus } from "@/utils/course-utils";
 import { CalendarClock, FileText, Folder } from "lucide-react";
@@ -102,4 +102,4 @@ function AssignmentCard({ assignment }: { assignment: Assignment }) {
       </div>
     </div>
   );
-} 
+}

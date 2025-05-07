@@ -118,8 +118,6 @@
   --sidebar-border: hsl(220, 14%, 90%);
   --sidebar-ring: hsl(217, 89%, 50%);
   --sidebar: hsl(220, 14%, 96%);
-
-
 }
 
 .dark {
@@ -157,9 +155,6 @@
   --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
   --sidebar: hsl(240 5.9% 10%);
 }
-
-
-
 
 @layer base {
   * {
@@ -215,7 +210,6 @@
 }
 
 @keyframes caret-blink {
-
   0%,
   70%,
   100% {
@@ -286,9 +280,6 @@ input:-webkit-autofill {
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
-
-
-
 
 /***
   * Spinner

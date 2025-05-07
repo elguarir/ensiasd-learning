@@ -10,7 +10,12 @@ import {
 import { type BreadcrumbItem as BreadcrumbItemType } from "@/types";
 import { Link } from "@inertiajs/react";
 import { Fragment } from "react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 export function Breadcrumbs({
   breadcrumbs,
@@ -26,7 +31,9 @@ export function Breadcrumbs({
               <>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href={breadcrumbs[0].href}>{breadcrumbs[0].title}</Link>
+                    <Link href={breadcrumbs[0].href}>
+                      {breadcrumbs[0].title}
+                    </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
@@ -57,7 +64,9 @@ export function Breadcrumbs({
                 ))}
                 <BreadcrumbSeparator className="md:hidden" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>{breadcrumbs[breadcrumbs.length - 1].title}</BreadcrumbPage>
+                  <BreadcrumbPage>
+                    {breadcrumbs[breadcrumbs.length - 1].title}
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </>
             ) : (

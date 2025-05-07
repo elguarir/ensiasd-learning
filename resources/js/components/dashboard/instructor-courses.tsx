@@ -61,7 +61,7 @@ import {
   TableIcon,
   TrashIcon,
 } from "lucide-react";
-import { useId, useMemo, useRef, useState, useEffect } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Badge } from "../ui/badge";
 import AddCourseDialog from "./add-course-dialog";
 import CoursesGrid from "./courses-grid";

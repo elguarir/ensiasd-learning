@@ -2,11 +2,7 @@ import { HTMLAttributes } from "react";
 
 function Placeholder(props: HTMLAttributes<HTMLOrSVGElement>) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      {...props}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" {...props}>
       <rect width="1200" height="1200" fill="#EAEAEA" rx="3" />
       <g opacity=".5">
         <g opacity=".5">
@@ -31,11 +27,7 @@ function Placeholder(props: HTMLAttributes<HTMLOrSVGElement>) {
           strokeWidth="2.418"
           d="M404.846 598.671h391.726"
         />
-        <path
-          stroke="url(#c)"
-          strokeWidth="2.418"
-          d="M599.5 795.742V404.017"
-        />
+        <path stroke="url(#c)" strokeWidth="2.418" d="M599.5 795.742V404.017" />
         <path
           stroke="url(#d)"
           strokeWidth="2.418"

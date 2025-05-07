@@ -19,7 +19,6 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { router } from "@inertiajs/react";
 interface Props {
   showText: boolean;
 }

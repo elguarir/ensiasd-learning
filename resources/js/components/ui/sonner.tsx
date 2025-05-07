@@ -1,9 +1,5 @@
 "use client";
 
-import { XCircleIcon } from "lucide-react";
-import { AlertCircleIcon } from "lucide-react";
-import { InfoIcon } from "lucide-react";
-import { CheckCircleIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Toaster as Sonner, ToasterProps } from "sonner";
 

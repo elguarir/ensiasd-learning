@@ -1,5 +1,5 @@
 import { useForm } from "@inertiajs/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -73,7 +73,10 @@ export function EditChapterModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="edit-title" className="mb-1 block text-sm font-medium">
+            <label
+              htmlFor="edit-title"
+              className="mb-1 block text-sm font-medium"
+            >
               Chapter Title
             </label>
             <Input
@@ -107,11 +110,7 @@ export function EditChapterModal({
           </div>
 
           <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-            >
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <Button type="submit" disabled={processing}>
