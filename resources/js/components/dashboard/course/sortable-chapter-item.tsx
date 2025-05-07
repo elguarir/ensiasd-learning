@@ -15,10 +15,11 @@ import { Chapter } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { router } from "@inertiajs/react";
-import { Edit, GripVertical, MoreHorizontal, Plus, Trash2 } from "lucide-react";
+import { Edit, GripVertical, MoreHorizontal, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { EditChapterModal } from "./edit-chapter-modal";
 import { ResourceListItem } from "./resource-list-item";
+import { AddResourceSheet } from "@/components/add-resource-sheet";
 
 export function SortableChapterItem({
   chapter,
@@ -140,10 +141,7 @@ export function SortableChapterItem({
 
             {isInstructor && (
               <div>
-                <Button variant="outline" size="sm" className="mt-2">
-                  <Plus className="mr-1 h-4 w-4" />
-                  Add Resource
-                </Button>
+                <AddResourceSheet chapterId={chapter.id} />
               </div>
             )}
           </AccordionContent>

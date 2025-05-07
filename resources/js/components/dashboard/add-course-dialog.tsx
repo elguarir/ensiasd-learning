@@ -167,7 +167,7 @@ function AddCourseDialog(p: Props) {
                     <TooltipContent
                       side="bottom"
                       className="bg-destructive text-destructive-foreground"
-                      closeClassName="bg-destructive fill-destructive"
+                      arrowClassName="bg-destructive fill-destructive"
                     >
                       {errors.image}
                     </TooltipContent>

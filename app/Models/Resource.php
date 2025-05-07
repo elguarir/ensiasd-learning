@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Resource extends Model
 {
@@ -27,14 +28,29 @@ class Resource extends Model
         return $this->belongsTo(Chapter::class);
     }
 
-    public function attachments(): MorphMany
-    {
-        return $this->morphMany(Attachment::class, 'attachable');
-    }
-
     public function isResourceType($type)
     {
         return $this->resource_type === $type;
+    }
+
+    public function attachmentResource(): HasOne
+    {
+        return $this->hasOne(AttachmentResource::class);
+    }
+
+    public function embedResource(): HasOne
+    {
+        return $this->hasOne(EmbedResource::class);
+    }
+
+    public function richTextResource(): HasOne
+    {
+        return $this->hasOne(RichTextResource::class);
+    }
+
+    public function externalResource(): HasOne
+    {
+        return $this->hasOne(ExternalResource::class);
     }
 
     // You can add similar methods for other resource types

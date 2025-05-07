@@ -3,6 +3,7 @@
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileCompletionController;
+use App\Http\Controllers\ResourceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -42,12 +43,20 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
         Route::put('courses/{course}/status', [CourseController::class, 'updateStatus'])->name('courses.status');
         Route::delete('courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
     });
+
+    // Courses
     Route::post('courses/join', [CourseController::class, 'join'])->name('courses.join');
     Route::post('courses', [CourseController::class, 'store'])->name('courses.store');
     Route::post('courses/{course}/chapters', [ChapterController::class, 'store'])->name('courses.chapters.store');
     Route::post('courses/{course}/chapters/reorder', [ChapterController::class, 'reorder'])->name('courses.chapters.reorder');
+
+    // Chapters
     Route::put('chapters/{chapter}', [ChapterController::class, 'update'])->name('chapters.update');
     Route::delete('chapters/{chapter}', [ChapterController::class, 'destroy'])->name('chapters.destroy');
+
+    // Resources
+    Route::post('resources', [ResourceController::class, 'store'])->name('resources.store');
+    
 });
 
 // Auth routes that don't require complete profile
