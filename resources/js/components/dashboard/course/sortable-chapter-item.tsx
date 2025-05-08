@@ -1,3 +1,4 @@
+import { AddResourceSheet } from "@/components/dashboard/add-resource-sheet";
 import {
   AccordionContent,
   AccordionItem,
@@ -19,7 +20,6 @@ import { Edit, GripVertical, MoreHorizontal, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { EditChapterModal } from "./edit-chapter-modal";
 import { ResourceListItem } from "./resource-list-item";
-import { AddResourceSheet } from "@/components/add-resource-sheet";
 
 export function SortableChapterItem({
   chapter,

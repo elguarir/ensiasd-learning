@@ -21,7 +21,6 @@ export default function DiscussionTab({ threads = [] }: DiscussionTabProps) {
 
       {threads.length > 0 ? (
         <div className="space-y-4">
-          {/* Thread list will go here */}
           <p>Thread list will be implemented here</p>
         </div>
       ) : (

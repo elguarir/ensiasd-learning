@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import CodeBlock from "@tiptap/extension-code-block";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -71,8 +72,10 @@ export function RichTextEditor({
     },
     editorProps: {
       attributes: {
-        class:
-          "prose prose-sm dark:prose-invert prose-p:m-0 min-h-[200px] max-w-none px-4 outline-none ring-0 focus:outline-none focus:ring-0",
+        class: cn(
+          "prose prose-xs sm:prose-sm dark:prose-invert prose-p:m-0 max-h-[300px] min-h-[200px] max-w-none overflow-y-auto px-4 pt-2 ring-0 outline-none focus:ring-0 focus:outline-none",
+          className,
+        ),
         autoCorrect: "off",
         spellcheck: "false",
       },
@@ -105,8 +108,10 @@ export function RichTextEditor({
   };
 
   return (
-    <div className={`rounded-md border ${className}`}>
-      <div className="bg-muted/20 p-2 flex flex-wrap items-center gap-1 border-b">
+    <div
+      className={`rounded-md border ${className} focus-within:border-ring focus-within:ring-ring/15 focus-within:ring-[3px]`}
+    >
+      <div className="bg-muted/20 flex flex-wrap items-center gap-1 border-b p-2">
         <TooltipProvider delayDuration={300}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -117,6 +122,7 @@ export function RichTextEditor({
                   editor.chain().focus().toggleHeading({ level: 1 }).run()
                 }
                 aria-label="Heading 1"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
               >
                 <Heading1 className="h-4 w-4" />
               </Toggle>
@@ -128,6 +134,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive("heading", { level: 2 })}
                 onPressedChange={() =>
                   editor.chain().focus().toggleHeading({ level: 2 }).run()
@@ -144,6 +151,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive("heading", { level: 3 })}
                 onPressedChange={() =>
                   editor.chain().focus().toggleHeading({ level: 3 }).run()
@@ -162,6 +170,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive("bold")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleBold().run()
@@ -178,6 +187,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive("italic")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleItalic().run()
@@ -194,6 +204,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive("underline")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleUnderline().run()
@@ -210,6 +221,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive("strike")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleStrike().run()
@@ -228,6 +240,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive("bulletList")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleBulletList().run()
@@ -244,6 +257,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive("orderedList")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleOrderedList().run()
@@ -260,6 +274,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive("blockquote")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleBlockquote().run()
@@ -276,6 +291,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive("codeBlock")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleCodeBlock().run()
@@ -294,6 +310,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive({ textAlign: "left" })}
                 onPressedChange={() =>
                   editor.chain().focus().setTextAlign("left").run()
@@ -310,6 +327,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive({ textAlign: "center" })}
                 onPressedChange={() =>
                   editor.chain().focus().setTextAlign("center").run()
@@ -326,6 +344,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive({ textAlign: "right" })}
                 onPressedChange={() =>
                   editor.chain().focus().setTextAlign("right").run()
@@ -342,6 +361,7 @@ export function RichTextEditor({
             <TooltipTrigger asChild>
               <Toggle
                 size="sm"
+                className="aria-[pressed=true]:bg-primary/90 hover:aria-[pressed=true]:bg-primary aria-[pressed=true]:text-primary-foreground transition-colors"
                 pressed={editor.isActive({ textAlign: "justify" })}
                 onPressedChange={() =>
                   editor.chain().focus().setTextAlign("justify").run()
@@ -405,10 +425,7 @@ export function RichTextEditor({
           </Popover>
         </TooltipProvider>
       </div>
-      <EditorContent
-        editor={editor}
-        className="prose prose-sm pt-2 dark:prose-invert prose-p:m-0 min-h-[200px] max-w-none max-h-[300px] overflow-y-auto"
-      />
+      <EditorContent editor={editor} />
     </div>
   );
 }

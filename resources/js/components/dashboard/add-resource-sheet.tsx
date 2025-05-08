@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { QuizBuilder } from "./quiz-builder";
+import { QuizBuilder } from "../quiz-builder";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 // Define the type for our form data
