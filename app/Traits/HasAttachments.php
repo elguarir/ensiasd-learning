@@ -44,7 +44,6 @@ trait HasAttachments
         }
 
         return $this->attachments()->create([
-            'original_filename' => $originalFilename,
             'disk' => $disk,
             'path' => $path,
             'filename' => $filename,

@@ -205,15 +205,46 @@ export interface ThreadComment {
 export interface Resource {
   id: number;
   chapter_id: number;
+  resource_type: "attachment" | "rich_text" | "quiz" | "external";
   title: string;
-  description: string | null;
-  resource_type: string;
   position: number;
   metadata: Record<string, any> | null;
   created_at: string;
   updated_at: string;
   chapter?: Chapter;
-  attachments?: Attachment[];
+  attachment_resource?: {
+    id: number;
+    resource_id: number;
+    attachments?: Attachment[];
+  };
+  rich_text_resource?: {
+    id: number;
+    resource_id: number;
+    content: string;
+    format: string;
+  };
+  external_resource?: {
+    id: number;
+    resource_id: number;
+    external_url: string;
+    link_title: string | null;
+    link_description: string | null;
+    favicon_url: string | null;
+    og_image_url: string | null;
+  };
+  quiz_questions?: Array<{
+    id: number;
+    resource_id: number;
+    question: string;
+    position?: number;
+    points?: number;
+    options?: Array<{
+      id: number;
+      quiz_question_id: number;
+      text: string;
+      is_correct: boolean;
+    }>;
+  }>;
 }
 
 export interface Announcement {

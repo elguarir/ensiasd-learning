@@ -1,4 +1,4 @@
-import { AddResourceSheet } from "@/components/dashboard/add-resource-sheet";
+import { AddResourceSheet } from "@/components/dashboard/course/add-resource-sheet";
 import {
   AccordionContent,
   AccordionItem,
@@ -128,7 +128,7 @@ export function SortableChapterItem({
             )}
 
             {chapter.resources && chapter.resources.length > 0 ? (
-              <div className="space-y-2 py-4">
+              <div className="space-y-4 py-4">
                 {chapter.resources.map((resource) => (
                   <ResourceListItem key={resource.id} resource={resource} />
                 ))}

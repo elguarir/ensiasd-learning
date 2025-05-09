@@ -14,9 +14,8 @@ class Attachment extends Model
     protected $disk;
 
     protected $fillable = [
-        'original_filename',
-        'path',
         'filename',
+        'path',
         'mime_type',
         'size',
         'extension',

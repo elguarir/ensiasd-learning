@@ -1,5 +1,5 @@
 import { Assignment } from "@/types";
-import { File, FileText, Video } from "lucide-react";
+import { File, FileText, Video, HelpCircle, ExternalLink } from "lucide-react";
 import React from "react";
 
 /**
@@ -80,10 +80,14 @@ export function getAssignmentStatus(assignment: Assignment): {
  */
 export function ResourceIcon({ type }: { type: string }): React.ReactElement {
   switch (type) {
-    case "video":
-      return <Video className="h-4 w-4" />;
-    case "document":
+    case "attachment":
+      return <File className="h-4 w-4" />;
+    case "rich_text":
       return <FileText className="h-4 w-4" />;
+    case "quiz":
+      return <HelpCircle className="h-4 w-4" />;
+    case "external":
+      return <ExternalLink className="h-4 w-4" />;
     default:
       return <File className="h-4 w-4" />;
   }

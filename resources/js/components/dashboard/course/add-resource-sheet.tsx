@@ -2,12 +2,13 @@
 
 import { useForm } from "@inertiajs/react";
 import { Edit, HelpCircle, Link, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { FileUploader } from "@/components/ui/file-uploader";
 import { Input } from "@/components/ui/input";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import {
   Sheet,
   SheetContent,
@@ -18,14 +19,12 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { QuizBuilder } from "../quiz-builder";
-import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { QuizBuilder } from "../../quiz-builder";
 
 // Define the type for our form data
 type ResourceFormData = {
   chapter_id: number;
   title: string;
-  description: string;
   resource_type: "attachment" | "rich_text" | "quiz" | "external";
   attachment: {
     files: File[];
@@ -57,12 +56,10 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
     "attachment" | "rich_text" | "quiz" | "external"
   >("attachment");
 
-  // Create form with Inertia's useForm - organized by resource type
   const { data, setData, post, processing, errors, reset } =
     useForm<ResourceFormData>({
       chapter_id: chapterId,
       title: "",
-      description: "",
       resource_type: "attachment",
       attachment: {
         files: [],
@@ -89,6 +86,8 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
         link_description: "",
       },
     });
+
+
 
   // Helper to set resource type specific data
   const setResourceTypeData = (key: string, value: any) => {
@@ -202,39 +201,18 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Common fields for all resource types */}
+            {/* Common fields */}
             <div>
               <label htmlFor="title" className="text-sm font-medium">
                 Title
               </label>
               <Input
                 id="title"
-                placeholder="Resource title"
+                placeholder="Enter a title for the resource"
                 value={data.title}
                 onChange={(e) => setData("title", e.target.value)}
               />
-              {errors.title && (
-                <p className="mt-1 text-sm text-red-500">{errors.title}</p>
-              )}
             </div>
-
-            <div>
-              <label htmlFor="description" className="text-sm font-medium">
-                Description (Optional)
-              </label>
-              <Textarea
-                id="description"
-                placeholder="Brief description of the resource"
-                value={data.description}
-                onChange={(e) => setData("description", e.target.value)}
-              />
-              {errors.description && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.description}
-                </p>
-              )}
-            </div>
-
             {/* Attachment-specific fields */}
             <TabsContent value="attachment" className="space-y-4">
               <div>
@@ -274,7 +252,9 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
                 </label>
                 <RichTextEditor
                   content={data.rich_text.content}
-                  onChange={(content) => setResourceTypeData("content", content)}
+                  onChange={(content) =>
+                    setResourceTypeData("content", content)
+                  }
                   className="min-h-[300px]"
                 />
                 {errors["rich_text.content"] && (

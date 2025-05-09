@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('chapter_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->text('description')->nullable();
             $table->enum('resource_type', ['attachment', 'embed', 'rich_text', 'external']);
             $table->integer('position')->default(0);
             $table->json('metadata')->nullable();

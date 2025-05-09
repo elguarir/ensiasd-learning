@@ -104,7 +104,7 @@ export default function Profile({
                     </AvatarFallback>
                   </Avatar>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 flex items-center gap-2">
                   <Button type="button" variant={"outline"} asChild>
                     <label htmlFor="avatar">
                       <div>Change avatar</div>

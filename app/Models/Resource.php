@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Resource extends Model
 {
@@ -13,7 +14,6 @@ class Resource extends Model
     protected $fillable = [
         'chapter_id',
         'title',
-        'description',
         'resource_type',
         'position',
         'metadata',
@@ -38,11 +38,6 @@ class Resource extends Model
         return $this->hasOne(AttachmentResource::class);
     }
 
-    public function embedResource(): HasOne
-    {
-        return $this->hasOne(EmbedResource::class);
-    }
-
     public function richTextResource(): HasOne
     {
         return $this->hasOne(RichTextResource::class);
@@ -53,8 +48,9 @@ class Resource extends Model
         return $this->hasOne(ExternalResource::class);
     }
 
-    // You can add similar methods for other resource types
-    // public function embedResource() {...}
-    // public function richTextResource() {...}
-    // public function externalResource() {...}
+    public function quizQuestions(): HasMany
+    {
+        return $this->hasMany(QuizQuestion::class);
+    }
+
 }

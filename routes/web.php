@@ -56,7 +56,7 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
 
     // Resources
     Route::post('resources', [ResourceController::class, 'store'])->name('resources.store');
-    
+    Route::delete('resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
 });
 
 // Auth routes that don't require complete profile

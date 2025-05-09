@@ -85,11 +85,75 @@ class CourseController extends Controller
 
         // Load chapters with their resources
         $chapters = $course->chapters()
-            ->with(['resources' => function ($query) {
-                $query->orderBy('position');
-            }])
+            ->with([
+                'resources' => function ($query) {
+                    $query->orderBy('position');
+                },
+                'resources.attachmentResource.attachments',
+                'resources.richTextResource',
+                'resources.externalResource',
+                'resources.quizQuestions.options'
+            ])
             ->orderBy('position')
             ->get();
+        
+        // Transform resources data for frontend
+        $chapters->each(function ($chapter) {
+            if ($chapter->resources) {
+                $chapter->resources->each(function ($resource) {
+                    // Add metadata based on resource type
+                    switch ($resource->resource_type) {
+                        case 'attachment':
+                            if ($resource->attachmentResource) {
+                                $fileCount = $resource->attachmentResource->attachments->count();
+                                $totalSize = $resource->attachmentResource->attachments->sum('size');
+                                
+                                $resource->metadata = [
+                                    'file_count' => $fileCount,
+                                    'total_size' => $totalSize,
+                                    'file_types' => $resource->attachmentResource->attachments->pluck('mime_type')->unique()->toArray(),
+                                ];
+                            }
+                            break;
+                            
+                        case 'rich_text':
+                            if ($resource->richTextResource) {
+                                $resource->metadata = [
+                                    'format' => $resource->richTextResource->format,
+                                    'excerpt' => substr(strip_tags($resource->richTextResource->content), 0, 100) . '...',
+                                ];
+                            }
+                            break;
+                            
+                        case 'external':
+                            if ($resource->externalResource) {
+                                $resource->metadata = [
+                                    'external_url' => $resource->externalResource->external_url,
+                                    'link_title' => $resource->externalResource->link_title,
+                                    'link_description' => $resource->externalResource->link_description,
+                                    'favicon_url' => $resource->externalResource->favicon_url,
+                                ];
+                            }
+                            break;
+                            
+                        case 'quiz':
+                            if ($resource->quizQuestions) {
+                                $resource->metadata = [
+                                    'question_count' => $resource->quizQuestions->count(),
+                                    'total_points' => $resource->quizQuestions->sum('points'),
+                                ];
+                            }
+                            break;
+                    }
+                    
+                    // Clean up the response by removing unnecessary nested relations
+                    unset($resource->attachmentResource);
+                    unset($resource->richTextResource);
+                    unset($resource->externalResource);
+                    unset($resource->quizQuestions);
+                });
+            }
+        });
 
         // Load published assignments
         $assignments = $course->hasMany(Assignment::class)
