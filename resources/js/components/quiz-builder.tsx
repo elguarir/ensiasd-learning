@@ -368,7 +368,6 @@ export function QuizBuilder({ questions, onChange }: QuizBuilderProps) {
           </AccordionItem>
         ))}
       </Accordion>
-
       <Button
         type="button"
         variant="outline"

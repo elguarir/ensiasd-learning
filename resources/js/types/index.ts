@@ -202,50 +202,76 @@ export interface ThreadComment {
   author?: User;
 }
 
-export interface Resource {
+// New types for Resource metadata
+export interface ResourceAttachmentFile {
+  id: number; // Attachment ID
+  name: string;
+  size: number;
+  mime_type: string;
+  path: string; // URL to download/access
+}
+
+export interface AttachmentResourceMetadata {
+  file_count: number;
+  total_size: number;
+  files: ResourceAttachmentFile[];
+}
+
+export interface RichTextResourceMetadata {
+  format: string;
+  content: string;
+  excerpt: string;
+}
+
+export interface ExternalResourceMetadata {
+  external_url: string;
+  link_title: string | null;
+  link_description: string | null;
+  favicon_url: string | null;
+}
+
+// Note: Assuming QuizOption type is sufficient for options listed in quiz questions metadata.
+// The controller maps $question->options directly.
+export interface QuizResourceMetadata {
+  question_count: number;
+  total_points: number;
+  questions: Array<{
+    id: number; // QuizQuestion ID
+    question: string; // Text of the question
+    // points per question is not in controller's mapped 'questions' array, so not included here.
+    options: QuizOption[]; // Array of QuizOption objects
+  }>;
+}
+
+// Base for all resource types
+interface BaseResource {
   id: number;
   chapter_id: number;
-  resource_type: "attachment" | "rich_text" | "quiz" | "external";
   title: string;
   position: number;
-  metadata: Record<string, any> | null;
   created_at: string;
   updated_at: string;
   chapter?: Chapter;
-  attachment_resource?: {
-    id: number;
-    resource_id: number;
-    attachments?: Attachment[];
-  };
-  rich_text_resource?: {
-    id: number;
-    resource_id: number;
-    content: string;
-    format: string;
-  };
-  external_resource?: {
-    id: number;
-    resource_id: number;
-    external_url: string;
-    link_title: string | null;
-    link_description: string | null;
-    favicon_url: string | null;
-    og_image_url: string | null;
-  };
-  quiz_questions?: Array<{
-    id: number;
-    resource_id: number;
-    question: string;
-    position?: number;
-    points?: number;
-    options?: Array<{
-      id: number;
-      quiz_question_id: number;
-      text: string;
-      is_correct: boolean;
-    }>;
-  }>;
 }
+
+// Discriminated union for Resource
+export type Resource =
+  | (BaseResource & {
+      resource_type: "attachment";
+      metadata: AttachmentResourceMetadata | null;
+    })
+  | (BaseResource & {
+      resource_type: "rich_text";
+      metadata: RichTextResourceMetadata | null;
+    })
+  | (BaseResource & {
+      resource_type: "quiz";
+      metadata: QuizResourceMetadata | null;
+    })
+  | (BaseResource & {
+      resource_type: "external";
+      metadata: ExternalResourceMetadata | null;
+    });
 
 export interface Announcement {
   id: number;

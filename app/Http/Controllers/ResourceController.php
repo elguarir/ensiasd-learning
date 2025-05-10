@@ -12,7 +12,6 @@ use App\Models\QuizQuestion;
 use App\Models\QuizOption;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 
 class ResourceController extends Controller

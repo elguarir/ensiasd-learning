@@ -130,7 +130,11 @@ export function SortableChapterItem({
             {chapter.resources && chapter.resources.length > 0 ? (
               <div className="space-y-4 py-4">
                 {chapter.resources.map((resource) => (
-                  <ResourceListItem key={resource.id} resource={resource} />
+                  <ResourceListItem
+                    key={resource.id}
+                    resource={resource}
+                    isInstructor={isInstructor}
+                  />
                 ))}
               </div>
             ) : (

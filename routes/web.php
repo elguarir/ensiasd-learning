@@ -3,6 +3,7 @@
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ProfileCompletionController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResourceController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -57,6 +58,9 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
     // Resources
     Route::post('resources', [ResourceController::class, 'store'])->name('resources.store');
     Route::delete('resources/{resource}', [ResourceController::class, 'destroy'])->name('resources.destroy');
+
+    // Quiz
+    Route::post('quiz/generate', [QuizController::class, 'generateQuiz'])->name('quiz.generate');
 });
 
 // Auth routes that don't require complete profile

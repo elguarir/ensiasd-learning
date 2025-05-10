@@ -96,7 +96,7 @@ class CourseController extends Controller
             ])
             ->orderBy('position')
             ->get();
-        
+
         // Transform resources data for frontend
         $chapters->each(function ($chapter) {
             if ($chapter->resources) {
@@ -107,24 +107,35 @@ class CourseController extends Controller
                             if ($resource->attachmentResource) {
                                 $fileCount = $resource->attachmentResource->attachments->count();
                                 $totalSize = $resource->attachmentResource->attachments->sum('size');
-                                
+
                                 $resource->metadata = [
                                     'file_count' => $fileCount,
                                     'total_size' => $totalSize,
-                                    'file_types' => $resource->attachmentResource->attachments->pluck('mime_type')->unique()->toArray(),
+                                    'files' => $resource->attachmentResource->attachments->map(function ($attachment) {
+                                        return [
+                                            'id' => $attachment->id,
+                                            'name' => $attachment->filename,
+                                            'size' => $attachment->size,
+                                            'mime_type' => $attachment->mime_type,
+                                            'path' => Storage::disk('s3')->url($attachment->path),
+                                        ];
+                                    })->toArray(),
                                 ];
                             }
+                            unset($resource->attachmentResource);
                             break;
-                            
+
                         case 'rich_text':
                             if ($resource->richTextResource) {
                                 $resource->metadata = [
                                     'format' => $resource->richTextResource->format,
+                                    'content' => $resource->richTextResource->content,
                                     'excerpt' => substr(strip_tags($resource->richTextResource->content), 0, 100) . '...',
                                 ];
                             }
+                            unset($resource->richTextResource);
                             break;
-                            
+
                         case 'external':
                             if ($resource->externalResource) {
                                 $resource->metadata = [
@@ -134,23 +145,39 @@ class CourseController extends Controller
                                     'favicon_url' => $resource->externalResource->favicon_url,
                                 ];
                             }
+                            unset($resource->externalResource);
                             break;
-                            
+
                         case 'quiz':
                             if ($resource->quizQuestions) {
                                 $resource->metadata = [
                                     'question_count' => $resource->quizQuestions->count(),
                                     'total_points' => $resource->quizQuestions->sum('points'),
+                                    'questions' => $resource->quizQuestions->map(function ($question) {
+                                        return [
+                                            'id' => $question->id,
+                                            'question' => $question->question,
+                                            'options' => $question->options,
+                                        ];
+                                    })->toArray(),
                                 ];
                             }
+                            unset($resource->quizQuestions);
                             break;
                     }
-                    
-                    // Clean up the response by removing unnecessary nested relations
-                    unset($resource->attachmentResource);
-                    unset($resource->richTextResource);
-                    unset($resource->externalResource);
-                    unset($resource->quizQuestions);
+
+                    if ($resource->resource_type !== 'rich_text') {
+                        unset($resource->richTextResource);
+                    }
+                    if ($resource->resource_type !== 'attachment') {
+                        unset($resource->attachmentResource);
+                    }
+                    if ($resource->resource_type !== 'external') {
+                        unset($resource->externalResource);
+                    }
+                    if ($resource->resource_type !== 'quiz') {
+                        unset($resource->quizQuestions);
+                    }
                 });
             }
         });
@@ -228,12 +255,12 @@ class CourseController extends Controller
 
         $oldStatus = $course->status;
         $newStatus = $request->status;
-        
+
         // Update published_at timestamp if publishing for the first time
         if ($newStatus === 'published' && $oldStatus !== 'published') {
             $course->published_at = now();
         }
-        
+
         $course->status = $newStatus;
         $course->save();
 

@@ -2,7 +2,7 @@
 
 import { useForm } from "@inertiajs/react";
 import { Edit, HelpCircle, Link, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { QuizBuilder } from "../../quiz-builder";
+import QuizGenerator from "@/components/quiz-generator";
 
 // Define the type for our form data
 type ResourceFormData = {
@@ -86,8 +87,6 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
         link_description: "",
       },
     });
-
-
 
   // Helper to set resource type specific data
   const setResourceTypeData = (key: string, value: any) => {
@@ -202,16 +201,21 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Common fields */}
-            <div>
+            <div className="space-y-2">
               <label htmlFor="title" className="text-sm font-medium">
                 Title
               </label>
               <Input
                 id="title"
+                type="text"
+                required
                 placeholder="Enter a title for the resource"
                 value={data.title}
                 onChange={(e) => setData("title", e.target.value)}
               />
+              {errors?.title && (
+                <p className="mt-1 text-sm text-red-500">{errors?.title}</p>
+              )}
             </div>
             {/* Attachment-specific fields */}
             <TabsContent value="attachment" className="space-y-4">
@@ -269,6 +273,12 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
             <TabsContent value="quiz" className="space-y-4">
               <div>
                 <label className="text-sm font-medium">Quiz Questions</label>
+                <QuizGenerator
+                  // resources={data.attachment.files}
+                  onChange={(questions) =>
+                    setResourceTypeData("questions", questions)
+                  }
+                />
                 <QuizBuilder
                   questions={data.quiz.questions}
                   onChange={(questions) =>
