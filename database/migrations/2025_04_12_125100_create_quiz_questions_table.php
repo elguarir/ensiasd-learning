@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('quiz_questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('assignment_id')->constrained()->onDelete('cascade')->nullable();
-            $table->foreignId('resource_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('assignment_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('resource_id')->nullable()->constrained()->onDelete('cascade');
             $table->text('question');
             $table->integer('position')->default(0);
             $table->integer('points')->default(1);

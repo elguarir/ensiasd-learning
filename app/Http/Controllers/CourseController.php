@@ -117,7 +117,7 @@ class CourseController extends Controller
                                             'name' => $attachment->filename,
                                             'size' => $attachment->size,
                                             'mime_type' => $attachment->mime_type,
-                                            'path' => Storage::disk('s3')->url($attachment->path),
+                                            'path' => Storage::url($attachment->path),
                                         ];
                                     })->toArray(),
                                 ];
@@ -157,7 +157,12 @@ class CourseController extends Controller
                                         return [
                                             'id' => $question->id,
                                             'question' => $question->question,
-                                            'options' => $question->options,
+                                            'options' => $question->options->map(function ($option) {
+                                                return [
+                                                    'text' => $option->text,
+                                                    'is_correct' => $option->is_correct,
+                                                ];
+                                            })->toArray(),
                                         ];
                                     })->toArray(),
                                 ];

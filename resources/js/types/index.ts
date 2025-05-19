@@ -102,7 +102,7 @@ export interface Submission {
 export interface QuizQuestion {
   id: number;
   assignment_id: number;
-  question_text: string;
+  text: string;
   position: number;
   points: number;
   created_at: string;
@@ -115,7 +115,7 @@ export interface QuizQuestion {
 export interface QuizOption {
   id: number;
   quiz_question_id: number;
-  option_text: string;
+  text: string;
   is_correct: boolean;
   created_at: string;
   updated_at: string;

@@ -36,9 +36,14 @@ interface QuizQuestion {
 interface QuizBuilderProps {
   questions: QuizQuestion[];
   onChange: (questions: QuizQuestion[]) => void;
+  setView: (view: "quiz-builder" | "quiz-generator") => void;
 }
 
-export function QuizBuilder({ questions, onChange }: QuizBuilderProps) {
+export function QuizBuilder({
+  questions,
+  onChange,
+  setView,
+}: QuizBuilderProps) {
   const [openQuestion, setOpenQuestion] = useState<string | undefined>(
     "question-0",
   );

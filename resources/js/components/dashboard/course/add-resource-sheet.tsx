@@ -1,10 +1,19 @@
 "use client";
 
 import { useForm } from "@inertiajs/react";
-import { Edit, HelpCircle, Link, Plus } from "lucide-react";
+import {
+  Edit,
+  HelpCircle,
+  Link,
+  Paperclip,
+  Plus,
+  Sparkles,
+} from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import FormField from "@/components/form-field";
+import QuizGenerator from "@/components/quiz-generator";
 import { Button } from "@/components/ui/button";
 import { FileUploader } from "@/components/ui/file-uploader";
 import { Input } from "@/components/ui/input";
@@ -20,8 +29,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { QuizBuilder } from "../../quiz-builder";
-import QuizGenerator from "@/components/quiz-generator";
-
 // Define the type for our form data
 type ResourceFormData = {
   chapter_id: number;
@@ -56,6 +63,9 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
   const [resourceType, setResourceType] = useState<
     "attachment" | "rich_text" | "quiz" | "external"
   >("attachment");
+  const [view, setView] = useState<"quiz-builder" | "quiz-generator">(
+    "quiz-builder",
+  );
 
   const { data, setData, post, processing, errors, reset } =
     useForm<ResourceFormData>({
@@ -115,7 +125,7 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
 
     post(route("resources.store"), {
       preserveScroll: true,
-      forceFormData: true,
+      forceFormData: resourceType === "attachment",
       onError: () => {
         toast.error("Failed to create resource!");
       },
@@ -156,7 +166,7 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
                 value="attachment"
                 className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
               >
-                <Plus
+                <Paperclip
                   className="-ms-0.5 opacity-60"
                   size={16}
                   aria-hidden="true"
@@ -201,7 +211,7 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Common fields */}
-            <div className="space-y-2">
+            <div className="flex flex-col space-y-1.5">
               <label htmlFor="title" className="text-sm font-medium">
                 Title
               </label>
@@ -219,7 +229,7 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
             </div>
             {/* Attachment-specific fields */}
             <TabsContent value="attachment" className="space-y-4">
-              <div>
+              <FormField>
                 <label htmlFor="files" className="text-sm font-medium">
                   Upload Files
                 </label>
@@ -245,12 +255,11 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
                     {errors["attachment.files"]}
                   </p>
                 )}
-              </div>
+              </FormField>
             </TabsContent>
-
             {/* Rich Text-specific fields */}
             <TabsContent value="rich_text" className="space-y-4">
-              <div>
+              <FormField>
                 <label htmlFor="content" className="text-sm font-medium">
                   Content
                 </label>
@@ -266,36 +275,67 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
                     {errors["rich_text.content"]}
                   </p>
                 )}
-              </div>
+              </FormField>
             </TabsContent>
 
             {/* Quiz-specific fields */}
             <TabsContent value="quiz" className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Quiz Questions</label>
-                <QuizGenerator
-                  // resources={data.attachment.files}
-                  onChange={(questions) =>
-                    setResourceTypeData("questions", questions)
-                  }
-                />
-                <QuizBuilder
-                  questions={data.quiz.questions}
-                  onChange={(questions) =>
-                    setResourceTypeData("questions", questions)
-                  }
-                />
+              <FormField className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium">Quiz Questions</label>
+                  <Tabs
+                    defaultValue={view}
+                    value={view}
+                    onValueChange={(value) =>
+                      setView(value as "quiz-builder" | "quiz-generator")
+                    }
+                  >
+                    <TabsList className="gap-1 rounded-full bg-transparent">
+                      <TabsTrigger
+                        value="quiz-builder"
+                        className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full data-[state=active]:shadow-none"
+                      >
+                        <Sparkles className="mr-1 h-4 w-4" />
+                        Quiz Builder
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="quiz-generator"
+                        className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full data-[state=active]:shadow-none"
+                      >
+                        <Sparkles className="mr-1 h-4 w-4" />
+                        Quiz Generator
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+                {view === "quiz-builder" && (
+                  <QuizBuilder
+                    questions={data.quiz.questions}
+                    onChange={(questions) =>
+                      setResourceTypeData("questions", questions)
+                    }
+                    setView={setView}
+                  />
+                )}
+                {view === "quiz-generator" && (
+                  <QuizGenerator
+                    onChange={(questions) =>
+                      setResourceTypeData("questions", questions)
+                    }
+                    setView={setView}
+                  />
+                )}
                 {errors["quiz.questions"] && (
                   <p className="mt-1 text-sm text-red-500">
                     {errors["quiz.questions"]}
                   </p>
                 )}
-              </div>
+              </FormField>
             </TabsContent>
 
             {/* External Link-specific fields */}
             <TabsContent value="external" className="space-y-4">
-              <div>
+              <FormField>
                 <label htmlFor="external_url" className="text-sm font-medium">
                   External URL
                 </label>
@@ -313,9 +353,9 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
                     {errors["external.external_url"]}
                   </p>
                 )}
-              </div>
+              </FormField>
 
-              <div>
+              <FormField>
                 <label htmlFor="link_title" className="text-sm font-medium">
                   Link Title (Optional)
                 </label>
@@ -335,9 +375,9 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
                     {errors["external.link_title"]}
                   </p>
                 )}
-              </div>
+              </FormField>
 
-              <div>
+              <FormField>
                 <label
                   htmlFor="link_description"
                   className="text-sm font-medium"
@@ -357,7 +397,7 @@ export function AddResourceSheet({ chapterId }: { chapterId: number }) {
                     {errors["external.link_description"]}
                   </p>
                 )}
-              </div>
+              </FormField>
             </TabsContent>
 
             <div className="flex justify-end space-x-2 pt-4">

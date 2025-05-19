@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Resource } from "@/types";
 import { confirmSafe } from "@/utils/confirm";
 import { ResourceIcon } from "@/utils/course-utils";
-import { Link, router } from "@inertiajs/react";
-import { Edit, ExternalLink, PenBox, Trash2 } from "lucide-react";
+import { router } from "@inertiajs/react";
+import { ExternalLink, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AttachmentDetailsDialog } from "./attachment-details-dialog";
+import { QuizDetailsDialog } from "./quiz-details-dialog";
 import { RichTextDetailsDialog } from "./richtext-details-dialog";
 
 export function ResourceListItem({
@@ -19,6 +20,7 @@ export function ResourceListItem({
 }) {
   const [rTextOpen, setRTextOpen] = useState(false);
   const [attachmentOpen, setAttachmentOpen] = useState(false);
+  const [quizOpen, setQuizOpen] = useState(false);
 
   const getResourceTypeName = () => {
     switch (resource.resource_type) {
@@ -98,15 +100,13 @@ export function ResourceListItem({
         );
       case "quiz":
         return (
-          <Button variant="outline" size="sm" asChild>
-            <Link
-              // href={route("resources.quiz.take", { resource: resource.id })}
-              href="#"
-            >
-              <PenBox className="mr-1 h-3.5 w-3.5" />
-              Take Quiz
-            </Link>
-          </Button>
+          <>
+            <QuizDetailsDialog
+              resource={resource}
+              open={quizOpen}
+              onOpenChange={setQuizOpen}
+            />
+          </>
         );
       case "external":
         return (
@@ -153,19 +153,6 @@ export function ResourceListItem({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8"
-                    asChild
-                  >
-                    <Link
-                      // href={route("resources.edit", { resource: resource.id })}
-                      href="#"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
                     className="text-destructive hover:text-destructive h-8 w-8"
                     onClick={async () => {
                       const confirmed = await confirmSafe({
@@ -178,7 +165,6 @@ export function ResourceListItem({
                       });
 
                       if (confirmed) {
-                        // Create a promise to handle the delete operation
                         const deletePromise = new Promise<void>(
                           (resolve, reject) => {
                             router.delete(
