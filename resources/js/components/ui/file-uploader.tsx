@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import { Button } from "./button"
-import { UploadCloud, X, FileText, File, Image } from "lucide-react"
+import { UploadCloud, X, FileText, File, Image, Paperclip } from "lucide-react"
 
 interface FileUploaderProps {
   value?: File[]
@@ -15,6 +15,7 @@ interface FileUploaderProps {
   uploadText?: string
   className?: string
   showPreview?: boolean
+  variant?: "default" | "compact"
 }
 
 export const FileUploader = ({
@@ -27,6 +28,7 @@ export const FileUploader = ({
   uploadText = "Drag and drop files here or click to upload",
   className = "",
   showPreview = true,
+  variant = "default",
 }: FileUploaderProps) => {
   const [files, setFiles] = useState<File[]>(value || [])
 
@@ -66,6 +68,65 @@ export const FileUploader = ({
     } else {
       return <File className="h-5 w-5" />
     }
+  }
+
+  if (variant === "compact") {
+    return (
+      <div className={className}>
+        <div
+          {...getRootProps()}
+          className={`border rounded-md p-2 cursor-pointer ${
+            isDragActive 
+              ? "border-primary bg-primary/5" 
+              : "border-neutral-200 dark:border-neutral-700"
+          }`}
+        >
+          <input {...getInputProps()} />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Paperclip className="h-4 w-4 text-neutral-500" />
+              <span className="text-sm">
+                {files.length > 0 
+                  ? `${files.length} file(s) selected` 
+                  : uploadText.split(" ").slice(0, 4).join(" ") || "Attach files"}
+              </span>
+            </div>
+            <small className="text-xs text-neutral-500">
+              {files.length}/{maxFiles}
+            </small>
+          </div>
+        </div>
+
+        {showPreview && files.length > 0 && (
+          <ul className="mt-2 space-y-1.5">
+            {files.map((file, index) => (
+              <li
+                key={`${file.name}-${index}`}
+                className="flex items-center justify-between rounded border border-neutral-200 dark:border-neutral-800 p-1.5 text-sm"
+              >
+                <div className="flex items-center gap-1.5 overflow-hidden">
+                  {getFileIcon(file)}
+                  <span className="truncate">{file.name}</span>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    removeFile(file)
+                  }}
+                >
+                  <X className="h-3.5 w-3.5" />
+                  <span className="sr-only">Remove file</span>
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    )
   }
 
   return (

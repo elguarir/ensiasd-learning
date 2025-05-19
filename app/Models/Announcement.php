@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Announcement extends Model
 {
@@ -36,5 +37,13 @@ class Announcement extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(AnnouncementComment::class);
+    }
+    
+    /**
+     * Get all attachments for this announcement.
+     */
+    public function attachments(): MorphMany
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 }

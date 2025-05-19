@@ -184,11 +184,13 @@ export interface CourseThread {
   author_id: number;
   title: string;
   content: string;
+  is_pinned?: boolean;
   created_at: string;
   updated_at: string;
   course?: Course;
   author?: User;
   comments?: ThreadComment[];
+  attachments?: Attachment[];
 }
 
 export interface ThreadComment {
@@ -196,10 +198,12 @@ export interface ThreadComment {
   thread_id: number;
   author_id: number;
   content: string;
+  parent_id: number | null;
   created_at: string;
   updated_at: string;
   thread?: CourseThread;
   author?: User;
+  attachments?: Attachment[];
 }
 
 // New types for Resource metadata
@@ -283,6 +287,7 @@ export interface Announcement {
   user: User;
   comments: AnnouncementComment[];
   course?: Course;
+  attachments?: Attachment[];
 }
 
 export interface AnnouncementComment {
@@ -294,4 +299,5 @@ export interface AnnouncementComment {
   updated_at: string;
   user: User;
   announcement?: Announcement;
+  attachments?: Attachment[];
 }

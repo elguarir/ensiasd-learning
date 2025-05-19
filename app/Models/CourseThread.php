@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class CourseThread extends Model
 {
@@ -10,9 +11,12 @@ class CourseThread extends Model
         'course_id',
         'author_id',
         'title',
-        'description',
-        'image',
-        'category',
+        'content',
+        'is_pinned',
+    ];
+
+    protected $casts = [
+        'is_pinned' => 'boolean',
     ];
 
     public function course()
@@ -25,8 +29,17 @@ class CourseThread extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
+   
     public function comments()
     {
         return $this->hasMany(ThreadComment::class, 'thread_id');
+    }
+    
+    /**
+     * Get all attachments for this thread.
+     */
+    public function attachments(): MorphMany
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 }

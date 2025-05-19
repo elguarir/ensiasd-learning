@@ -13,11 +13,10 @@ return new class extends Migration {
         Schema::create('course_threads', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained("users")->onDelete('cascade');
+            $table->foreignId('author_id')->constrained("users")->onDelete('cascade');
             $table->string('title');
-            $table->json('body');
-            
-            $table->timestamp('resolved_at')->nullable();
+            $table->text('content');
+            $table->boolean('is_pinned')->default(false);
             $table->timestamps();
         });
     }

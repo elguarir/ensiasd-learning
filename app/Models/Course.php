@@ -51,6 +51,11 @@ class Course extends Model
         return $this->hasMany(CourseThread::class);
     }
 
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class);
+    }
+
     public function isPublished()
     {
         return $this->status === 'published';

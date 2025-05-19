@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseThreadController;
 use App\Http\Controllers\ProfileCompletionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResourceController;
@@ -61,6 +63,20 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
 
     // Quiz
     Route::post('quiz/generate', [QuizController::class, 'generateQuiz'])->name('quiz.generate');
+    
+    // Announcements
+    Route::post('courses/{course}/announcements', [AnnouncementController::class, 'store'])->name('courses.announcements.store');
+    Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+    Route::post('announcements/{announcement}/comments', [AnnouncementController::class, 'storeComment'])->name('announcements.comments.store');
+    Route::delete('announcement-comments/{comment}', [AnnouncementController::class, 'destroyComment'])->name('announcement-comments.destroy');
+    
+    // Course Threads (Discussions)
+    Route::get('courses/{course}/threads', [CourseThreadController::class, 'index'])->name('courses.threads.index');
+    Route::get('courses/{course}/threads/{thread}', [CourseThreadController::class, 'show'])->name('courses.threads.show');
+    Route::post('courses/{course}/threads', [CourseThreadController::class, 'store'])->name('courses.threads.store');
+    Route::delete('courses/{course}/threads/{thread}', [CourseThreadController::class, 'destroy'])->name('courses.threads.destroy');
+    Route::post('courses/{course}/threads/{thread}/comments', [CourseThreadController::class, 'storeComment'])->name('courses.threads.comments.store');
+    Route::delete('courses/{course}/threads/{thread}/comments/{comment}', [CourseThreadController::class, 'destroyComment'])->name('courses.threads.comments.destroy');
 });
 
 // Auth routes that don't require complete profile

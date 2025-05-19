@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class ThreadComment extends Model
 {
@@ -31,5 +32,13 @@ class ThreadComment extends Model
     public function replies()
     {
         return $this->hasMany(ThreadComment::class, 'parent_id');
+    }
+    
+    /**
+     * Get all attachments for this comment.
+     */
+    public function attachments(): MorphMany
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 }

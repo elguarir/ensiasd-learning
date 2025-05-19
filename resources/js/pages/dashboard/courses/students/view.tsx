@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useIsInstructor } from "@/hooks/use-user";
 import AppLayout from "@/layouts/app-layout";
 import {
   Announcement,
@@ -14,6 +15,7 @@ import {
   Chapter,
   Course,
   CourseThread,
+  SharedData,
 } from "@/types";
 import { getInitials } from "@/utils/course-utils";
 import { Head, Link } from "@inertiajs/react";
@@ -41,7 +43,7 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-interface CourseViewProps {
+interface CourseViewProps extends SharedData {
   course: Course;
   chapters: Chapter[];
   assignments: Assignment[];
@@ -59,6 +61,7 @@ export default function CourseView(p: CourseViewProps) {
     enrollmentCount,
     threads,
   } = p;
+
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -117,9 +120,11 @@ export default function CourseView(p: CourseViewProps) {
                 </div>
 
                 <div className="flex gap-3">
-                  <Button size="sm" variant="secondary" className="gap-2">
-                    <MessageSquare className="h-4 w-4" />
-                    <span className="hidden sm:inline">Discussion</span>
+                  <Button size="sm" variant="secondary" className="gap-2" asChild>
+                    <a href={route("courses.threads.index", course.id)}>
+                      <MessageSquare className="h-4 w-4" />
+                      <span className="hidden sm:inline">Discussion</span>
+                    </a>
                   </Button>
                   <Button size="sm" variant="secondary" className="gap-2">
                     <Info className="h-4 w-4" />
@@ -233,7 +238,10 @@ export default function CourseView(p: CourseViewProps) {
               value="announcements"
               className="focus-visible:ring-0 focus-visible:outline-none"
             >
-              <AnnouncementsTab announcements={announcements} />
+              <AnnouncementsTab 
+                announcements={announcements} 
+                course={course}
+              />
             </TabsContent>
 
             {/* Discussion Tab */}
@@ -241,7 +249,10 @@ export default function CourseView(p: CourseViewProps) {
               value="discussion"
               className="focus-visible:ring-0 focus-visible:outline-none"
             >
-              <DiscussionTab threads={threads} />
+              <DiscussionTab 
+                threads={threads} 
+                course={course}
+              />
             </TabsContent>
           </Tabs>
         </div>
