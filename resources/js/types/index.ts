@@ -44,6 +44,7 @@ export interface Course {
   id: number;
   instructor_id: number;
   code: string;
+  invite_token: string;
   title: string;
   description: string;
   image: string;

@@ -15,9 +15,7 @@ use Prism\Prism\Schema\ArraySchema;
 use Prism\Prism\Schema\BooleanSchema;
 use Prism\Prism\ValueObjects\Messages\UserMessage;
 use Prism\Prism\ValueObjects\Messages\Support\Document;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
 
 class QuizController extends Controller
 {
@@ -26,6 +24,13 @@ class QuizController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+
+
+    public function __construct()
+    {
+        set_time_limit(900);
+    }
+
     public function generateQuiz(Request $request)
     {
         $resourceIds = $request->input('attachments');

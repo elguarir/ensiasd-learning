@@ -35,7 +35,6 @@ import { Link, usePage } from "@inertiajs/react";
 import {
   BookOpenText,
   ClipboardList,
-  FileText,
   LayoutGrid,
   Menu,
   MessageSquareIcon,
@@ -56,6 +55,11 @@ const studentMainNavItems: NavItem[] = [
     url: "/dashboard/courses",
     icon: BookOpenText,
   },
+  {
+    title: "Assignements",
+    url: "/dashboard/assignments",
+    icon: ClipboardList,
+  },
 ];
 
 const instructorMainNavItems: NavItem[] = [
@@ -69,16 +73,7 @@ const instructorMainNavItems: NavItem[] = [
     url: "/dashboard/courses",
     icon: BookOpenText,
   },
-  {
-    title: "Assignements",
-    url: "/dashboard/assignments",
-    icon: ClipboardList,
-  },
-  {
-    title: "Publications",
-    url: "/dashboard/publications",
-    icon: FileText,
-  },
+
   {
     title: "Messages",
     url: "/dashboard/messages",

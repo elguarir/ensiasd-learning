@@ -15,6 +15,7 @@ class Course extends Model
         'description',
         'image',
         'code',
+        'invite_token',
         'color',
         'category',
         'status', // draft, published, archived
@@ -59,5 +60,13 @@ class Course extends Model
     public function isPublished()
     {
         return $this->status === 'published';
+    }
+
+    /**
+     * Get the invite link for this course
+     */
+    public function getInviteLink()
+    {
+        return url("/courses/join/{$this->invite_token}");
     }
 }

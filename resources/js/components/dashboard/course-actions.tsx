@@ -17,6 +17,7 @@ import {
   EditIcon,
   EllipsisIcon,
   EyeIcon,
+  LinkIcon,
   TrashIcon,
   UploadIcon,
   UserIcon,
@@ -162,6 +163,17 @@ export function handleDeleteCourse(courseId: number | string) {
   };
 }
 
+export function handleCopyInviteLink(course: Course) {
+  return async () => {
+    try {
+      const inviteLink = `${window.location.origin}/courses/join/${course.invite_token}`;
+      await navigator.clipboard.writeText(inviteLink);
+      
+      toast.success("Invite link copied to clipboard!");
+    } catch (error) {}
+  };
+}
+
 interface CourseActionsProps {
   course: Course;
   children?: ReactNode;
@@ -177,6 +189,7 @@ export default function CourseActions({
   const isDraft = course.status === "draft";
 
   const deleteCourseHandler = handleDeleteCourse(course.id);
+  const copyInviteLinkHandler = handleCopyInviteLink(course);
 
   return (
     <DropdownMenu>
@@ -262,6 +275,11 @@ export default function CourseActions({
               <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
             </DropdownMenuItem>
           </CourseCodeDialog>
+          <DropdownMenuItem onClick={copyInviteLinkHandler}>
+            <LinkIcon className="mr-2 h-4 w-4" />
+            <span>Copy invite link</span>
+            <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 

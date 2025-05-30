@@ -35,6 +35,7 @@ class CourseController extends Controller
                         'description' => $course->description,
                         'image' => $course->image,
                         'code' => $course->code,
+                        'invite_token' => $course->invite_token,
                         'color' => $course->color,
                         'category' => $course->category,
                         'status' => $course->status,
@@ -207,7 +208,7 @@ class CourseController extends Controller
             });
         }
 
-        // Load announcements with comments and their authors
+        // Load announcements with comments, their authors and attachments
         $announcements = $course->hasMany(Announcement::class)
             ->with(['user' => function ($query) {
                 $query->select('id', 'name', 'username', 'avatar');
@@ -215,7 +216,7 @@ class CourseController extends Controller
                 $query->orderBy('created_at');
             }, 'comments.user' => function ($query) {
                 $query->select('id', 'name', 'username', 'avatar');
-            }])
+            }, 'attachments'])
             ->latest()
             ->get();
 
@@ -360,6 +361,40 @@ class CourseController extends Controller
     }
 
     /**
+     * Join a course via invite link
+     */
+    public function joinViaLink($inviteToken)
+    {
+        $course = Course::where('invite_token', $inviteToken)->first();
+        
+        if (!$course) {
+            return redirect()->route('dashboard.courses')->with('error', 'Invalid invite link');
+        }
+
+        // Check if course is published
+        if (!$course->isPublished()) {
+            return redirect()->route('dashboard.courses')->with('error', 'This course is not available for enrollment');
+        }
+
+        $user = request()->user();
+        
+        // Check if user is already enrolled in the course
+        if ($user->courses()->where('course_id', $course->id)->exists()) {
+            return redirect()->route('dashboard.courses.show', $course->id)->with('success', 'You are already enrolled in this course');
+        }
+
+        // Check if user is the instructor
+        if ($user->id === $course->instructor_id) {
+            return redirect()->route('dashboard.courses.show', $course->id)->with('info', 'You are the instructor of this course');
+        }
+
+        // Enroll the user
+        $user->courses()->attach($course->id);
+        
+        return redirect()->route('dashboard.courses.show', $course->id)->with('success', 'Successfully joined the course!');
+    }
+
+    /**
      * Store a newly created course in storage.
      */
     public function store(CreateCourseRequest $request)
@@ -372,6 +407,12 @@ class CourseController extends Controller
         // Ensure code uniqueness
         while (Course::where('code', $code)->exists()) {
             $code = strtoupper(Str::random(6));
+        }
+
+        // Generate unique invite token
+        $inviteToken = Str::random(32);
+        while (Course::where('invite_token', $inviteToken)->exists()) {
+            $inviteToken = Str::random(32);
         }
 
         // Handle image upload to S3
@@ -392,6 +433,7 @@ class CourseController extends Controller
             'title' => $validated['title'],
             'description' => $validated['description'],
             'code' => $code,
+            'invite_token' => $inviteToken,
             'color' => $validated['color'],
             'image' => $imageUrl,
             'category' => $validated['category'],

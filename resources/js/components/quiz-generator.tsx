@@ -45,6 +45,7 @@ type ChapterWithPdfs = {
 
 function QuizGenerator({ onChange, setView }: QuizGeneratorProps) {
   const props = usePage<PageProps>().props;
+  console.log(props);
   const [chaptersWithPdfs, setChaptersWithPdfs] = useState<ChapterWithPdfs[]>(
     [],
   );
@@ -60,9 +61,6 @@ function QuizGenerator({ onChange, setView }: QuizGeneratorProps) {
     additionalInstructions: "",
   });
   const [processing, setProcessing] = useState(false);
-
-  const allDocuments = chaptersWithPdfs.flatMap((chapter) => chapter.documents);
-  const hasPdfs = allDocuments.length > 0;
 
   const toggleResource = (id: number) => {
     setData(
@@ -110,9 +108,12 @@ function QuizGenerator({ onChange, setView }: QuizGeneratorProps) {
         const pdfDocuments = (chapter.resources || [])
           .filter((resource) => resource.resource_type === "attachment")
           .flatMap((resource) =>
-            (resource.metadata?.files || []).filter(
-              (file) => file.mime_type === "application/pdf",
-            ),
+            (resource.metadata?.files || [])
+              .filter((file) => file.mime_type === "application/pdf")
+              .map((file) => ({
+                ...file,
+                id: resource.id, // Use resource.id instead of file.id
+              })),
           );
 
         if (pdfDocuments.length > 0) {
@@ -134,6 +135,8 @@ function QuizGenerator({ onChange, setView }: QuizGeneratorProps) {
 
     setChaptersWithPdfs(chaptersWithPdfsData);
   }, [props.chapters]);
+
+  console.log(chaptersWithPdfs);
 
   return (
     <div className="space-y-6">

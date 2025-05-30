@@ -42,7 +42,6 @@ export default function AnnouncementsTab({
   const [announcements, setAnnouncements] =
     useState<Announcement[]>(initialAnnouncements);
   const isInstructor = useIsInstructor(course);
-
   const handleDeleteAnnouncement = (announcementId: number) => {
     if (confirm("Are you sure you want to delete this announcement?")) {
       router.delete(route("announcements.destroy", announcementId), {
@@ -304,7 +303,7 @@ function AnnouncementCard({
 
           {/* Announcement Attachments */}
           {announcement.attachments && announcement.attachments.length > 0 && (
-            <div className="mt-4 border-t pt-4">
+            <div className="mt-4 border-t py-4">
               <h3 className="mb-3 flex items-center gap-2 text-sm font-medium">
                 <Paperclip className="h-4 w-4" />
                 Attachments ({announcement.attachments.length})

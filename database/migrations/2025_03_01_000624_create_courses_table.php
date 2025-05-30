@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('instructor_id')->constrained("users")->onDelete('cascade');
             $table->string('code')->unique();
+            $table->string('invite_token')->unique();
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('color')->default('#0B6E99');
