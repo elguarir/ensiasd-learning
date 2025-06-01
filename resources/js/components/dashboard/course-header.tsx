@@ -115,10 +115,10 @@ export default function CourseHeader({
 
             <div className="flex gap-3">
               <Button size="sm" variant="secondary" className="gap-2" asChild>
-                <a href={route("courses.threads.index", course.id)}>
+                <Link href={route("dashboard.courses.discussion", course.id)}>
                   <MessageSquare className="h-4 w-4" />
                   <span className="hidden sm:inline">Discussion</span>
-                </a>
+                </Link>
               </Button>
               <Button size="sm" variant="secondary" className="gap-2">
                 <Info className="h-4 w-4" />

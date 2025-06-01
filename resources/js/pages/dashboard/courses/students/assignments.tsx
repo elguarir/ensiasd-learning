@@ -1,5 +1,5 @@
 import CourseHeader from "@/components/dashboard/course-header";
-import AssignmentsTab from "@/components/dashboard/course/assignments-tab";
+import AssignmentsTab from "@/components/dashboard/courses/assignments-tab";
 import AppLayout from "@/layouts/app-layout";
 import {
   Assignment,

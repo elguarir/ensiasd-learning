@@ -1,5 +1,5 @@
 import CourseHeader from "@/components/dashboard/course-header";
-import DiscussionTab from "@/components/dashboard/course/discussion-tab";
+import DiscussionTab from "@/components/dashboard/courses/discussion-tab";
 import AppLayout from "@/layouts/app-layout";
 import {
   BreadcrumbItem,

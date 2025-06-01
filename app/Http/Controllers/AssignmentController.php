@@ -12,7 +12,7 @@ use Inertia\Inertia;
 use App\Http\Requests\StoreAssignmentRequest;
 use App\Http\Requests\UpdateAssignmentRequest;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
 class AssignmentController extends Controller
 {
     public function store(StoreAssignmentRequest $request, Course $course)
@@ -45,11 +45,16 @@ class AssignmentController extends Controller
             // Handle attachments for instructions
             if ($request->hasFile('attachments')) {
                 foreach ($request->file('attachments') as $file) {
-                    $path = $file->store('assignment-attachments', 's3');
+                    $path = $file->store('assignment-attachments', [
+                        'disk' => 's3',
+                        'visibility' => 'public',
+                    ]);
+
+                    $url = Storage::url($path);
 
                     $assignment->attachments()->create([
                         'filename' => $file->getClientOriginalName(),
-                        'path' => $path,
+                        'path' => $url,
                         'mime_type' => $file->getMimeType(),
                         'size' => $file->getSize(),
                         'extension' => $file->getClientOriginalExtension(),
@@ -132,7 +137,7 @@ class AssignmentController extends Controller
 
         $assignment->delete();
 
-        return redirect()->route('courses.assignments.index', $course)
+        return redirect()->back()
             ->with('success', 'Assignment deleted successfully');
     }
 
@@ -150,17 +155,85 @@ class AssignmentController extends Controller
 
     public function viewSubmissions(Course $course, Assignment $assignment)
     {
-        // TODO
+        Gate::authorize('manage-course', $course);
+        
+        $assignment->load(['submissions' => function ($query) {
+            $query->with(['user', 'attachments'])
+                ->orderBy('submitted_at', 'desc');
+        }]);
+        
+        // Calculate submission statistics
+        $totalStudents = $course->students()->count();
+        $submittedCount = $assignment->submissions()->where('status', '!=', 'draft')->count();
+        $gradedCount = $assignment->submissions()->where('status', 'graded')->count();
+        $averageGrade = $assignment->submissions()->where('status', 'graded')->avg('grade');
+        
+        return Inertia::render('dashboard/courses/instructors/assignments/submissions', [
+            'course' => $course,
+            'assignment' => $assignment,
+            'stats' => [
+                'total_students' => $totalStudents,
+                'submitted_count' => $submittedCount,
+                'graded_count' => $gradedCount,
+                'average_grade' => $averageGrade ? round($averageGrade, 2) : null,
+                'submission_rate' => $totalStudents > 0 ? round(($submittedCount / $totalStudents) * 100, 1) : 0,
+            ],
+        ]);
     }
 
     public function showGradeSubmissionForm(Course $course, Assignment $assignment, Submission $submission)
     {
-        // TODO
+        Gate::authorize('manage-course', $course);
+        
+        // Ensure the submission belongs to the assignment
+        if ($submission->assignment_id !== $assignment->id) {
+            abort(404);
+        }
+        
+        // Load necessary relationships
+        $submission->load(['user', 'attachments']);
+        $assignment->load(['attachments']);
+        
+        if ($assignment->type === 'quiz') {
+            $assignment->load(['quizQuestions.options']);
+            $submission->load(['quizAnswers']);
+        }
+        
+        return Inertia::render('dashboard/courses/instructors/assignments/grade-submission', [
+            'course' => $course,
+            'assignment' => $assignment,
+            'submission' => $submission,
+        ]);
     }
-
 
     public function gradeSubmission(Request $request, Course $course, Assignment $assignment, Submission $submission)
     {
-        // TODO
+        Gate::authorize('manage-course', $course);
+        
+        // Ensure the submission belongs to the assignment
+        if ($submission->assignment_id !== $assignment->id) {
+            abort(404);
+        }
+        
+        $validated = $request->validate([
+            'grade' => 'required|numeric|min:0|max:' . $assignment->points_possible,
+            'feedback' => 'nullable|string',
+        ]);
+        
+        // Apply late penalty if applicable
+        $finalGrade = $validated['grade'];
+        if ($submission->is_late && $assignment->allow_late_submissions && $assignment->late_penalty_percentage > 0) {
+            $penaltyAmount = ($validated['grade'] * $assignment->late_penalty_percentage) / 100;
+            $finalGrade = max(0, $validated['grade'] - $penaltyAmount);
+        }
+        
+        $submission->update([
+            'grade' => $finalGrade,
+            'feedback' => $validated['feedback'],
+            'status' => 'graded',
+        ]);
+        
+        return redirect()->route('courses.assignments.submissions', [$course, $assignment])
+            ->with('success', 'Submission graded successfully');
     }
 }

@@ -21,8 +21,6 @@ class StoreAssignmentRequest extends FormRequest
             'points_possible' => 'required|integer|min:0',
             'allow_late_submissions' => 'boolean',
             'late_penalty_percentage' => 'required_if:allow_late_submissions,true|integer|min:0|max:100',
-            'available_from' => 'nullable|date',
-            'available_until' => 'nullable|date|after:available_from',
             'published' => 'boolean',
             'attachments.*' => 'nullable|file|max:10240',
             'questions' => 'required_if:type,quiz|array',

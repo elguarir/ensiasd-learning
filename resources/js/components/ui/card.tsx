@@ -2,12 +2,17 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-function Card({ className, ...props }: React.ComponentProps<"div">) {
+interface CardProps extends React.ComponentProps<"div"> {
+  noPadding?: boolean;
+}
+
+function Card({ className, noPadding, ...props }: CardProps) {
   return (
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-4 rounded-sm border py-4 shadow-sm",
+        "bg-card text-card-foreground flex flex-col gap-4 rounded-sm border shadow-sm",
+        !noPadding && "py-4",
         className,
       )}
       {...props}
@@ -15,11 +20,20 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+interface CardHeaderProps extends React.ComponentProps<"div"> {
+  variant?: "default" | "highlighted";
+}
+
+function CardHeader({ className, variant = "default", ...props }: CardHeaderProps) {
   return (
     <div
       data-slot="card-header"
-      className={cn("flex flex-col gap-1.5 px-4", className)}
+      className={cn(
+        "flex flex-col gap-1.5",
+        variant === "default" && "px-4",
+        variant === "highlighted" && "bg-muted/50 border-b px-6 py-3 -mt-4 rounded-t-sm",
+        className
+      )}
       {...props}
     />
   );

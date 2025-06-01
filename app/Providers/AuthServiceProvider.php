@@ -26,5 +26,16 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage-course', function ($user, Course $course) {
             return $user->id === $course->instructor_id;
         });
+        
+        // Define a gate to check if a user can view a course (instructor or enrolled student)
+        Gate::define('view-course', function ($user, Course $course) {
+            // Check if user is the instructor
+            if ($user->id === $course->instructor_id) {
+                return true;
+            }
+            
+            // Check if user is enrolled in the course
+            return $user->courses()->where('course_id', $course->id)->exists();
+        });
     }
 } 

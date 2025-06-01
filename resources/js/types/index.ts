@@ -74,6 +74,12 @@ export interface Assignment {
   due_date: string | null;
   points_possible: number;
   published: boolean;
+  instructions: string | null;
+  allow_late_submissions: boolean;
+  late_penalty_percentage: number;
+  available_from: string | null;
+  available_until: string | null;
+  settings: Record<string, any> | null;
   created_at: string;
   updated_at: string;
   course?: Course;
@@ -102,13 +108,15 @@ export interface Submission {
 
 export interface QuizQuestion {
   id: number;
-  assignment_id: number;
-  text: string;
+  assignment_id?: number | null;
+  resource_id?: number | null;
+  question: string;
   position: number;
   points: number;
   created_at: string;
   updated_at: string;
   assignment?: Assignment;
+  resource?: Resource;
   options?: QuizOption[];
   answers?: QuizAnswer[];
 }

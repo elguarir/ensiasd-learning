@@ -23,8 +23,6 @@ return new class extends Migration
             $table->text('instructions')->nullable()->after('description');
             $table->boolean('allow_late_submissions')->default(false)->after('points_possible');
             $table->integer('late_penalty_percentage')->default(0)->after('allow_late_submissions');
-            $table->timestamp('available_from')->nullable()->after('published');
-            $table->timestamp('available_until')->nullable()->after('available_from');
             $table->json('settings')->nullable();
             $table->timestamps();
         });

@@ -96,6 +96,11 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
     Route::put('courses/{course}/assignments/{assignment}', [AssignmentController::class, 'update'])->name('courses.assignments.update');
     Route::delete('courses/{course}/assignments/{assignment}', [AssignmentController::class, 'destroy'])->name('courses.assignments.destroy');
     Route::post('courses/{course}/assignments/{assignment}/toggle-publish', [AssignmentController::class, 'togglePublish'])->name('courses.assignments.toggle-publish');
+    
+    // Teacher submission routes
+    Route::get('courses/{course}/assignments/{assignment}/submissions', [AssignmentController::class, 'viewSubmissions'])->name('courses.assignments.submissions');
+    Route::get('courses/{course}/assignments/{assignment}/submissions/{submission}', [AssignmentController::class, 'showGradeSubmissionForm'])->name('courses.assignments.submissions.show');
+    Route::put('courses/{course}/assignments/{assignment}/submissions/{submission}', [AssignmentController::class, 'gradeSubmission'])->name('courses.assignments.submissions.grade');
 
     // Submissions
     Route::post('courses/{course}/assignments/{assignment}/submit', [SubmissionController::class, 'store'])->name('courses.assignments.submit');

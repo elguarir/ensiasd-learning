@@ -51,8 +51,6 @@ interface AssignmentFormData {
   points_possible: number;
   allow_late_submissions: boolean;
   late_penalty_percentage: number;
-  available_from: string;
-  available_until: string;
   published: boolean;
   attachments: File[];
   questions: QuizQuestion[];
@@ -70,8 +68,6 @@ export function CreateAssignmentDialog({ course }: CreateAssignmentDialogProps) 
     points_possible: 100,
     allow_late_submissions: false as boolean,
     late_penalty_percentage: 0,
-    available_from: "",
-    available_until: "",
     published: false as boolean,
     attachments: [] as File[],
     questions: [] as any[],
@@ -252,24 +248,6 @@ export function CreateAssignmentDialog({ course }: CreateAssignmentDialogProps) 
                 />
               </div>
             )}
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="available_from">Available From</Label>
-                <DatePicker
-                  value={data.available_from as string}
-                  onChange={(date) => setData("available_from", date?.toISOString() || "")}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="available_until">Available Until</Label>
-                <DatePicker
-                  value={data.available_until as string}
-                  onChange={(date) => setData("available_until", date?.toISOString() || "")}
-                />
-              </div>
-            </div>
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">

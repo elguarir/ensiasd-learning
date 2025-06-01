@@ -1,5 +1,5 @@
 import CourseHeader from "@/components/dashboard/course-header";
-import AnnouncementsTab from "@/components/dashboard/course/announcements-tab";
+import AnnouncementsTab from "@/components/dashboard/courses/announcements-tab";
 import AppLayout from "@/layouts/app-layout";
 import {
   Announcement,

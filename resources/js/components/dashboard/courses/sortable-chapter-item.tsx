@@ -1,4 +1,4 @@
-import { AddResourceSheet } from "@/components/dashboard/course/add-resource-sheet";
+import { AddResourceSheet } from "@/components/dashboard/courses/add-resource-sheet";
 import {
   AccordionContent,
   AccordionItem,

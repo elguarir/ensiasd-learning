@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useUser } from "@/hooks/use-user";
+import { useUser, useIsInstructor } from "@/hooks/use-user";
 import { Assignment, Course } from "@/types";
 import { formatDate, getAssignmentStatus } from "@/utils/course-utils";
 import { Link } from "@inertiajs/react";
@@ -20,11 +20,22 @@ interface AssignmentCardProps {
 export function AssignmentCard({ assignment, course }: AssignmentCardProps) {
   const { status, type } = getAssignmentStatus(assignment);
   const user = useUser();
-  // Find the current user's submission
-  const userSubmission =
-    assignment.submissions?.find((s) => s.user_id === user?.id) || null;
+  const isInstructor = useIsInstructor(course);
+  
+  // Find the current user's submission (only for students)
+  const userSubmission = !isInstructor
+    ? assignment.submissions?.find((s) => s.user_id === user?.id) || null
+    : null;
+  
   const isSubmitted = userSubmission?.status === "submitted";
   const isGraded = userSubmission?.status === "graded";
+
+  // Calculate instructor statistics
+  const instructorStats = isInstructor ? {
+    totalSubmissions: assignment.submissions?.length || 0,
+    gradedSubmissions: assignment.submissions?.filter(s => s.status === 'graded').length || 0,
+    submittedSubmissions: assignment.submissions?.filter(s => s.status === 'submitted' || s.status === 'graded').length || 0,
+  } : null;
 
   const statusStyles = {
     overdue: {
@@ -82,12 +93,22 @@ export function AssignmentCard({ assignment, course }: AssignmentCardProps) {
                 <Badge variant="outline" className="text-xs">
                   {assignment.type === "quiz" ? "Quiz" : "File Submission"}
                 </Badge>
-                <Badge
-                  className={`${statusStyles.badge} font-semibold`}
-                  variant="secondary"
-                >
-                  {status}
-                </Badge>
+                {!isInstructor && (
+                  <Badge
+                    className={`${statusStyles.badge} font-semibold`}
+                    variant="secondary"
+                  >
+                    {status}
+                  </Badge>
+                )}
+                {isInstructor && (
+                  <Badge 
+                    variant={assignment.published ? "default" : "secondary"}
+                    className="text-xs"
+                  >
+                    {assignment.published ? "Published" : "Draft"}
+                  </Badge>
+                )}
               </div>
             </div>
           </div>
@@ -96,12 +117,17 @@ export function AssignmentCard({ assignment, course }: AssignmentCardProps) {
             <p className="text-sm font-medium">
               {assignment.points_possible} pts
             </p>
-            {userSubmission?.grade !== null &&
+            {!isInstructor && userSubmission?.grade !== null &&
               userSubmission?.grade !== undefined && (
                 <p className="text-muted-foreground text-sm">
                   Score: {userSubmission.grade}%
                 </p>
               )}
+            {isInstructor && instructorStats && (
+              <p className="text-muted-foreground text-sm">
+                {instructorStats.submittedSubmissions} submissions
+              </p>
+            )}
           </div>
         </CardHeader>
 
@@ -123,7 +149,7 @@ export function AssignmentCard({ assignment, course }: AssignmentCardProps) {
                 </span>
               </div>
 
-              {userSubmission && (
+              {!isInstructor && userSubmission && (
                 <div className="flex items-center gap-1">
                   {isGraded ? (
                     <>
@@ -147,6 +173,15 @@ export function AssignmentCard({ assignment, course }: AssignmentCardProps) {
                   )}
                 </div>
               )}
+
+              {isInstructor && instructorStats && (
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <span className="text-green-600 dark:text-green-400">
+                    {instructorStats.gradedSubmissions} graded
+                  </span>
+                </div>
+              )}
             </div>
 
             <Button asChild size="sm">
@@ -156,9 +191,12 @@ export function AssignmentCard({ assignment, course }: AssignmentCardProps) {
                   assignment.id,
                 ])}
               >
-                {userSubmission?.status === "submitted"
+                {isInstructor 
+                  ? "Manage Assignment"
+                  : userSubmission?.status === "submitted"
                   ? "View Submission"
-                  : "Start Assignment"}
+                  : "Start Assignment"
+                }
               </Link>
             </Button>
           </div>

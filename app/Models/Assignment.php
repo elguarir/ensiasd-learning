@@ -21,8 +21,6 @@ class Assignment extends Model
         'instructions',
         'allow_late_submissions',
         'late_penalty_percentage',
-        'available_from',
-        'available_until',
         'settings',
     ];
 
@@ -32,8 +30,6 @@ class Assignment extends Model
         'points_possible' => 'integer',
         'allow_late_submissions' => 'boolean',
         'late_penalty_percentage' => 'integer',
-        'available_from' => 'datetime',
-        'available_until' => 'datetime',
         'settings' => 'array',
     ];
 
@@ -84,16 +80,6 @@ class Assignment extends Model
 
     public function isAvailable()
     {
-        $now = now();
-
-        if ($this->available_from && $now->lt($this->available_from)) {
-            return false;
-        }
-
-        if ($this->available_until && $now->gt($this->available_until)) {
-            return false;
-        }
-
         return $this->published;
     }
 

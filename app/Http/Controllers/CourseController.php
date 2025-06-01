@@ -469,17 +469,35 @@ class CourseController extends Controller
         // Load the course with its instructor
         $course = $this->loadCourseWithInstructor($course);
 
-        // Load published assignments
-        $assignments = $course->assignments()
-            ->where('published', true)
-            ->with([
-                'submissions' => function ($query) {
-                    $query->where('user_id', request()->user()->id);
-                },
-                'attachments',
-            ])
-            ->orderBy('due_date')
-            ->get();
+        // Check if user is instructor
+        $isInstructor = request()->user()->id === $course->instructor_id;
+
+        if ($isInstructor) {
+            // For instructors: load all assignments with all submissions for statistics
+            $assignments = $course->assignments()
+                ->with([
+                    'submissions' => function ($query) {
+                        $query->with(['user' => function ($userQuery) {
+                            $userQuery->select('id', 'name', 'email', 'avatar');
+                        }]);
+                    },
+                    'attachments'
+                ])
+                ->orderBy('due_date')
+                ->get();
+        } else {
+            // For students: load published assignments with their own submissions
+            $assignments = $course->assignments()
+                ->where('published', true)
+                ->with([
+                    'submissions' => function ($query) {
+                        $query->where('user_id', request()->user()->id);
+                    },
+                    'attachments',
+                ])
+                ->orderBy('due_date')
+                ->get();
+        }
 
         // Get header data
         $headerData = $this->getCourseHeaderData($course);
