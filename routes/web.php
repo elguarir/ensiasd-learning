@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseThreadController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileCompletionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -53,6 +55,9 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
 
         Route::get('courses', [CourseController::class, 'view'])->name('courses');
         Route::get('courses/{course}', [CourseController::class, 'show'])->name('courses.show');
+        Route::get('courses/{course}/assignments', [CourseController::class, 'assignments'])->name('courses.assignments');
+        Route::get('courses/{course}/announcements', [CourseController::class, 'announcements'])->name('courses.announcements');
+        Route::get('courses/{course}/discussion', [CourseController::class, 'discussion'])->name('courses.discussion');
 
         Route::get('courses/{course}/students', [CourseController::class, 'students'])->name('courses.students');
         Route::delete('courses/{course}/students/{enrollment}', [CourseController::class, 'removeStudent'])->name('courses.students.remove');
@@ -84,6 +89,16 @@ Route::middleware(['auth', 'profile.complete'])->group(function () {
     Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
     Route::post('announcements/{announcement}/comments', [AnnouncementController::class, 'storeComment'])->name('announcements.comments.store');
     Route::delete('announcement-comments/{comment}', [AnnouncementController::class, 'destroyComment'])->name('announcement-comments.destroy');
+
+    // Assignments
+    Route::post('courses/{course}/assignments', [AssignmentController::class, 'store'])->name('courses.assignments.store');
+    Route::get('courses/{course}/assignments/{assignment}', [AssignmentController::class, 'show'])->name('courses.assignments.show');
+    Route::put('courses/{course}/assignments/{assignment}', [AssignmentController::class, 'update'])->name('courses.assignments.update');
+    Route::delete('courses/{course}/assignments/{assignment}', [AssignmentController::class, 'destroy'])->name('courses.assignments.destroy');
+    Route::post('courses/{course}/assignments/{assignment}/toggle-publish', [AssignmentController::class, 'togglePublish'])->name('courses.assignments.toggle-publish');
+
+    // Submissions
+    Route::post('courses/{course}/assignments/{assignment}/submit', [SubmissionController::class, 'store'])->name('courses.assignments.submit');
 
     // Course Threads (Discussions)
     Route::get('courses/{course}/threads', [CourseThreadController::class, 'index'])->name('courses.threads.index');

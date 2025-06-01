@@ -19,7 +19,6 @@ return new class extends Migration
             $table->boolean('is_late')->default(false);
             $table->enum('status', ['draft', 'submitted', 'graded'])->default('draft');
             $table->decimal('grade', 5, 2)->nullable();
-            
             $table->text('feedback')->nullable();
             $table->timestamps();
         });

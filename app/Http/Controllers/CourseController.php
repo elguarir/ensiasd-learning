@@ -11,9 +11,11 @@ use Inertia\Inertia;
 use App\Models\Assignment;
 use App\Models\Announcement;
 use App\Models\CourseEnrollment;
+use App\Traits\CourseAccessControl;
 
 class CourseController extends Controller
 {
+    use CourseAccessControl;
 
     public function view(Request $request)
     {
@@ -70,19 +72,14 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        // Check if the user is enrolled in the course or is the instructor
-        $user = request()->user();
-        $isInstructor = $user->id === $course->instructor_id;
-        $isEnrolled = $user->courses()->where('course_id', $course->id)->exists();
-
-        if (!$isInstructor && !$isEnrolled) {
-            return redirect()->route('dashboard.courses')->with('error', 'You are not enrolled in this course');
+        // Check access
+        $accessResult = $this->checkCourseAccess($course);
+        if ($accessResult !== true) {
+            return $accessResult;
         }
 
         // Load the course with its instructor
-        $course->load(['instructor' => function ($query) {
-            $query->select('id', 'name', 'username', 'email', 'avatar');
-        }]);
+        $course = $this->loadCourseWithInstructor($course);
 
         // Load chapters with their resources
         $chapters = $course->chapters()
@@ -188,60 +185,26 @@ class CourseController extends Controller
             }
         });
 
-        // Load published assignments
-        $assignments = $course->hasMany(Assignment::class)
+        // Load published assignments for the content tab
+        $assignments = $course->assignments()
             ->where('published', true)
+            ->with([
+                'submissions' => function ($query) {
+                    $query->where('user_id', request()->user()->id);
+                },
+                'attachments',
+            ])
             ->orderBy('due_date')
             ->get();
 
-        // Load student's submissions for each assignment if they're a student
-        if (!$isInstructor) {
-            $submissions = $user->submissions()
-                ->whereIn('assignment_id', $assignments->pluck('id'))
-                ->get()
-                ->keyBy('assignment_id');
+        // Get header data
+        $headerData = $this->getCourseHeaderData($course);
 
-            // Add submission data to each assignment
-            $assignments->map(function ($assignment) use ($submissions) {
-                $assignment->user_submission = $submissions->get($assignment->id);
-                return $assignment;
-            });
-        }
-
-        // Load announcements with comments, their authors and attachments
-        $announcements = $course->hasMany(Announcement::class)
-            ->with(['user' => function ($query) {
-                $query->select('id', 'name', 'username', 'avatar');
-            }, 'comments' => function ($query) {
-                $query->orderBy('created_at');
-            }, 'comments.user' => function ($query) {
-                $query->select('id', 'name', 'username', 'avatar');
-            }, 'attachments'])
-            ->latest()
-            ->get();
-
-        // Load course threads with their authors and comments
-        $threads = $course->threads()
-            ->with(['author' => function ($query) {
-                $query->select('id', 'name', 'username', 'avatar');
-            }, 'comments' => function ($query) {
-                $query->orderBy('created_at');
-            }, 'comments.author' => function ($query) {
-                $query->select('id', 'name', 'username', 'avatar');
-            }])
-            ->latest()
-            ->get();
-
-        // Get enrollment data
-        $enrollmentCount = $course->enrollments()->count();
-
-        return Inertia::render('dashboard/courses/students/view', [
+        return Inertia::render('dashboard/courses/students/content', [
             'course' => $course,
             'chapters' => $chapters,
             'assignments' => $assignments,
-            'announcements' => $announcements,
-            'threads' => $threads,
-            'enrollmentCount' => $enrollmentCount,
+            ...$headerData,
         ]);
     }
 
@@ -366,7 +329,7 @@ class CourseController extends Controller
     public function joinViaLink($inviteToken)
     {
         $course = Course::where('invite_token', $inviteToken)->first();
-        
+
         if (!$course) {
             return redirect()->route('dashboard.courses')->with('error', 'Invalid invite link');
         }
@@ -377,7 +340,7 @@ class CourseController extends Controller
         }
 
         $user = request()->user();
-        
+
         // Check if user is already enrolled in the course
         if ($user->courses()->where('course_id', $course->id)->exists()) {
             return redirect()->route('dashboard.courses.show', $course->id)->with('success', 'You are already enrolled in this course');
@@ -390,7 +353,7 @@ class CourseController extends Controller
 
         // Enroll the user
         $user->courses()->attach($course->id);
-        
+
         return redirect()->route('dashboard.courses.show', $course->id)->with('success', 'Successfully joined the course!');
     }
 
@@ -490,5 +453,113 @@ class CourseController extends Controller
         }
 
         return redirect()->back()->with('success', 'Student status updated successfully');
+    }
+
+    /**
+     * Show the course assignments page.
+     */
+    public function assignments(Course $course)
+    {
+        // Check access
+        $accessResult = $this->checkCourseAccess($course);
+        if ($accessResult !== true) {
+            return $accessResult;
+        }
+
+        // Load the course with its instructor
+        $course = $this->loadCourseWithInstructor($course);
+
+        // Load published assignments
+        $assignments = $course->assignments()
+            ->where('published', true)
+            ->with([
+                'submissions' => function ($query) {
+                    $query->where('user_id', request()->user()->id);
+                },
+                'attachments',
+            ])
+            ->orderBy('due_date')
+            ->get();
+
+        // Get header data
+        $headerData = $this->getCourseHeaderData($course);
+
+        return Inertia::render('dashboard/courses/students/assignments', [
+            'course' => $course,
+            'assignments' => $assignments,
+            ...$headerData,
+        ]);
+    }
+
+    /**
+     * Show the course announcements page.
+     */
+    public function announcements(Course $course)
+    {
+        // Check access
+        $accessResult = $this->checkCourseAccess($course);
+        if ($accessResult !== true) {
+            return $accessResult;
+        }
+
+        // Load the course with its instructor
+        $course = $this->loadCourseWithInstructor($course);
+
+        // Load announcements with comments, their authors and attachments
+        $announcements = $course->announcements()
+            ->with(['user' => function ($query) {
+                $query->select('id', 'name', 'username', 'avatar');
+            }, 'comments' => function ($query) {
+                $query->orderBy('created_at');
+            }, 'comments.user' => function ($query) {
+                $query->select('id', 'name', 'username', 'avatar');
+            }, 'attachments'])
+            ->latest()
+            ->get();
+
+        // Get header data
+        $headerData = $this->getCourseHeaderData($course);
+
+        return Inertia::render('dashboard/courses/students/announcements', [
+            'course' => $course,
+            'announcements' => $announcements,
+            ...$headerData,
+        ]);
+    }
+
+    /**
+     * Show the course discussion page.
+     */
+    public function discussion(Course $course)
+    {
+        // Check access
+        $accessResult = $this->checkCourseAccess($course);
+        if ($accessResult !== true) {
+            return $accessResult;
+        }
+
+        // Load the course with its instructor
+        $course = $this->loadCourseWithInstructor($course);
+
+        // Load course threads with their authors and comments
+        $threads = $course->threads()
+            ->with(['author' => function ($query) {
+                $query->select('id', 'name', 'username', 'avatar');
+            }, 'comments' => function ($query) {
+                $query->orderBy('created_at');
+            }, 'comments.author' => function ($query) {
+                $query->select('id', 'name', 'username', 'avatar');
+            }])
+            ->latest()
+            ->get();
+
+        // Get header data
+        $headerData = $this->getCourseHeaderData($course);
+
+        return Inertia::render('dashboard/courses/students/discussion', [
+            'course' => $course,
+            'threads' => $threads,
+            ...$headerData,
+        ]);
     }
 }

@@ -80,18 +80,6 @@ class User extends Authenticatable
         return $this->hasMany(ThreadComment::class, 'author_id');
     }
 
-    // Assignment relationships
-    public function createdAssignments()
-    {
-        return $this->hasManyThrough(
-            Assignment::class,
-            Course::class,
-            'instructor_id', // Foreign key on courses table
-            'course_id', // Foreign key on assignments table
-            'id', // Local key on users table
-            'id' // Local key on courses table
-        );
-    }
 
     // Submission relationships
     public function submissions()
@@ -105,10 +93,10 @@ class User extends Authenticatable
         return $this->hasManyThrough(
             QuizAnswer::class,
             Submission::class,
-            'user_id', // Foreign key on submissions table
-            'submission_id', // Foreign key on quiz_answers table
-            'id', // Local key on users table
-            'id' // Local key on submissions table
+            'user_id',       // Foreign key on submissions table (User -> Submission)
+            'submission_id', // Foreign key on quiz_answers table (Submission -> QuizAnswer)
+            'id',            // Local key on users table
+            'id'             // Local key on submissions table
         );
     }
 
@@ -140,6 +128,19 @@ class User extends Authenticatable
             ->where('assignment_id', $assignmentId)
             ->first();
     }
+
+    public function createdAssignments()
+    {
+        return $this->hasManyThrough(
+            Assignment::class,
+            Course::class,
+            'instructor_id', // Foreign key on courses table (User -> Course)
+            'course_id',     // Foreign key on assignments table (Course -> Assignment)
+            'id',            // Local key on users table
+            'id'             // Local key on courses table
+        );
+    }
+
 
     public function getEnrollment($courseId)
     {

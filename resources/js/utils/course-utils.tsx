@@ -31,14 +31,14 @@ export function getDaysRemaining(dueDate: string): number {
  */
 export function getAssignmentStatus(assignment: Assignment): {
   status: string;
-  color: string;
-  bgColor: string;
+  type: "overdue" | "due-today" | "due-soon" | "normal" | "no-deadline";
+  daysRemaining: number | null;
 } {
   if (!assignment.due_date) {
     return {
       status: "No deadline",
-      color: "bg-gray-200",
-      bgColor: "bg-gray-50 dark:bg-gray-800/50",
+      type: "no-deadline",
+      daysRemaining: null,
     };
   }
 
@@ -47,31 +47,31 @@ export function getAssignmentStatus(assignment: Assignment): {
   if (daysRemaining < 0) {
     return {
       status: "Overdue",
-      color: "bg-red-500",
-      bgColor: "bg-red-50 dark:bg-red-900/20",
+      type: "overdue",
+      daysRemaining,
     };
   }
 
   if (daysRemaining === 0) {
     return {
       status: "Due today",
-      color: "bg-amber-500",
-      bgColor: "bg-amber-50 dark:bg-amber-900/20",
+      type: "due-today",
+      daysRemaining,
     };
   }
 
   if (daysRemaining <= 3) {
     return {
       status: `Due soon (${daysRemaining} days)`,
-      color: "bg-amber-400",
-      bgColor: "bg-amber-50 dark:bg-amber-900/20",
+      type: "due-soon",
+      daysRemaining,
     };
   }
 
   return {
     status: `${daysRemaining} days left`,
-    color: "bg-emerald-500",
-    bgColor: "bg-emerald-50 dark:bg-emerald-900/20",
+    type: "normal",
+    daysRemaining,
   };
 }
 

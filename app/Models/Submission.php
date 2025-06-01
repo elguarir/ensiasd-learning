@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory; // Add this
 
 class Submission extends Model
 {
+    use HasFactory; // Add this
+
     protected $fillable = [
         'assignment_id',
         'user_id',
@@ -20,6 +23,7 @@ class Submission extends Model
     protected $casts = [
         'submitted_at' => 'datetime',
         'is_late' => 'boolean',
+        'grade' => 'decimal:2',
     ];
 
     // Relationships

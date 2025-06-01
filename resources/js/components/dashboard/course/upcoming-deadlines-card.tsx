@@ -8,7 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { formatDate, getAssignmentStatus } from "@/utils/course-utils";
+import { Link } from "@inertiajs/react";
 import { Calendar, FileText } from "lucide-react";
 
 export function UpcomingDeadlinesCard({
@@ -31,19 +33,87 @@ export function UpcomingDeadlinesCard({
       <CardContent className="space-y-4">
         {upcomingAssignments.length > 0 ? (
           upcomingAssignments.map((assignment) => {
-            const { status, color, bgColor } = getAssignmentStatus(assignment);
+            const { status, type } = getAssignmentStatus(assignment);
+
+            const statusStyles = {
+              overdue: {
+                text: "text-red-700 dark:text-red-400",
+                bg: "bg-red-50 dark:bg-red-950/30",
+                border: "border-red-300 dark:border-red-900",
+                hover:
+                  "hover:bg-red-100 hover:border-red-400 dark:hover:bg-red-950/50 dark:hover:border-red-800",
+                badgeBg: "bg-red-100 dark:bg-red-900/50",
+                badgeText: "text-red-800 dark:text-red-200",
+                badgeHover:
+                  "group-hover:bg-red-200 dark:group-hover:bg-red-900/70",
+              },
+              "due-today": {
+                text: "text-amber-700 dark:text-amber-400",
+                bg: "bg-amber-50 dark:bg-amber-950/30",
+                border: "border-amber-300 dark:border-amber-900",
+                hover:
+                  "hover:bg-amber-100 hover:border-amber-400 dark:hover:bg-amber-950/50 dark:hover:border-amber-800",
+                badgeBg: "bg-amber-100 dark:bg-amber-900/50",
+                badgeText: "text-amber-800 dark:text-amber-200",
+                badgeHover:
+                  "group-hover:bg-amber-200 dark:group-hover:bg-amber-900/70",
+              },
+              "due-soon": {
+                text: "text-orange-700 dark:text-orange-400",
+                bg: "bg-orange-50 dark:bg-orange-950/30",
+                border: "border-orange-300 dark:border-orange-900",
+                hover:
+                  "hover:bg-orange-100 hover:border-orange-400 dark:hover:bg-orange-950/50 dark:hover:border-orange-800",
+                badgeBg: "bg-orange-100 dark:bg-orange-900/50",
+                badgeText: "text-orange-800 dark:text-orange-200",
+                badgeHover:
+                  "group-hover:bg-orange-200 dark:group-hover:bg-orange-900/70",
+              },
+              normal: {
+                text: "text-green-700 dark:text-green-400",
+                bg: "bg-green-50 dark:bg-green-950/30",
+                border: "border-green-300 dark:border-green-900",
+                hover:
+                  "hover:bg-green-100 hover:border-green-400 dark:hover:bg-green-950/50 dark:hover:border-green-800",
+                badgeBg: "bg-green-100 dark:bg-green-900/50",
+                badgeText: "text-green-800 dark:text-green-200",
+                badgeHover:
+                  "group-hover:bg-green-200 dark:group-hover:bg-green-900/70",
+              },
+              "no-deadline": {
+                text: "text-gray-600 dark:text-gray-400",
+                bg: "bg-gray-50 dark:bg-gray-900/30",
+                border: "border-gray-300 dark:border-gray-800",
+                hover:
+                  "hover:bg-gray-100 hover:border-gray-400 dark:hover:bg-gray-900/50 dark:hover:border-gray-700",
+                badgeBg: "bg-gray-100 dark:bg-gray-800/50",
+                badgeText: "text-gray-700 dark:text-gray-300",
+                badgeHover:
+                  "group-hover:bg-gray-200 dark:group-hover:bg-gray-800/70",
+              },
+            }[type];
+
             return (
-              <div
+              <Link
                 key={assignment.id}
-                className={`flex items-start gap-3 border border-neutral-200 p-4 transition-colors hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900/50 ${bgColor}`}
+                href={route("courses.assignments.show", [
+                  assignment.course_id,
+                  assignment.id,
+                ])}
+                className={cn(
+                  `group flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-all duration-200 hover:translate-y-[-1.5px] hover:shadow-sm`,
+                  statusStyles.bg,
+                  statusStyles.border,
+                  statusStyles.hover,
+                )}
               >
                 {assignment.type === "quiz" ? (
-                  <div className="rounded-md bg-blue-100 p-2.5 dark:bg-blue-900">
-                    <FileText className="h-4 w-4 text-blue-500 dark:text-blue-300" />
+                  <div className="rounded-lg bg-blue-500/20 p-2.5 dark:bg-blue-900">
+                    <FileText className="h-4 w-4 text-blue-600 dark:text-blue-300" />
                   </div>
                 ) : (
-                  <div className="rounded-md bg-green-100 p-2.5 dark:bg-green-900">
-                    <FileText className="h-4 w-4 text-green-500 dark:text-green-300" />
+                  <div className="rounded-lg bg-green-500/20 p-2.5 dark:bg-green-900">
+                    <FileText className="h-4 w-4 text-green-600 dark:text-green-300" />
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
@@ -58,11 +128,11 @@ export function UpcomingDeadlinesCard({
                   </div>
                 </div>
                 <div
-                  className={`rounded-full px-2 py-1 text-xs font-medium text-white ${color}`}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors duration-200 ${statusStyles.badgeBg} ${statusStyles.badgeText} ${statusStyles.badgeHover}`}
                 >
                   {status}
                 </div>
-              </div>
+              </Link>
             );
           })
         ) : (

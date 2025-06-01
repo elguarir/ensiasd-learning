@@ -13,7 +13,13 @@ import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem, Course } from "@/types";
 import { Head, router } from "@inertiajs/react";
 import { formatDistance } from "date-fns";
-import { CalendarIcon, MailIcon, SearchIcon, UserIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  CalendarIcon,
+  MailIcon,
+  SearchIcon,
+  UserIcon,
+} from "lucide-react";
 import { useState } from "react";
 import StudentActions from "./components/student-actions";
 
@@ -96,6 +102,7 @@ export default function Students({
               }
               variant="outline"
             >
+              <ArrowLeftIcon className="h-4 w-4" />
               Back to Course
             </Button>
           </div>

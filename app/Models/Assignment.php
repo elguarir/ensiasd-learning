@@ -4,34 +4,42 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory; // Add this
 
 class Assignment extends Model
 {
+    use HasFactory; // Add this
+
     protected $fillable = [
         'course_id',
-        'chapter_id', // Optional - to associate with specific chapters
         'title',
         'description',
-        'type', // 'file' or 'quiz'
+        'type',
         'due_date',
         'points_possible',
         'published',
+        'instructions',
+        'allow_late_submissions',
+        'late_penalty_percentage',
+        'available_from',
+        'available_until',
+        'settings',
     ];
 
     protected $casts = [
         'due_date' => 'datetime',
         'published' => 'boolean',
+        'points_possible' => 'integer',
+        'allow_late_submissions' => 'boolean',
+        'late_penalty_percentage' => 'integer',
+        'available_from' => 'datetime',
+        'available_until' => 'datetime',
+        'settings' => 'array',
     ];
 
-    // Relationships
     public function course()
     {
         return $this->belongsTo(Course::class);
-    }
-
-    public function chapter()
-    {
-        return $this->belongsTo(Chapter::class);
     }
 
     public function submissions()
@@ -61,5 +69,36 @@ class Assignment extends Model
     public function isFileSubmission()
     {
         return $this->type === 'file';
+    }
+
+    public function getStatusForUser($userId)
+    {
+        $submission = $this->submissions()->where('user_id', $userId)->first();
+
+        if (!$submission) {
+            return 'not_started';
+        }
+
+        return $submission->status;
+    }
+
+    public function isAvailable()
+    {
+        $now = now();
+
+        if ($this->available_from && $now->lt($this->available_from)) {
+            return false;
+        }
+
+        if ($this->available_until && $now->gt($this->available_until)) {
+            return false;
+        }
+
+        return $this->published;
+    }
+
+    public function getFormattedType()
+    {
+        return $this->type === 'quiz' ? 'Quiz' : 'File Submission';
     }
 }

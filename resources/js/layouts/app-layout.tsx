@@ -10,6 +10,7 @@ interface AppLayoutProps {
 
 export default ({ children, breadcrumbs, ...props }: AppLayoutProps) => {
   const { appearance, updateAppearance } = useAppearance();
+  
   return (
     <AppLayoutTemplate breadcrumbs={breadcrumbs} {...props}>
       {children}

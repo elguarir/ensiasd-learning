@@ -57,6 +57,11 @@ class Course extends Model
         return $this->hasMany(Announcement::class);
     }
 
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class)->orderBy('due_date');
+    }
+
     public function isPublished()
     {
         return $this->status === 'published';
