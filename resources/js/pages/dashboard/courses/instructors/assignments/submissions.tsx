@@ -295,9 +295,9 @@ export default function SubmissionsPage({
                   </TableHeader>
                   <TableBody>
                     {sortedSubmissions.map((submission) => (
-                      <TableRow key={submission.id}>
+                      <TableRow key={submission.id} >
                         <TableCell>
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 min-w-[200px]">
                             <img
                               src={submission.user?.avatar}
                               alt={submission.user?.name}
@@ -314,7 +314,7 @@ export default function SubmissionsPage({
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 text-nowrap">
                             {getStatusBadge(submission)}
                             {submission.is_late && (
                               <Badge variant="destructive" className="gap-1">
@@ -326,7 +326,7 @@ export default function SubmissionsPage({
                         </TableCell>
                         <TableCell>
                           {submission.submitted_at ? (
-                            <div>
+                            <div className="text-nowrap min-w-[50px]">
                               <p className="text-sm">
                                 {format(
                                   new Date(submission.submitted_at),
@@ -344,7 +344,9 @@ export default function SubmissionsPage({
                             <span className="text-muted-foreground">—</span>
                           )}
                         </TableCell>
-                        <TableCell>{getGradeDisplay(submission)}</TableCell>
+                        <TableCell className="text-nowrap min-w-[50px]">
+                          {getGradeDisplay(submission)}
+                        </TableCell>
                         <TableCell className="text-right">
                           <Button size="sm" variant="ghost" asChild>
                             <Link
