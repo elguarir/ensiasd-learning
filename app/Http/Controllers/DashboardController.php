@@ -181,6 +181,8 @@ class DashboardController extends Controller
             $homeContent->content = 'Welcome to the Ensiasd E-Learning Platform, your gateway to quality education and skill development. Our platform is designed to provide you with a comprehensive and interactive learning experience, tailored to meet your educational needs and career aspirations.';
             $homeContent->link1 = '/courses';
             $homeContent->link2 = '/about';
+            $homeContent->image = "/images/illustration.png";
+            $homeContent->background_image = "/images/hero-bg.png";
         }
 
         $courses = Course::with('instructor')->take(3)->get();

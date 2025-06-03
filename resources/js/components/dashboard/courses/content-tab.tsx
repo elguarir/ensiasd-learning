@@ -202,7 +202,7 @@ export default function ContentTab({
       </div>
 
       <div className="space-y-8 lg:col-span-1">
-        <UpcomingDeadlinesCard assignments={assignments} />
+        <UpcomingDeadlinesCard assignments={assignments} course={course} />
         <CourseInfoCard course={course} />
       </div>
     </div>

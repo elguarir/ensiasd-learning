@@ -73,7 +73,7 @@
 
             @if ($publications->isEmpty())
                 <div class="text-center py-5">
-                    <img src="{{ asset('images/nothing-found.svg') }}" alt="No publications found" class="img-fluid mb-3" style="max-width: 300px; opacity: 0.7;">
+                    <img src="{{ asset('images/nothing-found.svg') }}" alt="No publications found" class="img-fluid mb-3" style="max-width: 600px; opacity: 0.7; margin: 0 auto;">
                     <p class="text-muted fs-5">No publications found at this time.</p>
                 </div>
             @else

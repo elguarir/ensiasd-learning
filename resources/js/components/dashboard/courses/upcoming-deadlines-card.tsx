@@ -1,4 +1,4 @@
-import { Assignment } from "@/types";
+import { Assignment, Course } from "@/types";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,8 +15,10 @@ import { Calendar, FileText } from "lucide-react";
 
 export function UpcomingDeadlinesCard({
   assignments,
+  course,
 }: {
   assignments: Assignment[];
+  course: Course;
 }) {
   const upcomingAssignments = assignments
     .filter(
@@ -108,29 +110,33 @@ export function UpcomingDeadlinesCard({
                 )}
               >
                 {assignment.type === "quiz" ? (
-                  <div className="rounded-lg bg-blue-500/20 p-2.5 dark:bg-blue-900">
+                  <div className="flex-shrink-0 rounded-lg bg-blue-500/20 p-2.5 dark:bg-blue-900">
                     <FileText className="h-4 w-4 text-blue-600 dark:text-blue-300" />
                   </div>
                 ) : (
-                  <div className="rounded-lg bg-green-500/20 p-2.5 dark:bg-green-900">
+                  <div className="flex-shrink-0 rounded-lg bg-green-500/20 p-2.5 dark:bg-green-900">
                     <FileText className="h-4 w-4 text-green-600 dark:text-green-300" />
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium">{assignment.title}</p>
-                  <div className="mt-1.5 flex items-center gap-1">
-                    <Calendar className="text-muted-foreground h-3.5 w-3.5" />
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="line-clamp-1 flex-1 truncate leading-tight font-medium">
+                      {assignment.title}
+                    </p>
+                    <div
+                      className={`flex-shrink-0 rounded-full px-3 py-1 text-xs font-semibold transition-colors duration-200 ${statusStyles.badgeBg} ${statusStyles.badgeText} ${statusStyles.badgeHover}`}
+                    >
+                      {status}
+                    </div>
+                  </div>
+                  <div className="mt-px flex items-center gap-1">
+                    <Calendar className="text-muted-foreground h-3.5 w-3.5 flex-shrink-0" />
                     <span className="text-muted-foreground text-xs">
                       {assignment.due_date
                         ? formatDate(assignment.due_date)
                         : "No deadline"}
                     </span>
                   </div>
-                </div>
-                <div
-                  className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors duration-200 ${statusStyles.badgeBg} ${statusStyles.badgeText} ${statusStyles.badgeHover}`}
-                >
-                  {status}
                 </div>
               </Link>
             );
@@ -143,8 +149,14 @@ export function UpcomingDeadlinesCard({
       </CardContent>
       {upcomingAssignments.length > 0 && (
         <CardFooter>
-          <Button variant="outline" className="w-full">
-            View All Assignments
+          <Button asChild variant="outline" className="w-full">
+            <Link
+              href={route("dashboard.courses.assignments", {
+                course: course.id,
+              })}
+            >
+              View All Assignments
+            </Link>
           </Button>
         </CardFooter>
       )}
