@@ -14,18 +14,27 @@ class CourseEnrollmentSeeder extends Seeder
         $students = User::where('role', 'student')->get();
         $courses = Course::all();
 
-        foreach ($students as $student) {
-            // Each student enrolls in 2-4 random courses
-            $numEnrollments = rand(2, 4);
-            $randomCourses = $courses->random($numEnrollments);
+        if ($students->isEmpty()) {
+            $this->command->error('No students found. Please run UserSeeder first.');
+            return;
+        }
 
-            foreach ($randomCourses as $course) {
+        if ($courses->isEmpty()) {
+            $this->command->error('No courses found. Please run CourseSeeder first.');
+            return;
+        }
+
+        // Enroll all students in all courses
+        foreach ($students as $student) {
+            foreach ($courses as $course) {
                 CourseEnrollment::create([
                     'user_id' => $student->id,
                     'course_id' => $course->id,
-                    'enrolled_at' => now()->subDays(rand(0, 30)),
+                    'enrolled_at' => now()->subDays(rand(1, 7)), // Enrolled 1-7 days ago
                 ]);
             }
         }
+
+        $this->command->info("Enrolled {$students->count()} students in {$courses->count()} courses.");
     }
 } 

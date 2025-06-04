@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "elguarir/ensiasd-learning",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "An E-learning platform for the ENSIASD students",
     "keywords": [
         "laravel",
         "framework"

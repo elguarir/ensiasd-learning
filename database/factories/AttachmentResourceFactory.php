@@ -33,7 +33,6 @@ class AttachmentResourceFactory extends Factory
             for ($i = 0; $i < $count; $i++) {
                 $attachmentResource->attachments()->create([
                     'filename' => fake()->word() . '.' . fake()->randomElement(['pdf', 'docx', 'pptx', 'xlsx', 'zip']),
-                    'original_filename' => fake()->sentence(3) . '.' . fake()->randomElement(['pdf', 'docx', 'pptx', 'xlsx', 'zip']),
                     'mime_type' => fake()->randomElement([
                         'application/pdf', 
                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
