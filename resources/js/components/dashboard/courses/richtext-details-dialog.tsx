@@ -36,7 +36,7 @@ export function RichTextDetailsDialog({
           <DialogTitle>{resource.title}</DialogTitle>
         </DialogHeader>
         <div
-          className="prose prose-sm dark:prose-invert max-w-none pb-4"
+          className="prose prose-sm dark:prose-invert max-w-none pb-4 prose-p:my-2!"
           dangerouslySetInnerHTML={{
             __html: resource.metadata.content,
           }}
