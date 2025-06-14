@@ -73,7 +73,7 @@ The ENSIASD E-Learning Platform serves three distinct user communities:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/elguarir/ensiasd-learning
    cd ensiasd-learning
    ```
 
