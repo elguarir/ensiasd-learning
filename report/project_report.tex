@@ -9,12 +9,14 @@
 \usepackage{hyperref}
 \usepackage{enumitem}
 \usepackage{fancyhdr}
+\usepackage{svg}
 \usepackage{titlesec}
 \usepackage{tocloft}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{textcomp} % or amssymb
+
 % Page setup
 \geometry{margin=1in}
 \pagestyle{fancy}
@@ -42,27 +44,76 @@
 
 % Title Page
 \begin{titlepage}
-    \centering
-    \vspace*{2cm}
+% \BgThispage % Assuming \BgThispage is a custom command for a background image; ensure it's defined or remove if not used.
+
+  \begin{center}
+    \vspace*{-3cm} % Pulls the logo up to the very top
+    \includegraphics[width=1\textwidth]{images/logo.png}\\[0.1cm]
+    \vspace*{0.2cm} % Space after logo
+  \end{center}
+
+  \begin{center}
+    {\Large \emph{Formation:}}\\[0.2cm] % Reduced spacing
+    {\large Software Engineering} \\[0.7cm] % Reduced spacing
+
+    % Enhanced project report title with reduced spacing
+    \begin{center}
+      \colorbox{white!90}{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{0.2cm} % Reduced padding
+        {\Large\bfseries RAPPORT DE PROJET}\\[0.1cm] % Reduced spacing
+        {\large\textit{Module: Technologies Web}}
+        \vspace{0.2cm} % Reduced padding
+      }}
+    \end{center}
+    \vspace{0.5cm} % Reduced spacing
+
+    % Title with reduced spacing
+    \rule{\linewidth}{0.5mm} \\[0.1cm]
+    {\huge \bfseries Development of an E-Learning Platform for ENSIASD \\[0.1cm]}
+    \rule{\linewidth}{0.5mm} \\[1cm] % Reduced spacing
     
-    {\Huge\bfseries ENSIASD E-Learning Platform}\\[0.5cm]
-    {\Large Technical Documentation and Analysis Report}\\[2cm]
-    
-    {\large Prepared for}\\[0.3cm]
-    {\Large\bfseries ENSIASD Taroudant}\\[2cm]
-    
-    {\large Document Version: 1.0}\\[0.5cm]
-    {\large Date: \today}\\[3cm]
-    
-    \vfill
-    
-    {\large This report provides comprehensive documentation of the ENSIASD E-Learning Platform, including technical specifications, architecture analysis, and implementation details.}
-    
+    \begin{center}
+      \includesvg[width=0.10\textwidth]{images/laravel.svg} \hspace{1cm}
+      \includesvg[width=0.10\textwidth]{images/react_light.svg} \hspace{1cm}
+      \includesvg[width=0.10\textwidth]{images/mysql.svg} \hspace{1cm}
+      \includesvg[width=0.15\textwidth]{images/tailwindcss.svg} % Reduced size
+    \end{center}
+
+    % Authors and supervisor side by side with reduced spacing
+    \vspace{6cm} % Reduced spacing
+
+    \begin{minipage}[t]{0.45\textwidth}
+      \begin{flushleft}
+        {\Large \emph{Réalisé par:}}\\[0.2cm] % Reduced spacing
+        {\large 
+          MOHAMED EL GUARIR \\[0.1cm] % Reduced spacing
+          MOHAMED EL HADDATI \\[0.1cm] % Reduced spacing
+          DOUNYA ZAHIDI \\[0.1cm] % Reduced spacing
+          BAHRI MALAK \\[0.1cm] % Reduced spacing
+        }
+      \end{flushleft}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\textwidth}
+      \begin{flushright}
+        {\Large \emph{Supervised by:}}\\[0.2cm] % Reduced spacing
+        {\large 
+          M. Mohamed Saad AZIZI \\[0.1cm] % Reduced spacing
+        }
+      \end{flushright}
+    \end{minipage}
+
+    \vspace*{3cm} % Push to bottom of page with minimal space
+    % Bottom of the page (moved closer to bottom)
+    {\large Année universitaire: 2024-2025}
+  \end{center}
 \end{titlepage}
 
 % Table of Contents
 \tableofcontents
 \newpage
+\listoffigures
 
 \section{Introduction}
 
@@ -89,70 +140,8 @@ This documentation encompasses both the technical foundations that power the pla
     \end{itemize}
 \end{itemize}
 
-\section{Technical Architecture}
-
-This section outlines the technical architecture and key components of the ENSIASD Taroudant E-Learning Platform.
-
-\subsection{Backend Technologies}
-\begin{itemize}
-    \item \textbf{Framework:} Laravel 12 (PHP 8.2+)
-    \item \textbf{Key Libraries:}
-    \begin{itemize}
-        \item \texttt{inertiajs/inertia-laravel}: For integrating the React frontend with the Laravel backend.
-        \item \texttt{league/flysystem-aws-s3-v3}: For S3 file storage.
-        \item \texttt{prism-php/prism}: Laravel package for integrating Large Language Models (LLMs).
-        \item \texttt{tightenco/ziggy}: Enables usage of Laravel named routes in JavaScript.
-    \end{itemize}
-\end{itemize}
-
-\subsection{Frontend Technologies}
-\begin{itemize}
-    \item \textbf{Framework/Library:} React 19 (using TypeScript)
-    \item \textbf{Integration:} Inertia.js is used to build this single-page application (SPA) experience with server-side routing and controllers.
-    \item \textbf{Key Libraries:}
-    \begin{itemize}
-        \item \texttt{@tiptap/react} \& Tiptap extensions: For a rich text editor experience.
-        \item \texttt{@dnd-kit/core} \& \texttt{@dnd-kit/sortable}: For drag and drop functionality.
-        \item \texttt{recharts}: For displaying charts (e.g., in instructor dashboards).
-        \item \texttt{zod} \& \texttt{zod-form-data}: For schema validation.
-        \item \texttt{date-fns}: For date utility functions.
-        \item \texttt{sonner}: For toast notifications.
-        \item \texttt{react-dropzone}: For file uploads.
-        \item \texttt{cmdk}: Command menu component.
-        \item \texttt{embla-carousel-react}: Carousel component.
-        \item \texttt{framer-motion}: For animations.
-    \end{itemize}
-\end{itemize}
-
-\subsection{Database Configuration}
-\begin{itemize}
-    \item \textbf{Default (Development):} SQLite (as configured in \texttt{config/database.php} and \texttt{composer.json} post-install script).
-    \item \textbf{Supported Production Databases:} MySQL, PostgreSQL, MariaDB, SQL Server (as listed in \texttt{config/database.php}).
-    \item \textbf{Caching:} Redis is also configured for caching and potentially other uses.
-\end{itemize}
-
-\subsection{Styling and UI Components}
-\begin{itemize}
-    \item \textbf{CSS Framework:} Tailwind CSS (Version 4).
-    \item \textbf{UI Components:} The project heavily utilizes Radix UI primitive components (e.g., \texttt{@radix-ui/react-accordion}, \texttt{@radix-ui/react-dialog}, etc.) and Lucide Icons (\texttt{lucide-react}). This component structure, found under \texttt{resources/js/components/ui}, is characteristic of component libraries like Shadcn UI, which are built on these primitives.
-    \item \textbf{Utility Libraries:} \texttt{class-variance-authority}, \texttt{clsx}, \texttt{tailwind-merge} for managing CSS classes.
-    \item \textbf{Animations:} \texttt{tailwindcss-animate}.
-\end{itemize}
-
-\subsection{API and Routing}
-\begin{itemize}
-    \item The application primarily functions as a web application using server-side rendering via Inertia.js.
-    \item There is no dedicated \texttt{routes/api.php} file for token-based API routes. Specific interactions, such as quiz generation (\texttt{POST /quiz/generate}), are handled via web routes defined in \texttt{routes/web.php}, likely as AJAX requests within the authenticated session.
-\end{itemize}
-
-\subsection{Development Tools}
-\begin{itemize}
-    \item \textbf{Build Tool:} Vite: Used for frontend asset bundling and development server, configured in \texttt{vite.config.mjs}.
-    \item \textbf{Version Control:} Git: Inferred from the presence of \texttt{.git} related files and common development practices.
-    \item \textbf{Server Environment (General Assumption):} A standard PHP server environment, such as Nginx or Apache with PHP-FPM, is required to host the Laravel backend. A Node.js environment is necessary for the frontend build process.
-\end{itemize}
-
 \section{User Roles and Functionality}
+\label{sec:user-roles-functionality}
 
 The platform's effectiveness stems from its careful attention to the distinct needs of each user type within the educational ecosystem. Rather than adopting a one-size-fits-all approach, the system provides tailored experiences that enhance productivity and engagement for students, instructors, and administrators alike.
 
@@ -166,7 +155,7 @@ The platform defines three primary user roles, each with specific capabilities:
         \item \textbf{Course Interaction:} Enrolls in available courses using course codes or invite links. Accesses all published course materials, including chapters, uploaded resources (documents, videos, links), and embedded rich text content.
         \item \textbf{Assignments \& Quizzes:} Submits assignments as per instructor requirements (potentially including text and file uploads). Takes quizzes designed to assess understanding of course content.
         \item \textbf{Communication:} Participates in course-specific discussion forums by creating new threads or commenting on existing ones. Views course announcements made by instructors and can comment on them.
-        \item \textbf{Progress \& Profile:} Tracks their progress and grades for assignments and quizzes (implied by submission and grading features). Manages their personal profile information (name, avatar, etc.).
+        \item \textbf{Progress & Profile:} Tracks their progress and grades for assignments and quizzes (implied by submission and grading features). Manages their personal profile information (name, avatar, etc.).
     \end{itemize}
     \item \textbf{Instructor:}
     \begin{itemize}
@@ -261,10 +250,182 @@ Beyond role-specific capabilities, the platform integrates numerous features tha
     \begin{itemize}
         \item All users (Students, Instructors, Administrators) can manage their personal profile information, including name, email, password, and avatar.
     \end{itemize}
+\end{itemize}
+\clearpage
+
+
+
+\section{System Architecture Overview}
+This diagram presents the platform's technical architecture, illustrating how different software layers interact to deliver the complete user experience:
+\begin{figure}[H] % Using [H] to suggest placing it "here". Adjust if needed.
+    \centering       
+    \includegraphics[width=0.8\textwidth,height=0.85\textheight,keepaspectratio]{system-architecture-overview.png}
+    \caption{System Architecture flowchart}
+    \label{fig:system-architecture-overview}
+\end{figure}
+\FloatBarrier % Ensure figure is placed before continuing
+
+\begin{itemize}
+    \item \textbf{Components:}
+    \begin{itemize}
+        \item \textbf{Client Tier:}
+        \begin{itemize}
+            \item \textbf{Web Browser:} Renders the UI (React components via Inertia.js), handles user input, executes client-side JavaScript.
+        \end{itemize}
+        \item \textbf{Application Tier:}
+        \begin{itemize}
+            \item \textbf{Web Server (e.g., Nginx, Apache):} Receives HTTP requests, serves static assets, acts as a reverse proxy for the application.
+            \item \textbf{Laravel Application (PHP-FPM):}
+            \begin{itemize}
+                \item \textbf{Routing Engine:} Maps URLs to controller actions.
+                \item \textbf{Controllers:} Handle HTTP requests, interact with models and services, prepare data for views/Inertia responses.
+                \item \textbf{Models (Eloquent ORM):} Represent database tables, manage data persistence and relationships.
+                \item \textbf{Middleware:} Handles cross-cutting concerns (authentication, CSRF, Inertia requests).
+                \item \textbf{Inertia.js Adapter:} Bridges Laravel backend with React frontend.
+                \item \textbf{Services:} Encapsulate specific business logic (e.g., QuizService, NotificationService - if explicitly created).
+            \end{itemize}
+        \end{itemize}
+        \item \textbf{Data Tier:}
+        \begin{itemize}
+            \item \textbf{Database Server (e.g., MySQL, PostgreSQL, SQLite):} Stores all persistent application data (users, courses, submissions, etc.).
+            \item \textbf{Cache Server (e.g., Redis):} Stores session data, cached queries, etc.
+        \end{itemize}
+        \item \textbf{External Services / Storage:}
+        \begin{itemize}
+            \item \textbf{File Storage (AWS S3):} Stores user-uploaded files (avatars, course materials, assignment attachments).
+            \item \textbf{Email Service:} For sending transactional emails (verification, notifications).
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Key Interactions:}
+    \begin{itemize}
+        \item Browser \texttt{<->} Web Server (HTTP/HTTPS)
+        \item Web Server \texttt{<->} Laravel Application (FastCGI/PHP-FPM)
+        \item Laravel Application \texttt{<->} Database Server (SQL)
+        \item Laravel Application \texttt{<->} Cache Server
+        \item Laravel Application \texttt{<->} File Storage
+    \end{itemize}
+\end{itemize}
+\clearpage
+
+
+\section{Technologies and Tools Used}
+\label{sec:technologies-tools}
+
+The platform's technical foundation reflects careful consideration of performance, maintainability, and developer experience. Each technology choice contributes to a cohesive development environment that supports rapid iteration while ensuring production reliability:
+
+\subsection{Backend}
+\begin{itemize}
+    \item \textbf{Programming Language:} PHP (Version 8.3+)
+    \item \textbf{Framework:} Laravel (Version 12)
+    \item \textbf{Key PHP Libraries \& Packages:}
+    \begin{itemize}
+        \item \texttt{inertiajs/inertia-laravel}: Server-side adapter for Inertia.js, facilitating integration with the React frontend.
+        \item \texttt{prism-php/prism}: Laravel package for integrating Large Language Models (LLMs).
+        \item \texttt{tightenco/ziggy}: Enables the use of Laravel named routes within JavaScript.
+        \item \texttt{league/flysystem-aws-s3-v3}: Provides an abstraction for file storage, configured for AWS S3. (Also supports local and other drivers).
+        \item \texttt{predis/predis}: A flexible and feature-complete Redis client for PHP.
     \end{itemize}
 \end{itemize}
 
+\subsection{Frontend}
+\begin{itemize}
+    \item \textbf{Programming Languages:} TypeScript, JavaScript (ES6+)
+    \item \textbf{Framework/Library:} React (Version 19)
+    \item \textbf{SPA Integration:} Inertia.js (using \texttt{@inertiajs/react} adapter) for building a modern, single-page application experience with server-driven routing.
+    \item \textbf{Key JavaScript Libraries \& Packages:}
+    \begin{itemize}
+        \item \textbf{UI \& Components:}
+        \begin{itemize}
+            \item \texttt{@radix-ui/*}: A comprehensive suite of unstyled, accessible UI primitives (e.g., Dialog, Dropdown, Select, Tooltip) used as the foundation for custom components (likely following a Shadcn UI-like pattern).
+            \item \texttt{lucide-react}: For a wide range of SVG icons.
+            \item \texttt{@headlessui/react}: Unstyled, fully accessible UI components.
+            \item \texttt{cmdk}: Command menu component for quick navigation and actions.
+            \item \texttt{embla-carousel-react}: A bare-bones carousel library.
+            \item \texttt{sonner}: For displaying toast notifications.
+            \item \texttt{recharts}: A composable charting library.
+            \item \texttt{react-day-picker}: Date picker component.
+            \item \texttt{vaul}: Drawer component.
+        \end{itemize}
+        \item \textbf{Text Editing:}
+        \begin{itemize}
+            \item \texttt{@tiptap/react} \& extensions: A headless, framework-agnostic rich text editor.
+        \end{itemize}
+        \item \textbf{Drag \& Drop:}
+        \begin{itemize}
+            \item \texttt{@dnd-kit/core} \& \texttt{@dnd-kit/sortable}: For implementing drag and drop interfaces.
+        \end{itemize}
+        \item \textbf{Forms \& Validation:}
+        \begin{itemize}
+            \item \texttt{zod} \& \texttt{zod-form-data}: For robust schema definition and validation.
+            \item \texttt{react-dropzone}: For handling file uploads via drag and drop.
+            \item \texttt{input-otp}: One-time password input component.
+        \end{itemize}
+        \item \textbf{Tables:}
+        \begin{itemize}
+            \item \texttt{@tanstack/react-table}: Headless UI for building powerful tables and datagrids.
+        \end{itemize}
+        \item \textbf{Animation:}
+        \begin{itemize}
+            \item \texttt{framer-motion}: A production-ready motion library for React.
+        \end{itemize}
+        \item \textbf{Utilities:}
+        \begin{itemize}
+            \item \texttt{date-fns}: Modern JavaScript date utility library.
+            \item \texttt{next-themes}: For theme management (e.g., light/dark mode).
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Database}
+\begin{itemize}
+    \item \textbf{Development Default:} SQLite
+    \item \textbf{Production Options:} MySQL, MariaDB, PostgreSQL, SQL Server (as per Laravel's standard support and \texttt{config/database.php}).
+    \item \textbf{Caching / Key-Value Store:} Redis (client \texttt{predis/predis} configured).
+\end{itemize}
+
+\subsection{Styling}
+\begin{itemize}
+    \item \textbf{CSS Framework:} Tailwind CSS (Version 4)
+    \item \textbf{Utility Libraries:}
+    \begin{itemize}
+        \item \texttt{class-variance-authority} (CVA): For creating type-safe, reusable UI components with variants.
+        \item \texttt{clsx}: A tiny utility for constructing \texttt{className} strings conditionally.
+        \item \texttt{tailwind-merge}: Utility to merge Tailwind CSS classes without style conflicts.
+        \item \texttt{tailwindcss-animate}: Plugin for Tailwind CSS that adds enter/exit animations.
+        \item \texttt{@tailwindcss/typography}: Tailwind CSS plugin for styling prose/HTML content.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Build \& Development Tools}
+\begin{itemize}
+    \item \textbf{JavaScript Bundler \& Dev Server:} Vite
+    \item \textbf{PHP Dependency Manager:} Composer
+    \item \textbf{JavaScript Package Manager:} npm (inferred from \texttt{package-lock.json}, though \texttt{bun.lock} also exists, indicating Bun might be used by some developers or in CI).
+    \item \textbf{Version Control:} Git
+    \item \textbf{Local Development Environment:} Laravel Sail (Docker-based, provides a standardized local development experience).
+    \item \textbf{Debugging (Backend):} \texttt{barryvdh/laravel-debugbar} for in-browser debugging information.
+    \item \textbf{Linters \& Formatters:}
+    \begin{itemize}
+        \item ESLint (JavaScript/TypeScript linter)
+        \item Prettier (Code formatter)
+        \item Laravel Pint (PHP code style fixer)
+    \end{itemize}
+\end{itemize}
+
+\subsection{Server Environment}
+\begin{itemize}
+    \item \textbf{Web Server:} Nginx or Apache
+    \item \textbf{PHP Runtime:} PHP-FPM (FastCGI Process Manager)
+    \item \textbf{Database Server:} (MySQL Server)
+    \item \textbf{Node.js:} Required for the frontend build process.
+\end{itemize}
+% \clearpage
+
+
+
+
 \section{Database Architecture and Data Modeling}
+\label{sec:database-architecture}
 
 The platform's data architecture reflects the complex relationships inherent in educational environments. The database design accommodates diverse content types, user interactions, and assessment methods while maintaining referential integrity and supporting efficient queries. The following entities form the foundation of the platform's data model:
 
@@ -467,8 +628,20 @@ The platform's data architecture reflects the complex relationships inherent in 
             \item \texttt{Attachment}: Polymorphic One-to-Many (ThreadComment can have many Attachments). \texttt{attachable\_id} \& \texttt{attachable\_type} on \texttt{attachments} table.
         \end{itemize}
     \end{itemize}
-    \end{itemize}
-\end{enumerate}
+\end{itemize}
+
+\subsection{Entity-Relationship Diagram}
+The database schema represents the complex relationships within an educational environment. This ERD captures how users, courses, assignments, and discussions interconnect to support the platform's functionality:
+
+\begin{figure}[H] % Using [H] to suggest placing it "here". Adjust if needed.
+    \centering
+    \includegraphics[width=0.95\linewidth]{mcd-diagram.png}
+    \caption{Entity-Relationship Diagram showing the complete database schema and relationships between all platform entities}
+    \label{fig:er-diagram}
+\end{figure}
+\FloatBarrier % Ensure figure is placed before continuing
+\clearpage
+
 
 \section{System Visualization and Process Flows}
 
@@ -476,8 +649,9 @@ Understanding complex software systems requires visual representation of their c
 
 \subsection{Use Case Diagrams}
 
-This section provides Mermaid code for Use Case diagrams, illustrating the interactions between different actors (Student, Instructor, Administrator) and the system.
+This section provides Use Case diagrams, illustrating the interactions between different actors (Student, Instructor, Administrator) and the system.
 
+\clearpage
 \begin{itemize}
     
     \item \textbf{Student Use Case Diagram}
@@ -486,8 +660,8 @@ This section provides Mermaid code for Use Case diagrams, illustrating the inter
         \captionof{figure}{Student Use Case Diagram - showing interactions between students and the learning platform}
         \label{fig:student-usecase}
     \end{center}
-    \clearpage
 
+    \clearpage
     \item \textbf{Instructor Use Case Diagram}
     
     \begin{figure}[!htbp]
@@ -497,7 +671,7 @@ This section provides Mermaid code for Use Case diagrams, illustrating the inter
         \label{fig:instructor-usecase}
     \end{figure}
     \FloatBarrier
-
+    
     \item \textbf{Administrator Use Case Diagram}
     
     \begin{figure}[!htbp]
@@ -534,581 +708,260 @@ These diagrams trace the flow of information through the system during critical 
         \captionof{figure}{User authentication sequence diagram}
         \label{fig:user-authentication}
         \end{center}
+        \FloatBarrier
     \clearpage
-\end{itemize}
-
-\subsection{System Architecture Overview}
-
-This diagram presents the platform's technical architecture, illustrating how different software layers interact to deliver the complete user experience:
-
-\begin{itemize}
-    \item \textbf{Components:}
-        \begin{center}       
-        \includegraphics[width=0.8\textwidth,height=0.85\textheight,keepaspectratio]{system-architecture-overview.png}
-        \captionof{figure}{System Architecture flowchart}
-        \label{fig:system-architecture-overview}
-        \end{center}
-    \begin{itemize}
-        \item \textbf{Client Tier:}
-        \begin{itemize}
-            \item \textbf{Web Browser:} Renders the UI (React components via Inertia.js), handles user input, executes client-side JavaScript.
-        \end{itemize}
-        \item \textbf{Application Tier:}
-        \begin{itemize}
-            \item \textbf{Web Server (e.g., Nginx, Apache):} Receives HTTP requests, serves static assets, acts as a reverse proxy for the application.
-            \item \textbf{Laravel Application (PHP-FPM):}
-            \begin{itemize}
-                \item \textbf{Routing Engine:} Maps URLs to controller actions.
-                \item \textbf{Controllers:} Handle HTTP requests, interact with models and services, prepare data for views/Inertia responses.
-                \item \textbf{Models (Eloquent ORM):} Represent database tables, manage data persistence and relationships.
-                \item \textbf{Middleware:} Handles cross-cutting concerns (authentication, CSRF, Inertia requests).
-                \item \textbf{Inertia.js Adapter:} Bridges Laravel backend with React frontend.
-                \item \textbf{Services:} Encapsulate specific business logic (e.g., QuizService, NotificationService - if explicitly created).
-            \end{itemize}
-        \end{itemize}
-        \item \textbf{Data Tier:}
-        \begin{itemize}
-            \item \textbf{Database Server (e.g., MySQL, PostgreSQL, SQLite):} Stores all persistent application data (users, courses, submissions, etc.).
-            \item \textbf{Cache Server (e.g., Redis):} Stores session data, cached queries, etc.
-        \end{itemize}
-        \item \textbf{External Services / Storage:}
-        \begin{itemize}
-            \item \textbf{File Storage (AWS S3):} Stores user-uploaded files (avatars, course materials, assignment attachments).
-            \item \textbf{Email Service:} For sending transactional emails (verification, notifications).
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{Key Interactions:}
-    \begin{itemize}
-        \item Browser \texttt{<->} Web Server (HTTP/HTTPS)
-        \item Web Server \texttt{<->} Laravel Application (FastCGI/PHP-FPM)
-        \item Laravel Application \texttt{<->} Database Server (SQL)
-        \item Laravel Application \texttt{<->} Cache Server
-        \item Laravel Application \texttt{<->} File Storage
-    \end{itemize}
-\end{itemize}
-
-\section{Technologies and Tools Used}
-
-The platform's technical foundation reflects careful consideration of performance, maintainability, and developer experience. Each technology choice contributes to a cohesive development environment that supports rapid iteration while ensuring production reliability:
-
-\subsection*{Backend}
-
-\begin{itemize}
-    \item \textbf{Programming Language:} PHP (Version 8.3+)
-    \item \textbf{Framework:} Laravel (Version 12)
-    \item \textbf{Key PHP Libraries \& Packages:}
-    \begin{itemize}
-        \item \texttt{inertiajs/inertia-laravel}: Server-side adapter for Inertia.js, facilitating integration with the React frontend.
-        \item \texttt{prism-php/prism}: Laravel package for integrating Large Language Models (LLMs).
-        \item \texttt{tightenco/ziggy}: Enables the use of Laravel named routes within JavaScript.
-        \item \texttt{league/flysystem-aws-s3-v3}: Provides an abstraction for file storage, configured for AWS S3. (Also supports local and other drivers).
-        \item \texttt{predis/predis}: A flexible and feature-complete Redis client for PHP.
-    \end{itemize}
-\end{itemize}
-
-\subsection*{Frontend}
-
-\begin{itemize}
-    \item \textbf{Programming Languages:} TypeScript, JavaScript (ES6+)
-    \item \textbf{Framework/Library:} React (Version 19)
-    \item \textbf{SPA Integration:} Inertia.js (using \texttt{@inertiajs/react} adapter) for building a modern, single-page application experience with server-driven routing.
-    \item \textbf{Key JavaScript Libraries \& Packages:}
-    \begin{itemize}
-        \item \textbf{UI \& Components:}
-        \begin{itemize}
-            \item \texttt{@radix-ui/*}: A comprehensive suite of unstyled, accessible UI primitives (e.g., Dialog, Dropdown, Select, Tooltip) used as the foundation for custom components (likely following a Shadcn UI-like pattern).
-            \item \texttt{lucide-react}: For a wide range of SVG icons.
-            \item \texttt{@headlessui/react}: Unstyled, fully accessible UI components.
-            \item \texttt{cmdk}: Command menu component for quick navigation and actions.
-            \item \texttt{embla-carousel-react}: A bare-bones carousel library.
-            \item \texttt{sonner}: For displaying toast notifications.
-            \item \texttt{recharts}: A composable charting library.
-            \item \texttt{react-day-picker}: Date picker component.
-            \item \texttt{vaul}: Drawer component.
-        \end{itemize}
-        \item \textbf{Text Editing:}
-        \begin{itemize}
-            \item \texttt{@tiptap/react} \& extensions: A headless, framework-agnostic rich text editor.
-        \end{itemize}
-        \item \textbf{Drag \& Drop:}
-        \begin{itemize}
-            \item \texttt{@dnd-kit/core} \& \texttt{@dnd-kit/sortable}: For implementing drag and drop interfaces.
-        \end{itemize}
-        \item \textbf{Forms \& Validation:}
-        \begin{itemize}
-            \item \texttt{zod} \& \texttt{zod-form-data}: For robust schema definition and validation.
-            \item \texttt{react-dropzone}: For handling file uploads via drag and drop.
-            \item \texttt{input-otp}: One-time password input component.
-        \end{itemize}
-        \item \textbf{Tables:}
-        \begin{itemize}
-            \item \texttt{@tanstack/react-table}: Headless UI for building powerful tables and datagrids.
-        \end{itemize}
-        \item \textbf{Animation:}
-        \begin{itemize}
-            \item \texttt{framer-motion}: A production-ready motion library for React.
-        \end{itemize}
-        \item \textbf{Utilities:}
-        \begin{itemize}
-            \item \texttt{date-fns}: Modern JavaScript date utility library.
-            \item \texttt{next-themes}: For theme management (e.g., light/dark mode).
-        \end{itemize}
-    \end{itemize}
-\end{itemize}
-
-\subsection*{Database}
-
-\begin{itemize}
-    \item \textbf{Development Default:} SQLite
-    \item \textbf{Production Options:} MySQL, MariaDB, PostgreSQL, SQL Server (as per Laravel's standard support and \texttt{config/database.php}).
-    \item \textbf{Caching / Key-Value Store:} Redis (client \texttt{predis/predis} configured).
-\end{itemize}
-
-\subsection*{Styling}
-
-\begin{itemize}
-    \item \textbf{CSS Framework:} Tailwind CSS (Version 4)
-    \item \textbf{Utility Libraries:}
-    \begin{itemize}
-        \item \texttt{class-variance-authority} (CVA): For creating type-safe, reusable UI components with variants.
-        \item \texttt{clsx}: A tiny utility for constructing \texttt{className} strings conditionally.
-        \item \texttt{tailwind-merge}: Utility to merge Tailwind CSS classes without style conflicts.
-        \item \texttt{tailwindcss-animate}: Plugin for Tailwind CSS that adds enter/exit animations.
-        \item \texttt{@tailwindcss/typography}: Tailwind CSS plugin for styling prose/HTML content.
-    \end{itemize}
-\end{itemize}
-
-\subsection*{Build \& Development Tools}
-
-\begin{itemize}
-    \item \textbf{JavaScript Bundler \& Dev Server:} Vite
-    \item \textbf{PHP Dependency Manager:} Composer
-    \item \textbf{JavaScript Package Manager:} npm (inferred from \texttt{package-lock.json}, though \texttt{bun.lock} also exists, indicating Bun might be used by some developers or in CI).
-    \item \textbf{Version Control:} Git
-    \item \textbf{Local Development Environment:} Laravel Sail (Docker-based, provides a standardized local development experience).
-    \item \textbf{Debugging (Backend):} \texttt{barryvdh/laravel-debugbar} for in-browser debugging information.
-    \item \textbf{Linters \& Formatters:}
-    \begin{itemize}
-        \item ESLint (JavaScript/TypeScript linter)
-        \item Prettier (Code formatter)
-        \item Laravel Pint (PHP code style fixer)
-    \end{itemize}
-\end{itemize}
-
-\subsection*{Testing}
-
-\begin{itemize}
-    \item \textbf{PHP Unit \& Feature Testing:} Pest (built on top of PHPUnit).
-    \item \textit{(Frontend testing tools like Jest or React Testing Library were not explicitly listed in the primary \texttt{package.json} devDependencies. Testing strategy for the frontend is not detailed from the provided file analysis.)}
-\end{itemize}
-
-\subsection*{Server Environment (Typical Deployment)}
-
-\begin{itemize}
-    \item \textbf{Web Server:} Nginx or Apache
-    \item \textbf{PHP Runtime:} PHP-FPM (FastCGI Process Manager)
-    \item \textbf{Database Server:} (MySQL Server)
-    \item \textbf{Node.js:} Required for the frontend build process.
 \end{itemize}
 
 \section{User Interface Design}
 
+\label{sec:ui-design}
+
 The following screenshots provide a comprehensive view of the platform's user interface design and functionality. Each screen demonstrates the practical implementation of the features described in previous sections, showing how users interact with the system across different roles and contexts:
 
 \subsection{Public Pages}
-
-These pages are accessible to all visitors and are primarily rendered using Laravel Blade views, with dynamic content fetched from the database. The course listing page might be enhanced with React/Inertia for dynamic filtering and display.
-
-\begin{itemize}
-    \item \textbf{Homepage (\texttt{home.blade.php}):}
-    \begin{itemize}
-        \item \textbf{Layout:} A clean and modern design featuring a prominent header and a comprehensive footer.
-        \begin{itemize}
-            \item \textit{Header:} Contains the ENSIASD logo, navigation links (Home, Courses, Publications, About, Contact), and buttons for "Login" and "Register".
-            \item \textit{Footer:} Includes copyright information, links to social media, and possibly quick links to important sections.
-        \end{itemize}
-        \item \textbf{Content Sections:}
-        \begin{itemize}
-            \item \textit{Hero Section:} A full-width banner with a captivating background image (dynamically set from \texttt{HomeContent}). Overlayed text includes a welcoming title (e.g., "Empowering Education Through Technology") and a brief description of the platform, both dynamic. Two prominent call-to-action buttons like "Explore Courses" (linking to the course listing) and "Learn More" (linking to the About page).
-            \item \textit{Popular Courses:} A section titled "Browse Our Popular Courses". Displays 3-4 course cards in a grid. Each card features a course image, category, title, a short description, the instructor's name and avatar, and a "View Course" link.
-            \item \textit{Platform Features ("Why Choose Us"):} A section highlighting key benefits, presented as a grid of feature cards. Each card has an icon (e.g., \texttt{fas fa-laptop-code} for Interactive Learning), a feature title, and a short explanatory text. Examples: "Interactive Learning," "Expert Instructors," "Flexible Schedule," "Certification."
-            \item \textit{Call to Action (CTA):} A visually distinct section encouraging user registration, with a title like "Ready to Start Learning?" and buttons for "Register Now" and "Contact Us."
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{Course Listing Page (\texttt{courses.blade.php}, potentially with React/Inertia):}
-    \begin{itemize}
-        \item \textbf{Layout:} Standard header and footer. The main content area is dedicated to displaying courses.
-        \item \textbf{Content:}
-        \begin{itemize}
-            \item \textit{Search and Filters:} A search bar at the top allows users to search for courses by title, description, or category. Filter dropdowns or sidebar options might be available for filtering by "Category."
-            \item \textit{Course Grid/List:} Courses are displayed in a responsive grid or list format. Each course card prominently shows its image, title, category, the instructor's name, and possibly the number of enrolled students or a rating. A button or link on each card leads to the detailed course view (if public) or prompts login.
-            \item \textit{Pagination:} If there are many courses, pagination controls are visible at the bottom.
-            \item \textit{No Results Message:} A user-friendly message and illustration (e.g., \texttt{nothing-found.svg}) appear if no courses match the search/filter criteria.
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{About Page (\texttt{about.blade.php}):}
-    \begin{itemize}
-        \item \textbf{Layout:} Standard header and footer.
-        \item \textbf{Content (Dynamically loaded from \texttt{AboutContent} model):}
-        \begin{itemize}
-            \item \textit{Hero Section:} Similar to the homepage hero, with a title like "About Our Platform" and relevant imagery.
-            \item \textit{Mission/Vision:} Dedicated sections with text describing the platform's mission and vision, possibly accompanied by images.
-            \item \textit{Platform Features:} Detailed descriptions of platform features (e.g., "Virtual Classes," "Centralized Resources," "Assignment Management").
-            \item \textit{Statistics:} A visually engaging display of platform statistics (e.g., "Active Courses," "Teachers," "Students," "Satisfaction Rate").
-            \item \textit{Benefits:} Sections detailing benefits for teachers and students, presented as bullet points or featurettes.
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{Contact Page (\texttt{contact.blade.php}):}
-    \begin{itemize}
-        \item \textbf{Layout:} Standard header and footer.
-        \item \textbf{Content (Dynamically loaded from \texttt{ContactContent} model):}
-        \begin{itemize}
-            \item \textit{Contact Information:} Clearly displayed school name, address, phone number, and email address.
-            \item \textit{Office Hours:} Information on when users can expect support or contact the institution.
-            \item \textit{Contact Form (Implied or possible):} A form for users to send inquiries directly.
-            \item \textit{Embedded Map:} An interactive map (e.g., Google Maps iframe) showing the institution's location.
-            \item \textit{Contact Image:} A relevant image for the contact page.
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{Publications Page (\texttt{publications.blade.php}):}
-    \begin{itemize}
-        \item \textbf{Layout:} Standard header and footer.
-        \item \textbf{Content:} A list or grid of articles, news, or general announcements (from the \texttt{Announcement} model, possibly filtered for site-wide items or a specific "Publications" category).
-        \begin{itemize}
-            \item Each item displays a title, a snippet of the content or a summary, the publication date, author (if applicable), and potentially an associated course.
-            \item Clicking an item would lead to a detailed view of that publication/announcement.
-        \end{itemize}
-    \end{itemize}
-\end{itemize}
-
-\subsection{Authenticated User Dashboard \& Internal Pages (React/Inertia)}
-
-These pages are part of the SPA experience after a user logs in, built with React and Inertia.js. They feature a consistent application shell.
-
-\begin{itemize}
-    \item \textbf{Main Dashboard Layout (\texttt{AppLayout.tsx}):}
-    \begin{itemize}
-        \item \textbf{Application Shell:}
-        \begin{itemize}
-            \item \textit{Sidebar (\texttt{AppSidebar.tsx}):} Collapsible navigation menu on the left. Links include "Dashboard," "My Courses," "All Courses," "Assignments," "Grades" (student), "Discussions," "Settings," and "Logout." The ENSIASD logo is displayed at the top.
-            \item \textit{Header (\texttt{AppHeader.tsx}):} Top bar containing breadcrumbs for navigation, a global search bar, a theme switcher (light/dark mode via \texttt{ThemeSwitcher.tsx}), and a user menu dropdown (avatar, links to Profile, Settings, Logout - \texttt{UserMenuContent.tsx}).
-        \end{itemize}
-        \item \textbf{Main Content Area:} The central area where specific page content is rendered.
-    \end{itemize}
-    \item \textbf{Dashboard View (\texttt{dashboard.tsx}):}
-    \begin{itemize}
-        \item \textbf{Instructor View:}
-        \begin{itemize}
-            \item \textit{Statistics Cards:} Prominent display of key metrics (e.g., "Total Students," "Total Courses," "Active Students This Month," "Student Growth \%") using \texttt{StatCard} components. Sparkline charts might be embedded within these cards.
-            \item \textit{Charts/Graphs:} Larger charts visualizing "Enrollment Trends" (line chart over months) and "Resource Type Distribution" (bar or pie chart).
-            \item \textit{Quick Actions:} Buttons or links to "Create New Course" or "Post New Announcement."
-            \item \textit{Recent Activity Feed (Speculative):} List of recent submissions, new enrollments, or discussion posts.
-        \end{itemize}
-        \item \textbf{Student View:}
-        \begin{itemize}
-            \item \textit{My Courses:} A grid or list of course cards for courses the student is enrolled in. Each card shows course title, instructor, and possibly a progress bar.
-            \item \textit{Upcoming Deadlines:} A list of assignments or quizzes with approaching due dates.
-            \item \textit{Recent Grades/Feedback:} Notifications or links to recently graded assignments.
-            \item \textit{Recent Announcements:} A feed of the latest announcements from enrolled courses.
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{Course View Page (e.g., \texttt{dashboard/courses/students/content.tsx} or instructor equivalent):}
-    \begin{itemize}
-        \item \textbf{Layout:} Uses the main dashboard shell. Breadcrumbs would show "Dashboard > Courses > [Course Title]".
-        \item \textbf{Header Area:} Displays the course title, description, and potentially the main course image.
-        \item \textbf{Tabbed Navigation or Sections:}
-        \begin{itemize}
-            \item \textit{Overview/Chapters:} Default view. Lists course chapters. Clicking a chapter expands it to show its resources (text snippets, links to files with icons indicating type, links to quizzes). Resources are ordered by position.
-            \item \textit{Assignments:} A list of all assignments for the course. Each item shows title, due date, status (e.g., "Open," "Submitted," "Graded"). Students see a "View/Submit" button. Instructors see "View Submissions" or "Edit."
-            \item \textit{Announcements:} A chronological list of announcements posted by the instructor for this course. Each announcement shows title, content snippet, and post date.
-            \item \textit{Discussions:} Lists discussion threads within the course. Each thread shows title, author, number of replies, and last activity. A "Start New Thread" button is available.
-            \item \textit{Students (Instructor Only):} A table listing all enrolled students, their enrollment date, and status (e.g., "Active," "Completed"). Options to remove or manage individual students.
-            \item \textit{Settings (Instructor Only):} Forms to edit course details (title, description, image, category, color, status, invite code).
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{Assignment Detail Page:}
-    \begin{itemize}
-        \item \textbf{Layout:} Dashboard shell. Breadcrumbs: "Dashboard > Courses > [Course Title] > Assignments > [Assignment Title]".
-        \item \textbf{Content:} Full assignment title, detailed description/instructions, due date, points possible, and any attached instruction files (downloadable).
-        \item \textbf{Student View (\texttt{dashboard/courses/students/assignments.tsx} showing a specific assignment, or a submission form):}
-        \begin{itemize}
-            \item If not submitted: A rich text editor (Tiptap) for text-based submissions, a file upload area (\texttt{react-dropzone}) for attachments. "Submit Assignment" button.
-            \item If submitted: Read-only view of their submission, submission date, status, grade, and feedback (if graded). Option to resubmit if allowed.
-        \end{itemize}
-        \item \textbf{Instructor View (\texttt{dashboard/courses/instructors/assignments.tsx} focused on managing/viewing submissions):}
-        \begin{itemize}
-            \item A table listing all students, their submission status (Submitted, Not Submitted, Late), submission date, and grade (if graded). Links to "View/Grade" each submission.
-            \item Overall assignment statistics (e.g., number submitted, average grade).
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{Submission Grading Page/Modal (Instructor):}
-    \begin{itemize}
-        \item \textbf{Layout:} Could be a dedicated page or a modal dialog overlaying the assignment submissions list.
-        \item \textbf{Content:}
-        \begin{itemize}
-            \item Student's name and submission details (date, lateness).
-            \item Direct view of the student's submitted text content (if applicable).
-            \item Links to download any submitted files.
-            \item A numeric input field for the "Grade."
-            \item A rich text editor for providing "Feedback."
-            \item Buttons like "Save Grade," "Save Draft Feedback," or "Publish Grade \& Notify Student."
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{Quiz Interface:}
-    \begin{itemize}
-        \item \textbf{Student Taking Quiz (Frontend component, possibly \texttt{QuizGenerator.tsx} or similar):}
-        \begin{itemize}
-            \item Clean interface displaying one question at a time or a scrollable list.
-            \item Question text, followed by multiple-choice options (radio buttons or checkboxes), true/false selections, etc.
-            \item Navigation buttons ("Next Question," "Previous Question," "Submit Quiz").
-            \item Timer displayed if the quiz is time-limited.
-            \item Progress indicator (e.g., "Question 5 of 20").
-        \end{itemize}
-        \item \textbf{Instructor Quiz Setup (Part of Resource creation or Assignment creation for 'quiz' type):}
-        \begin{itemize}
-            \item An interface (\texttt{QuizBuilder.tsx} or similar) to add/edit questions.
-            \item For each question: input for question text, select question type, input fields for options, checkbox to mark correct answer(s), points for the question.
-            \item Drag-and-drop reordering of questions. Settings for the quiz (e.g., time limit, shuffle questions).
-        \end{itemize}
-    \end{itemize}
-    \item \textbf{Profile Page (\texttt{dashboard/settings/profile.tsx} or similar):}
-    \begin{itemize}
-        \item \textbf{Layout:} Dashboard shell. Tabs for different settings categories (Profile, Account, Notifications).
-        \item \textbf{Content (Profile Tab):}
-        \begin{itemize}
-            \item Form fields to edit name, username, email (email might be read-only or require re-verification).
-            \item Avatar upload component.
-            \item For Instructors: additional fields for bio, expertise areas (possibly as a tag input), social media links from \texttt{InstructorProfile}.
-            \item "Update Profile" button.
-        \end{itemize}
-        \item \textbf{Content (Account Tab):}
-        \begin{itemize}
-            \item Password change form (current password, new password, confirm new password).
-        \end{itemize}
-    \end{itemize}
-\end{itemize}
-
-\subsection{Administrator Content Management Views}
-
-These views are not part of the main dashboard but are separate pages accessible only to users with the 'Administrator' role. They involve forms tailored to provide the ability to edit the website copy, images used etc...
-
-\begin{itemize}
-    \item \textbf{Example: Edit Homepage Content (associated with \texttt{DashboardController::updateHomeContent}):}
-    \begin{itemize}
-        \item \textbf{Layout:} Dashboard shell.
-        \item \textbf{Content:} A form with fields corresponding to \texttt{HomeContent} model attributes:
-        \begin{itemize}
-            \item Text input for "Hero Title."
-            \item Textarea (possibly a rich text editor) for "Hero Content."
-            \item File upload input for "Background Image" and "Hero Image" (with previews of current images).
-            \item Text inputs for "Link 1 URL" and "Link 2 URL."
-            \item "Save Changes" button.
-        \end{itemize}
-        \item Similar forms would exist for editing the About Page (\texttt{AboutContent}) and Contact Page (\texttt{ContactContent}), with fields matching their respective model attributes (e.g., multiple textareas for mission, vision, feature descriptions on the About page; fields for address, phone, map embed code on the Contact page).
-    \end{itemize}
-    \item \textbf{Manage Publications (if distinct from course announcements):}
-    \begin{itemize}
-        \item \textbf{Layout:} Dashboard shell.
-        \item \textbf{Content:} A table listing existing publications with columns for title, author, date, and actions (Edit, Delete).
-        \item A "Create New Publication" button leading to a form with fields for title, content (rich text editor), and potentially category or audience.
-    \end{itemize}
-\end{itemize}
-
-\section{Diagrams}
-
-This section provides the textual definitions for several key diagrams using the Mermaid diagramming language. This code can be copied and pasted into any Mermaid-compatible renderer (e.g., online editors, integrated development environment plugins, or documentation tools that support Mermaid) to generate visual diagrams.
-
-\section{System Diagrams and Visual Documentation}
-
-The following section presents formal diagram specifications using Mermaid syntax. These diagrams can be rendered using any Mermaid-compatible tool to create visual representations of the platform's structure and behavior. Each diagram serves a specific purpose in understanding different aspects of the system architecture and user interactions:
-
-\subsection{Entity-Relationship Diagram (ERD)}
-
-The database schema represents the complex relationships within an educational environment. This ERD captures how users, courses, assignments, and discussions interconnect to support the platform's functionality:
-
-\begin{figure}[!htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\linewidth]{er-diagram.png}
-    \caption{Entity-Relationship Diagram showing the complete database schema and relationships between all platform entities}
-    \label{fig:er-diagram}
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_.png}
+    \caption{Platform Homepage - Main landing page with hero section, popular courses, and calls to action.}
+    \label{fig:screen-homepage}
 \end{figure}
 \FloatBarrier
 
-\subsubsection{Sequence Diagrams}
-This section illustrates critical system workflows through sequence diagrams, demonstrating how the platform handles key user interactions and internal processes. Each diagram traces the complete flow of data and control through the system components.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_courses.png}
+    \caption{Course Courses Page - Browse, search, and filter available courses.}
+    \label{fig:screen-course-listing}
+\end{figure}
+\FloatBarrier
 
-\begin{itemize}
-    \item \textbf{Sequence Diagram: Student Submits Assignment}
-    
-    \begin{figure}[!htbp]
-        \centering
-        \includegraphics[width=0.9\textwidth]{student-submits-assignment.png}
-        \caption{Student Assignment Submission Process - Shows the interaction flow between student, web server, controllers, models, and database when submitting an assignment with file attachments}
-        \label{fig:student-submits-assignment}
-    \end{figure}
-    \FloatBarrier
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_publications.png}
+    \caption{Course Publications Page - View recent publications.}
+    \label{fig:screen-publications}
+\end{figure}
+\FloatBarrier
 
-    \item \textbf{Sequence Diagram: Instructor Grades Submission}
-    
-    \begin{figure}[!htbp]
-        \centering
-        \includegraphics[width=0.9\textwidth]{instructor-grades-submission.png}
-        \caption{Instructor Grading Workflow - Demonstrates the process of reviewing student submissions, providing grades and feedback, and updating the database records}
-        \label{fig:instructor-grades-submission}
-    \end{figure}
-    \FloatBarrier
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_about.png}
+    \caption{About Page - Information about ENSIASD and the platform.}
+    \label{fig:screen-about}
+\end{figure}
+\FloatBarrier
 
-    \item \textbf{Sequence Diagram: User Authentication (Login)}
-    
-    \begin{figure}[!htbp]
-        \centering
-        \includegraphics[width=0.9\textwidth]{user-authentication.png}
-        \caption{User Authentication Process - Illustrates the login flow including credential validation, session creation, and redirection to the user dashboard}
-        \label{fig:user-authentication}
-    \end{figure}
-    \FloatBarrier
-\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_contact.png}
+    \caption{Contact Page - ENSIASD contact information and place.}
+    \label{fig:screen-contact}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_login.png}
+    \caption{Login Page - Login to the ENSIASD platform.}
+    \label{fig:screen-login}
+\end{figure}
+\FloatBarrier
+\clearpage
+
+\subsection{Authenticated User Dashboard \& Internal Pages}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_dashboard.png}
+    \caption{Instructor Dashboard - Statistics on courses, students, and quick actions.}
+    \label{fig:screen-dashboard-instructor}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_dashboard (1).png}
+    \caption{Course List (Student) - Accessing enrolled courses.}
+    \label{fig:screen-course-list-student}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_dashboard_courses_1.png}
+    \caption{Course Content View (Student) - Accessing chapters, resources, assignments, and discussions.}
+    \label{fig:screen-course-content-student}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_login (3).png}
+    \caption{Course Join Dialog (Student) - Join a course using a code.}
+    \label{fig:screen-course-join}
+\end{figure}
+\FloatBarrier
+
+\clearpage
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_courses_1_threads_1 (2).png}
+    \caption{Course Management View (Instructor) - Editing course details, managing chapters and resources.}
+    \label{fig:screen-course-management}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_courses_1_threads_1 (1).png}
+    \caption{Course Creation Dialog (Instructor).}
+    \label{fig:screen-course-creation}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_courses_1_threads_1 (4).png}
+    \caption{Resources Creation Dialog (Instructor).}
+    \label{fig:screen-resource-creation}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_dashboard_courses_4 (2).png}
+    \caption{Resources Creation Dialog (Instructor) - Rich Text Editor.}
+    \label{fig:screen-resource-editor}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_dashboard_courses_4.png}
+    \caption{Resources Creation Dialog (Instructor) - Quiz Builder / AI Quiz Generator.}
+    \label{fig:screen-resource-quizbuilder}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_dashboard_courses_1_assignments.png}
+    \caption{Assignments View Page (Instructor) - Assignments List.}
+    \label{fig:screen-assignment-list}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_courses_1_assignments_3.png}
+    \caption{Assignment Submission Page (Instructor) - Assignment Details.}
+    \label{fig:screen-assignment-details}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_courses_1_assignments_3_submissions.png}
+    \caption{Assignment Submissions Page (Instructor) - Assignment Submissions.}
+    \label{fig:screen-assignment-submissions}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/ensiasd.elguarir.dev_courses_1_assignments_3_submissions (2).png}
+    \caption{Grading Interface (Instructor) - Reviewing submissions and providing feedback/grades.}
+    \label{fig:screen-grading}
+\end{figure}
+
+\FloatBarrier
+\clearpage
+
+% \subsection{Administrator Content Management}
+% \begin{figure}[H]
+%     \centering
+%     \framebox(300,200){Placeholder: Screenshot of Admin - Edit Homepage Content} % \includegraphics{path/to/admin_edit_home_screenshot.png}
+%     \caption{Administrator View - Editing public homepage content.}
+%     \label{fig:screen-admin-edit-home}
+% \end{figure}
+% \FloatBarrier
+% \clearpage
 
 \section{Future Development and Enhancement Opportunities}
+\label{sec:future-development}
 
 The current platform establishes a solid foundation for digital education at ENSIASD Taroudant. However, the rapidly evolving landscape of educational technology presents numerous opportunities for expansion and improvement. This section explores potential enhancements that could further strengthen the platform's capabilities and impact:
-
-\subsection{Suggestions for Platform Enhancements/Future Development}
-
+\subsection{Suggestions for Platform Enhancements}
 \begin{enumerate}
-    \item \textbf{Gamification \& Engagement:}
-    \begin{itemize}
-        \item Implement a system of points, badges, and certificates awarded for course completions, achieving high scores in quizzes, active participation in discussions, or completing learning streaks.
-        \item Introduce course-specific or site-wide leaderboards to foster friendly competition (optional and configurable per course).
-        \item Personalized dashboards with visual progress indicators and achievements.
-    \end{itemize}
     \item \textbf{Advanced Analytics \& Reporting:}
     \begin{itemize}
-        \item \textit{For Students:} Provide more detailed personal dashboards showing time spent on different resources, quiz performance breakdowns by topic, and comparison against anonymized class averages.
-        \item \textit{For Instructors:} Offer deeper insights into student engagement (e.g., which resources are most/least accessed), analysis of assignment difficulty, question-level statistics for quizzes, and automated alerts for students at risk of falling behind.
-        \item \textit{For Administrators:} Develop comprehensive reports on platform usage (e.g., peak hours, user growth rates), most popular courses, content consumption patterns, and instructor activity.
+        \item \textit{For Students:} More detailed personal progress dashboards.
+        \item \textit{For Instructors:} Deeper insights into student engagement, assignment difficulty, and at-risk student indicators.
+        \item \textit{For Administrators:} Comprehensive platform usage reports.
     \end{itemize}
     \item \textbf{Mobile Application:}
     \begin{itemize}
-        \item Develop native (iOS/Android) or hybrid mobile applications to provide students and instructors with convenient on-the-go access.
-        \item Features could include offline content access, push notifications for deadlines and announcements, and mobile-optimized interfaces for discussions and submissions.
+        \item Develop native or hybrid mobile apps for on-the-go access, offline content, and push notifications.
     \end{itemize}
     \item \textbf{Integrations with External Services:}
     \begin{itemize}
-        \item \textbf{Live Virtual Classes:} Integrate with video conferencing tools like Zoom, Google Meet, or BigBlueButton for conducting live lectures, Q\&A sessions, and workshops directly within the platform.
-        \item \textbf{Calendar Integration:} Allow users to sync course deadlines, live session schedules, and personal study plans with their Google Calendar, Outlook Calendar, or other calendar applications.
-        \item \textbf{Plagiarism Detection:} Integrate with services like Turnitin or Copyscape to check originality of assignment submissions.
-        \item \textbf{Single Sign-On (SSO):} Implement SSO with ENSIASD Taroudant's existing institutional identity provider for seamless user authentication.
-        \item \textbf{Payment Gateways:} If the platform intends to offer paid courses or certifications in the future, integrate with payment gateways like Stripe or PayPal.
+        \item \textbf{Live Virtual Classes:} Integration with tools like Zoom or BigBlueButton.
+        \item \textbf{Calendar Integration:} Syncing deadlines with Google/Outlook Calendar.
+        \item \textbf{Plagiarism Detection:} Tools like Turnitin.
+        \item \textbf{Single Sign-On (SSO):} Integration with institutional identity providers.
     \end{itemize}
     \item \textbf{Enhanced Accessibility (a11y):}
     \begin{itemize}
-        \item Conduct a thorough accessibility audit against WCAG 2.1/2.2 AA or AAA guidelines.
-        \item Systematically implement improvements for keyboard navigation, ARIA attributes for dynamic content and custom components, and ensure robust screen reader compatibility.
-        \item Offer high contrast themes and user-adjustable font sizes for better readability.
+        \item Continuous audits and improvements based on WCAG guidelines to ensure inclusivity.
     \end{itemize}
     \item \textbf{Personalized Learning Paths \& AI Features:}
     \begin{itemize}
-        \item Develop adaptive learning capabilities where the system suggests or adjusts learning paths based on student performance in quizzes and assignments.
-        \item Recommend supplementary resources, remedial exercises, or advanced topics tailored to individual student needs.
-        \item Explore AI-powered tutors or Q\&A bots for instant student support.
-    \end{itemize}
-    \item \textbf{Interactive Content Types \& Authoring:}
-    \begin{itemize}
-        \item Integrate support for H5P to allow instructors to create rich, interactive HTML5 content directly within the platform.
-        \item Enable embedding or importing of SCORM packages for standardized e-learning content.
-        \item Develop more sophisticated in-browser coding exercises with automated checks, or specialized simulation tools relevant to ENSIASD's curriculum.
+        \item Adaptive learning paths based on student performance.
+        \item AI-powered recommendations or support bots.
     \end{itemize}
     \item \textbf{Improved Search Functionality:}
     \begin{itemize}
-        \item Implement a global search feature allowing users to find content across all their enrolled courses, including resources, discussion posts, announcements, and assignment descriptions.
-        \item Introduce more advanced filtering and sorting options within search results (e.g., by date, type, author).
+        \item Global search across all enrolled courses and content types.
     \end{itemize}
-    \item \textbf{Social Learning \& Collaboration Features:}
+    \item \textbf{Interactive Content Types:}
     \begin{itemize}
-        \item Facilitate the creation of study groups or project collaboration spaces within courses, with shared file areas and discussion channels.
-        \item Implement a peer review system for assignments, allowing students to provide feedback on each other's work based on defined rubrics.
-        \item User profiles could be enhanced with interests, skills, and options to connect with peers.
-    \end{itemize}
-    \item \textbf{Advanced Certification Module:}
-    \begin{itemize}
-        \item Develop a robust certification module for automatically generating and issuing digital certificates upon successful course completion.
-        \item Ensure certificates are customizable, can include unique verifiable codes or links, and can be easily shared by students (e.g., on LinkedIn).
+        \item Support for H5P or SCORM packages for richer interactive content.
     \end{itemize}
 \end{enumerate}
 
-\subsection{Further Details for the Report Itself}
-
+\subsection{Platform Development and Operational Considerations}
 \begin{enumerate}
     \item \textbf{Deployment Strategy \& Infrastructure:}
     \begin{itemize}
-        \item Outline a typical deployment process for a Laravel and React (Inertia.js) application. This could include:
-        \begin{itemize}
-            \item Server requirements (LEMP/LAMP stack: Linux, Nginx/Apache, MySQL/PostgreSQL, PHP).
-            \item Steps: Cloning the Git repository, running \texttt{composer install --no-dev -o}, \texttt{npm install --production}, \texttt{npm run build}.
-            \item Configuration: Setting up the \texttt{.env} file with production credentials (database, S3, mail, etc.).
-            \item Database: Running migrations (\texttt{php artisan migrate --force}) and initial seeders if necessary.
-            \item Queue Workers: Setting up and supervising queue workers (e.g., using Supervisor) for background tasks.
-            \item Task Scheduler: Configuring the Laravel scheduler cron job.
-            \item Web server configuration for optimal performance and security.
-        \end{itemize}
-        \item Mention tools like Laravel Forge, Ploi, or a custom CI/CD pipeline (e.g., GitHub Actions, GitLab CI) that could automate and simplify deployment.
+        \item Standard LEMP/LAMP stack deployment. Key steps include code deployment, dependency installation, configuration, migrations, queue worker setup, and task scheduling.
+        \item Automation tools (Forge, Ploi, CI/CD pipelines) can simplify this.
     \end{itemize}
     \item \textbf{Security Considerations:}
     \begin{itemize}
-        \item Elaborate on Laravel's built-in security features already leveraged:
-        \begin{itemize}
-            \item CSRF (Cross-Site Request Forgery) protection via tokens.
-            \item XSS (Cross-Site Scripting) prevention through Blade's \texttt{\{\{ \}\}} templating (escapes output) and Vue/React's default data binding.
-            \item SQL Injection prevention via Eloquent ORM's use of prepared statements.
-            \item Secure password hashing (bcrypt by default).
-        \end{itemize}
-        \item Highlight application-level security measures:
-        \begin{itemize}
-            \item Input validation using Laravel's Form Requests or validator.
-            \item Authorization: Role-based access control (RBAC) via middleware and potentially Laravel Policies or Gates.
-            \item Use of HTTPS for all communication.
-        \end{itemize}
-        \item Recommend ongoing security practices:
-        \begin{itemize}
-            \item Regularly update dependencies (PHP, Laravel, npm packages).
-            \item Security audits and penetration testing.
-            \item Secure file upload handling (validation of types, sizes, scanning for malware).
-            \item Rate limiting and protection against brute-force attacks.
-        \end{itemize}
+        \item Leverage Laravel's built-in features (CSRF, XSS, SQLi prevention, hashing).
+        \item Application-level measures: input validation, RBAC, HTTPS.
+        \item Ongoing practices: dependency updates, audits, secure file handling, rate limiting.
     \end{itemize}
     \item \textbf{Scalability Aspects:}
     \begin{itemize}
-        \item Discuss how the chosen architecture (Laravel/PHP backend) can be scaled:
-        \begin{itemize}
-            \item \textbf{Horizontal Scaling:} PHP's stateless nature allows for adding more application servers behind a load balancer.
-            \item \textbf{Database Scaling:} Strategies like using read replicas for MySQL/PostgreSQL, database sharding (more complex), or choosing scalable cloud database solutions.
-            \item \textbf{Caching:} Leveraging Redis (already configured) or Memcached for database queries, sessions, and application data to reduce database load.
-            \item \textbf{Background Jobs/Queues:} Offloading time-consuming tasks (e.g., sending notifications, processing large files) to Laravel's queue system.
-            \item \textbf{Content Delivery Network (CDN):} Using a CDN to serve static assets (CSS, JS, images) to reduce load on the application server and improve global load times.
-            \item \textbf{Optimized Code \& Queries:} Emphasize the importance of efficient code and database query optimization.
-        \end{itemize}
+        \item Horizontal scaling of application servers.
+        \item Database scaling (read replicas, cloud solutions).
+        \item Extensive caching (Redis).
+        \item Background jobs for time-consuming tasks.
+        \item CDN for static assets.
     \end{itemize}
     \item \textbf{Project Management Methodology (Suggested):}
     \begin{itemize}
-        \item While not directly inferable from the codebase alone, suggest that an Agile methodology (like Scrum or Kanban) would be highly suitable for the development of such a platform.
-        \item Benefits: Iterative development, adaptability to changing requirements, regular feedback loops with stakeholders (instructors, students, administrators), and continuous improvement.
+        \item Agile methodologies (Scrum, Kanban) are well-suited for iterative development and stakeholder feedback.
     \end{itemize}
-    \item \textbf{Contribution Guidelines (for a hypothetical open-source or collaborative future):}
-    \begin{itemize}
-        \item Briefly mention standard practices if the project were to evolve with community contributions:
-        \begin{itemize}
-            \item Coding standards (e.g., PSR-12 for PHP, established ESLint/Prettier rules for frontend).
-            \item Branching strategy (e.g., Gitflow).
-            \item Pull request process (code reviews, automated checks).
-            \item Issue tracking and bug reporting guidelines.
-            \item Setting up a development environment.
-        \end{itemize}
-        \item This point is more about future-proofing or if the report context includes open collaboration.
-    \end{itemize}
+    % Contribution Guidelines can be omitted if not directly relevant to the report's current scope
 \end{enumerate}
+\clearpage
+
 
 \section{Conclusion}
+\label{sec:conclusion}
 
 The ENSIASD E-Learning Platform stands as a testament to thoughtful educational technology design, successfully bridging the gap between traditional academic instruction and modern digital learning requirements. Through its sophisticated integration of Laravel's robust backend capabilities with React's dynamic frontend experience, the platform creates an environment where education technology serves pedagogical goals rather than constraining them.
 
@@ -1117,4 +970,5 @@ The platform's architecture demonstrates careful consideration of the diverse st
 Perhaps most significantly, the platform's technical foundation positions ENSIASD Taroudant for continued innovation in digital education. The modular architecture, contemporary technology stack, and extensible design patterns create numerous opportunities for enhancement and adaptation as educational needs evolve.
 
 This analysis reveals not just a functional e-learning system, but a platform designed for growth, adaptation, and sustained educational impact. The careful balance between current functionality and future flexibility suggests that ENSIASD Taroudant has invested in technology that will continue serving its educational mission for years to come.
+
 \end{document}
